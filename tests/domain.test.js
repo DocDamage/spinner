@@ -16,6 +16,8 @@ const {SimulationEngine} = require('../js/domain/simulation-engine.js');
 const {tabIndexForKey} = require('../js/ui/tab-controller.js');
 const {CollectionWindow} = require('../js/domain/collection-window.js');
 const {CombatAdvisor} = require('../js/domain/combat-advisor.js');
+const {ExperienceEngine} = require('../js/domain/experience-engine.js');
+const {SessionEngine} = require('../js/domain/session-engine.js');
 
 const character = (id, rating, tags = []) => ({
   id,
@@ -149,6 +151,75 @@ test('tactical advice accounts for repeated-use penalties', () => {
     previewFor:() => ({accuracy:.8,minDamage:20,maxDamage:30})
   });
   assert.equal(result.techniqueId, 'fresh');
+});
+
+test('experience presets are isolated and stage routes expose ten beats', () => {
+  const engine=new ExperienceEngine();
+  const preset=engine.preset('vanguard');
+  preset.codename='Changed';
+  assert.equal(engine.preset('vanguard').codename,'Aegis');
+  const route=engine.timeline({stageNumber:2,localSpin:5});
+  assert.equal(route.length,10);
+  assert.equal(route[4].type,'RIVAL');
+  assert.equal(route[4].status,'current');
+  assert.equal(route[9].globalSpin,20);
+});
+
+test('reward comparisons expose permanent gains and tradeoffs', () => {
+  const engine=new ExperienceEngine();
+  const enemy={powers:['one','two'],stats:{might:100,defense:90,speed:80,skill:20,mind:10,energy:5,hax:1}};
+  const options=engine.rewardComparison({enemy,cost:3,remainingBudget:2,activeCount:3,partyCount:3,partyCapacity:3});
+  assert.equal(options.find(option=>option.id==='copy').headline,'2 abilities • Cost 3');
+  assert.match(options.find(option=>option.id==='copy').gain,/Stored safely/);
+  assert.match(options.find(option=>option.id==='recruit').headline,/replacement required/);
+  assert.equal(options.find(option=>option.id==='surge').headline,'+6 MIGHT / DEFENSE / SPEED');
+});
+
+test('collection progress reports universe totals and next milestone', () => {
+  const progress=new ExperienceEngine().collectionProgress([
+    {id:'a',universe:'One'},{id:'b',universe:'One'},{id:'c',universe:'Two'}
+  ],['a']);
+  assert.equal(progress.count,1);
+  assert.equal(progress.nextMilestone,5);
+  assert.deepEqual(progress.universes.find(entry=>entry.universe==='One'),{universe:'One',total:2,discovered:1});
+});
+
+test('collection rewards are deterministic and never repeat claimed milestones', () => {
+  const engine=new ExperienceEngine();
+  assert.deepEqual(engine.collectionRewards(10,[1,5]).map(reward=>reward.milestone),[10]);
+  assert.deepEqual(engine.collectionRewards(4,[]).map(reward=>reward.milestone),[1]);
+  assert.equal(engine.nextCollectionReward(10).milestone,25);
+});
+
+test('session objectives always expose one contextual next action', () => {
+  const engine=new SessionEngine();
+  assert.equal(engine.objective({characterReady:false}).id,'origin');
+  assert.equal(engine.objective({characterReady:true,spin:0,pending:null}).title,'Find your first power source');
+  assert.equal(engine.objective({characterReady:true,pending:{type:'battle',stage:'battle_reward'}}).id,'reward');
+  assert.equal(engine.objective({characterReady:true,pending:{type:'rare',stage:'result'}}).command,'continue');
+  assert.equal(engine.objective({characterReady:true,pending:{type:'boss',stage:'offer',combat:{round:3}}}).title,'Choose the best action for round 3');
+});
+
+test('session pulse summarizes streak, threat, stage, and boss distance', () => {
+  const pulse=new SessionEngine().pulse({spin:7,pending:null,hp:40,statuses:[{id:'INJURED'}],log:[{message:'VICTORY one'},{message:'VICTORY two'},{message:'DEFEAT three'}]},{maxHP:100,score:1234});
+  assert.equal(pulse.streak,'2W');
+  assert.equal(pulse.threatLabel,'PRESSURED');
+  assert.equal(pulse.stage,1);
+  assert.equal(pulse.bossIn,2);
+  assert.equal(pulse.score,1234);
+});
+
+test('portable backups are isolated and reject malformed state', () => {
+  const engine=new SessionEngine();
+  const state={version:3,seed:42,spin:4,kits:[],party:[],log:[],slices:[],customCharacter:{codename:'Test Hero'}};
+  const backup=engine.createBackup(state,{appVersion:'10.1.0',hero:'Test Hero',score:900});
+  state.spin=9;
+  const valid=engine.validateBackup(JSON.stringify(backup));
+  assert.equal(valid.ok,true);
+  assert.equal(valid.backup.state.spin,4);
+  assert.equal(valid.summary.hero,'Test Hero');
+  assert.equal(engine.validateBackup('{bad json').ok,false);
+  assert.equal(engine.validateBackup({...backup,state:{version:2}}).ok,false);
 });
 
 test('campaign decisions persist and modify the boss', () => {

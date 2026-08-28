@@ -218,13 +218,14 @@ class MultiverseWheel {
     this.isSpinning=true; this.renderHeader();
     const n=this.state.slices.length,index=this.int(0,n-1),sliceDeg=360/n,targetCenter=index*sliceDeg+sliceDeg/2;
     const current=((this.state.rotation%360)+360)%360; const desired=((270-targetCenter)%360+360)%360; const delta=((desired-current)%360+360)%360;
-    const turns=this.int(5,8); const start=this.state.rotation,end=start+turns*360+delta,duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?80:2500+this.int(0,500); const t0=performance.now(); let lastTick=-1;
+    const turns=this.int(5,8); const start=this.state.rotation,end=start+turns*360+delta,duration=this.spinDuration(2500+this.int(0,500)); const t0=performance.now(); let lastTick=-1;
     const ease=t=>1-Math.pow(1-t,4);
     await new Promise(resolve=>{
       const frame=now=>{const p=clamp((now-t0)/duration,0,1);this.state.rotation=start+(end-start)*ease(p);const tick=Math.floor(this.state.rotation/sliceDeg);if(tick!==lastTick){lastTick=tick;this.audio.tick();const ptr=document.getElementById('pointer');ptr.classList.add('tick');setTimeout(()=>ptr.classList.remove('tick'),45);}this.drawWheel();if(p<1)requestAnimationFrame(frame);else resolve();};requestAnimationFrame(frame);
     });
     this.state.rotation=((end%360)+360)%360; this.isSpinning=false; this.land(this.state.slices[index]);
   }
+  spinDuration(defaultDuration){return window.matchMedia('(prefers-reduced-motion: reduce)').matches?80:defaultDuration;}
 
   land(slice){
     this.advanceStatuses(); this.state.spin=Math.min(TOTAL_SPINS,this.state.spin+1);
