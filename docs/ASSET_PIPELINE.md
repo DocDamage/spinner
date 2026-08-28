@@ -15,8 +15,9 @@ Use the repository virtual environment, which includes `ddgs` and `requests`:
 npm run assets:catalog
 ```
 
-The catalog contains the complete runtime roster plus every item and Chronicle
-MacGuffin. Re-export it whenever game data changes.
+The catalog contains the complete runtime roster, every item and Chronicle
+MacGuffin, and 2,346 exact transformation targets. Re-export it whenever game
+data changes.
 
 ## Find or repair a character image
 
@@ -38,6 +39,12 @@ legacy portrait only for that exact roster ID; the original library remains
 untouched and recoverable. The older `download_character_images.py` filename is
 now a safe compatibility entry point for the same workflow.
 
+Acceptance also compares the candidate hash against every live character and
+verified asset. Identical bytes under another label are blocked because this is
+the most common signature of the old downloader's wrong-image bug. Use
+`--allow-duplicate` only after confirming that two exact IDs intentionally share
+the same art.
+
 For a batch where automatic acceptance is appropriate:
 
 ```powershell
@@ -46,6 +53,28 @@ For a batch where automatic acceptance is appropriate:
 
 Auto-accept requires a score of at least 80, at least 75% name-token coverage,
 and a 10-point lead over the second candidate. Everything else remains staged.
+
+## Transformation images
+
+Transformation IDs are exact runtime keys, such as `global:ultra_instinct` or
+`source:goku:3`. Find the required ID in
+`assets/game-asset-catalog.json`, then stage candidates:
+
+```powershell
+.\.venv\Scripts\python.exe download_game_assets.py search --kind transformations --ids source:goku:3 --candidates 5
+```
+
+The transformation scorer requires both the form name and its character/source
+identity. Auto-accept uses a stricter score of 100. Review the candidate and
+source page, then activate it by exact ID:
+
+```powershell
+.\.venv\Scripts\python.exe download_game_assets.py accept --id source:goku:3 --candidate 1 --replace
+```
+
+Accepted files go to `verified_transformation_images/`. If an exact asset is
+absent, the game uses a labeled project-generated card. It no longer guesses a
+transformation from similarly named base portraits.
 
 ## Items and MacGuffins
 

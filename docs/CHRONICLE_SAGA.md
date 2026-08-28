@@ -42,13 +42,22 @@ The declaration includes an editable description, skill, and appetite for risk.
 It supplies small, visible mechanical modifiers without replacing the specific
 combat technique or story choice.
 
-## Local multiplayer
+## Local and online multiplayer
 
 New Timeline setup supports 1–10 named people sharing one device and one save.
 The active captain rotates after resolved encounters. Captain mode lets the
 active player make a story decision. Council mode gathers one private vote from
-each player and uses the active captain's vote to break a tie. This is local
-hot-seat play; it does not claim to provide a network lobby or accounts.
+each player and uses the active captain's vote to break a tie. The one-device
+version remains available as local hot-seat play.
+
+V15 also supports direct cross-device tables. The host opens **Online**, creates
+one invite for each remote seat, and sends that code out of band. Each guest
+pastes the invite, returns one answer code, and receives host snapshots after
+the WebRTC data channel opens. The host remains authoritative: a guest proposal
+is accepted only when that guest owns the current captain turn or is the next
+council voter. No gameplay or signaling service is required by GitHub Pages.
+Public STUN attempts direct NAT traversal; an optional TURN URL, username, and
+credential can be supplied for networks that require relay traffic.
 
 ## Hero Forge
 
@@ -68,6 +77,19 @@ Base scores are purchased from 8–15 with a 27-point budget. A lineage adds two
 ability points, a calling defines saves and combat bias, and a background adds
 two skills plus a narrative feature. Players can select up to four additional
 skills and write their own ideal, bond, flaw, and origin.
+
+All imported and newly created heroes begin at Level 1. XP comes from completed
+encounters and combat victories. Every new level grants one allocation point
+for the six core abilities, capped at 20. Active power-source capacity grows at
+Levels 5 and 10; technique slots grow at Levels 3, 6, 10, and 15. Global forms
+require Level 3, while character-source forms begin at Level 4 and later forms
+require progressively higher levels. Mastery remains a second requirement, so
+finding a powerful source does not reveal its entire move list immediately.
+
+Portable `.mwhero.json` files contain only the creation concept and optional
+portrait. Their checksum and 27-point validation reject corrupted or illegal
+files. Import never carries XP, allocated points, copied powers, forms, items,
+companions, perks, or reward bonuses.
 
 The sheet translates the six roleplaying abilities into the existing seven
 simulation axes so all old encounters remain compatible:

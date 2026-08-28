@@ -38,6 +38,7 @@ ACTIVE_DIRS = {
     "character": ROOT / "verified_character_images",
     "item": ROOT / "item_images",
     "macguffin": ROOT / "macguffin_images",
+    "transformation": ROOT / "verified_transformation_images",
 }
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
 NEGATIVE_TERMS = {
@@ -89,7 +90,7 @@ def load_catalog() -> dict:
 
 
 def all_assets(catalog: dict) -> list[dict]:
-    return [*catalog["characters"], *catalog["items"], *catalog["macguffins"]]
+    return [*catalog["characters"], *catalog["items"], *catalog["macguffins"], *catalog.get("transformations", [])]
 
 
 def select_assets(catalog: dict, kind: str, ids: list[str]) -> list[dict]:
@@ -97,6 +98,7 @@ def select_assets(catalog: dict, kind: str, ids: list[str]) -> list[dict]:
         "characters": catalog["characters"], "character": catalog["characters"],
         "items": catalog["items"], "item": catalog["items"],
         "macguffins": catalog["macguffins"], "macguffin": catalog["macguffins"],
+        "transformations": catalog.get("transformations", []), "transformation": catalog.get("transformations", []),
         "all": all_assets(catalog),
     }
     selected = list(groups[kind])
@@ -173,6 +175,15 @@ def candidate_score(asset: dict, result: dict) -> tuple[int, float, list[str]]:
     if normalize(asset["name"]) in title:
         score += 24
         reasons.append("exact name phrase")
+    if asset["kind"] == "transformation":
+        character_tokens = tokens(asset.get("characterName", ""))
+        character_hits = len({token for token in character_tokens if token in searchable.split()})
+        if character_tokens and character_hits == len(character_tokens):
+            score += 24
+            reasons.append("exact character/source identity")
+        elif character_tokens:
+            score -= 38
+            reasons.append("missing character/source identity")
     universe_hits = len({token for token in universe_tokens if token in searchable.split()})
     if universe_hits:
         score += min(16, universe_hits * 6)
@@ -201,7 +212,7 @@ def candidate_score(asset: dict, result: dict) -> tuple[int, float, list[str]]:
 
 
 def search_query(asset: dict) -> str:
-    kind_hint = "fictional artifact prop" if asset["kind"] == "item" else "original science fiction relic" if asset["kind"] == "macguffin" else "character"
+    kind_hint = "fictional artifact prop" if asset["kind"] == "item" else "original science fiction relic" if asset["kind"] == "macguffin" else f'"{asset.get("characterName", "")}" transformation form' if asset["kind"] == "transformation" else "character"
     identity_hint = SEARCH_HINTS.get(asset["id"], "")
     return f'"{asset["name"]}" "{asset.get("universe", "")}" {identity_hint} {kind_hint} official render'.strip()
 
@@ -266,7 +277,21 @@ def active_files(kind: str, asset_id: str) -> list[Path]:
     return [path for path in directory.glob(f"{safe_id(asset_id)}.*") if path.suffix.lower() in IMAGE_SUFFIXES]
 
 
-def accept_candidate(asset: dict, index: int, replace: bool = False) -> Path:
+def duplicate_live_paths(source: Path, excluded: set[Path]) -> list[str]:
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    matches = []
+    for directory in [ROOT / "character_images", *ACTIVE_DIRS.values()]:
+        if not directory.exists():
+            continue
+        for path in directory.rglob("*"):
+            if not path.is_file() or path.suffix.lower() not in IMAGE_SUFFIXES or path.resolve() in excluded:
+                continue
+            if hashlib.sha256(path.read_bytes()).hexdigest() == digest:
+                matches.append(path.relative_to(ROOT).as_posix())
+    return matches
+
+
+def accept_candidate(asset: dict, index: int, replace: bool = False, allow_duplicate: bool = False) -> Path:
     review_dir = REVIEW_ROOT / asset["kind"] / safe_id(asset["id"])
     record_path = review_dir / "candidates.json"
     if not record_path.exists():
@@ -282,6 +307,12 @@ def accept_candidate(asset: dict, index: int, replace: bool = False) -> Path:
     destination_dir.mkdir(parents=True, exist_ok=True)
     source = review_dir / candidate["file"]
     destination = destination_dir / f"{safe_id(asset['id'])}{source.suffix.lower()}"
+    duplicates = duplicate_live_paths(source, {path.resolve() for path in existing})
+    if duplicates and not allow_duplicate:
+        raise SystemExit(
+            f"Candidate bytes already belong to {', '.join(duplicates[:5])}. "
+            "This often indicates a mismatched download; review it and re-run with --allow-duplicate only if the shared art is intentional."
+        )
     if replace:
         for old in existing:
             if old.resolve().parent == destination_dir.resolve() and old != destination:
@@ -399,7 +430,8 @@ def command_search(args: argparse.Namespace) -> None:
         candidates = stage_asset(asset, args.candidates, client)
         if args.auto_accept and candidates:
             top, runner_up = candidates[0], candidates[1] if len(candidates) > 1 else {"score": -99}
-            if top["score"] >= 80 and top["coverage"] >= .75 and top["score"] - runner_up["score"] >= 10:
+            threshold = 100 if asset["kind"] == "transformation" else 80
+            if top["score"] >= threshold and top["coverage"] >= .75 and top["score"] - runner_up["score"] >= 10:
                 destination = accept_candidate(asset, top["index"], replace=args.replace)
                 accepted += 1
                 print(f"  accepted high-confidence candidate -> {destination.relative_to(ROOT)}")
@@ -420,7 +452,7 @@ def command_accept(args: argparse.Namespace) -> None:
     matches = [asset for asset in all_assets(catalog) if safe_id(asset["id"]) == safe_id(args.id)]
     if len(matches) != 1:
         raise SystemExit(f"Expected one catalog entry for {args.id}; found {len(matches)}.")
-    destination = accept_candidate(matches[0], args.candidate, replace=args.replace)
+    destination = accept_candidate(matches[0], args.candidate, replace=args.replace, allow_duplicate=args.allow_duplicate)
     entries = write_manifest()
     print(f"Accepted {destination.relative_to(ROOT)}; manifest contains {len(entries)} entries.")
 
@@ -429,7 +461,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Search, verify, review, and activate Multiverse Wheel art.")
     subparsers = parser.add_subparsers(dest="command", required=True)
     search = subparsers.add_parser("search", help="Stage search candidates; optionally auto-accept only high-confidence matches.")
-    search.add_argument("--kind", choices=["characters", "items", "macguffins", "all"], default="items")
+    search.add_argument("--kind", choices=["characters", "items", "macguffins", "transformations", "all"], default="items")
     search.add_argument("--ids", nargs="*", default=[])
     search.add_argument("--limit", type=int, default=0)
     search.add_argument("--candidates", type=int, default=3)
@@ -441,6 +473,7 @@ def build_parser() -> argparse.ArgumentParser:
     accept.add_argument("--id", required=True)
     accept.add_argument("--candidate", required=True, type=int)
     accept.add_argument("--replace", action="store_true")
+    accept.add_argument("--allow-duplicate", action="store_true", help="Allow identical bytes only after confirming shared art is intentional.")
     accept.set_defaults(func=command_accept)
     audit = subparsers.add_parser("audit", help="Audit formats, dimensions, hashes, and build a visual contact sheet.")
     audit.add_argument("--json", action="store_true")
