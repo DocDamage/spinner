@@ -13,6 +13,7 @@ async function completeThirtySpinJourney(page){
     let guard=0;
     const resolve=()=>{
       const p=game.state.pending;if(!p)return;
+      if(p.type==='v14-saga'){if(p.stage==='offer')game.finishSagaChoiceV14(p.scene,p.scene.choices[0].id);else game.completeEvent();return;}
       if(p.type==='v13-universe'){game.applyUniverseChoiceV13(p.event.id,p.event.choices[0].id);game.completeEvent();return;}
       if(p.type==='v13-callback'){if(p.stage==='offer')p.stage='result';game.completeEvent();return;}
       if(p.type==='v9-story'){const branch=MultiverseDomain.CAMPAIGN_BRANCHES.find(item=>item.id===p.branchId);game.applyStoryChoiceV9(p.branchId,branch.choices[0].id);game.completeEvent();return;}
@@ -65,7 +66,7 @@ test('keyboard actions, save restoration, and portable backup export work togeth
 
 test('daily integrity, named ending recap, share card, and selectable New Game Plus are functional',async({page})=>{
   await openFresh(page);await page.getByRole('button',{name:/DAILY CHALLENGE/i}).click();await expect(page.locator('.v13-daily-best')).toContainText('PERSONAL BEST');await page.getByRole('button',{name:'START DAILY'}).click();await page.locator('[data-v13-fate-open]').click();await expect(page.locator('.v13-fate-protected')).toContainText('Daily Challenge wheels');await page.locator('[data-v13-fate-close]').click();
-  await page.evaluate(()=>{game.state.record={...game.state.record,wins:25,losses:3,bossWins:8};game.state.v13.storyStats.worldsProtected=5;game.state.v13.highlights=[{type:'boss',spin:10,title:'First Horizon',detail:'A world was protected.',weight:5}];game.endRun(true);});await expect(page.locator('.v13-ending')).toBeVisible();await expect(page.locator('.v13-ending-score')).toContainText('FINAL SCORE');const card=page.waitForEvent('download');await page.getByRole('button',{name:/DOWNLOAD SHARE CARD/}).click();expect((await card).suggestedFilename()).toMatch(/multiverse-wheel-.*\.png/);await page.getByRole('button',{name:/NEW GAME\+/}).click();await expect(page.getByRole('heading',{name:'Choose what survives'})).toBeVisible();await expect(page.locator('.v13-legacy-options label')).toHaveCount(8);
+  await page.evaluate(()=>{game.state.record={...game.state.record,wins:25,losses:3,bossWins:8};game.state.v13.storyStats.worldsProtected=5;game.state.v13.highlights=[{type:'boss',spin:10,title:'First Horizon',detail:'A world was protected.',weight:5}];game.endRun(true);});await expect(page.locator('.v14-saga-event')).toBeVisible();await page.locator('[data-v14-saga-choice]').first().click();await page.getByRole('button',{name:'CONTINUE CHRONICLE'}).click();await expect(page.locator('.v13-ending')).toBeVisible();await expect(page.locator('.v13-ending-score')).toContainText('FINAL SCORE');const card=page.waitForEvent('download');await page.getByRole('button',{name:/DOWNLOAD SHARE CARD/}).click();expect((await card).suggestedFilename()).toMatch(/multiverse-wheel-.*\.png/);await page.getByRole('button',{name:/NEW GAME\+/}).click();await expect(page.getByRole('heading',{name:'Choose what survives'})).toBeVisible();await expect(page.locator('.v13-legacy-options label')).toHaveCount(8);
 });
 
 for(const viewport of [{name:'desktop',width:1440,height:900},{name:'mobile',width:390,height:844}])test(`a complete 30-spin ${viewport.name} journey reaches a named ending without overflow`,async({page})=>{

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "stormbreaker",
+    "name": "Stormbreaker",
+    "universe": "Marvel",
+    "summary": "Negates one space or teleport hazard."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:51.494Z"
+}

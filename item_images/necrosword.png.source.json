@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "necrosword",
+    "name": "All-Black the Necrosword",
+    "universe": "Marvel",
+    "summary": "Power Clash gains +6."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.191Z"
+}

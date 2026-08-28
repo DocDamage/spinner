@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "one_ring",
+    "name": "The One Ring",
+    "universe": "The Lord of the Rings",
+    "summary": "Large Mystic bonus, but each use has a Curse chance."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:53.077Z"
+}

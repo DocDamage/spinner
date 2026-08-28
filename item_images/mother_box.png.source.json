@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "mother_box",
+    "name": "Mother Box",
+    "universe": "DC",
+    "summary": "25% chance to avoid any hazard."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:51.695Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "dragon_balls",
+    "name": "Dragon Balls",
+    "universe": "Dragon Ball",
+    "summary": "One automatic resurrection; consumed on use."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:52.276Z"
+}

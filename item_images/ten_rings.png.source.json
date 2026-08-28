@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "ten_rings",
+    "name": "Ten Rings",
+    "universe": "Marvel",
+    "summary": "+4 to every battle strategy."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:52.679Z"
+}

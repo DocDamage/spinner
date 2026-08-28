@@ -1,0 +1,29 @@
+{
+  "asset": {
+    "kind": "character",
+    "id": "mega_generator_rex__van_kleiss",
+    "name": "Van Kleiss",
+    "universe": "Generator Rex",
+    "version": "Mega Roster gameplay profile"
+  },
+  "index": 1,
+  "file": "candidate-1.webp",
+  "query": "\"Van Kleiss\" \"Generator Rex\" character official render",
+  "score": 103,
+  "coverage": 1.0,
+  "reasons": [
+    "name coverage 2/2",
+    "exact name phrase",
+    "universe context",
+    "preferred source"
+  ],
+  "title": "Van Kleiss | Generator Rex Wiki | Fandom",
+  "source": "",
+  "sourcePage": "https://generator-rex.fandom.com/wiki/Van_Kleiss",
+  "imageUrl": "https://static.wikia.nocookie.net/generator-rex/images/1/1c/OMLG_Van_Kleiss_SEXY!!!!!!.jpg/revision/latest?cb=20100614005437",
+  "width": 0,
+  "height": 0,
+  "mime": "image/webp",
+  "sha256": "ae5712fcfc759c6b7ae3dc901c6bc92a2aff3e2964961d8b76c08d806b6579cf",
+  "acceptedAt": "2026-08-28T17:46:45Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "omnitrix",
+    "name": "Omnitrix",
+    "universe": "Ben 10",
+    "summary": "Adds one random full character kit when acquired."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:52.095Z"
+}

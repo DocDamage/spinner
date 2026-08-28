@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "ultimate_nullifier",
+    "name": "Ultimate Nullifier",
+    "universe": "Marvel",
+    "summary": "Once per run, erase a hazard or normal opponent without a roll."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:53.593Z"
+}

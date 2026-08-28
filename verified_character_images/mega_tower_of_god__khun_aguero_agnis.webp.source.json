@@ -1,0 +1,29 @@
+{
+  "asset": {
+    "kind": "character",
+    "id": "mega_tower_of_god__khun_aguero_agnis",
+    "name": "Khun Aguero Agnis",
+    "universe": "Tower of God",
+    "version": "Mega Roster gameplay profile"
+  },
+  "index": 1,
+  "file": "candidate-1.webp",
+  "query": "\"Khun Aguero Agnis\" \"Tower of God\" character official render",
+  "score": 108,
+  "coverage": 1.0,
+  "reasons": [
+    "name coverage 3/3",
+    "exact name phrase",
+    "universe context",
+    "preferred source"
+  ],
+  "title": "Khun Aguero Agnis/History | Tower of God Wiki | Fandom",
+  "source": "towerofgod.fandom.com",
+  "sourcePage": "https://towerofgod.fandom.com/wiki/Khun_Aguero_Agnis/History",
+  "imageUrl": "https://static.wikia.nocookie.net/towerofgod/images/0/02/574_-_Khun_1.png/revision/latest?cb=20230829121720",
+  "width": 0,
+  "height": 0,
+  "mime": "image/webp",
+  "sha256": "e9c3297b4436fecdd45d20ff0d77f8d67312e72bf955015b3a00276573270a35",
+  "acceptedAt": "2026-08-28T17:46:46Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "vibranium_suit",
+    "name": "Vibranium Suit",
+    "universe": "Marvel",
+    "summary": "Reduces stat-loss penalties by 2."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:52.476Z"
+}

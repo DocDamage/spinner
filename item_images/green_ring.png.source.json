@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "green_ring",
+    "name": "Green Lantern Ring",
+    "universe": "DC",
+    "summary": "Party capacity +1 while held."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:51.593Z"
+}

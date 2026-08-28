@@ -1,0 +1,28 @@
+{
+  "asset": {
+    "kind": "character",
+    "id": "mega_metal_gear__solidus_snake",
+    "name": "Solidus Snake",
+    "universe": "Metal Gear",
+    "version": "Mega Roster gameplay profile"
+  },
+  "index": 1,
+  "file": "candidate-1.webp",
+  "query": "\"Solidus Snake\" \"Metal Gear\" character official render",
+  "score": 96,
+  "coverage": 1.0,
+  "reasons": [
+    "name coverage 2/2",
+    "exact name phrase",
+    "universe context"
+  ],
+  "title": "Image - Metal Gear Solid 2 Cast Solidus Snake.jpg | Metal Gear Wiki ...",
+  "source": "metalgear.wikia.com",
+  "sourcePage": "http://metalgear.wikia.com/wiki/File:Metal_Gear_Solid_2_Cast_Solidus_Snake.jpg",
+  "imageUrl": "http://vignette2.wikia.nocookie.net/metalgear/images/5/59/Metal_Gear_Solid_2_Cast_Solidus_Snake.jpg/revision/latest?cb=20130119234917",
+  "width": 0,
+  "height": 0,
+  "mime": "image/webp",
+  "sha256": "da85e7b93b23c97360738a03f03e700928f2df04fc42d78a20ff4b6ecdb2a126",
+  "acceptedAt": "2026-08-28T17:46:46Z"
+}

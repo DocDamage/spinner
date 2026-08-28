@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "infinity_gauntlet",
+    "name": "Infinity Gauntlet",
+    "universe": "Marvel",
+    "summary": "Once per run, overturn a failed non-final battle."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:51.294Z"
+}

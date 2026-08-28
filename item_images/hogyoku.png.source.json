@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "hogyoku",
+    "name": "Hogyoku",
+    "universe": "Bleach",
+    "summary": "After a loss, gain +3 to the failed strategy's lead stat."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:52.777Z"
+}

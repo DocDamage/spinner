@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "macguffin",
+    "id": "memory-seed",
+    "name": "Memory Seed",
+    "universe": "Chronicle Saga",
+    "summary": "Restores a lost truth"
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.579Z"
+}

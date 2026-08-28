@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "macguffin",
+    "id": "horizon-heart",
+    "name": "Heart of the Horizon",
+    "universe": "Chronicle Saga",
+    "summary": "Lets the coalition choose what the multiverse becomes"
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:55.384Z"
+}

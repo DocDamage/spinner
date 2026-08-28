@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "chaos_emeralds",
+    "name": "Seven Chaos Emeralds",
+    "universe": "Sonic",
+    "summary": "Speed Blitz gains +10; clears Exhausted after battles."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:52.191Z"
+}

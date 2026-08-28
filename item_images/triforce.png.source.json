@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "triforce",
+    "name": "Triforce",
+    "universe": "The Legend of Zelda",
+    "summary": "+6 all stats if the three lowest stats are within 15 points."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:53.495Z"
+}

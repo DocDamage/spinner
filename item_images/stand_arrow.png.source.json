@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "stand_arrow",
+    "name": "Stand Arrow",
+    "universe": "JoJo's Bizarre Adventure",
+    "summary": "Grants a random transformation when first acquired."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:53.992Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "macguffin",
+    "id": "tenfold-banner",
+    "name": "Tenfold Banner",
+    "universe": "Chronicle Saga",
+    "summary": "Unites incompatible factions"
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:55.080Z"
+}

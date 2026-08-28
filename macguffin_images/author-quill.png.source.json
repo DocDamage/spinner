@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "macguffin",
+    "id": "author-quill",
+    "name": "Unwritten Quill",
+    "universe": "Chronicle Saga",
+    "summary": "Writes a final rule"
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:55.278Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "blades_of_chaos",
+    "name": "Blades of Chaos",
+    "universe": "God of War",
+    "summary": "Power Clash gains +4 and Speed Blitz +3."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.092Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "macguffin",
+    "id": "echo-crown",
+    "name": "Echo Crown",
+    "universe": "Chronicle Saga",
+    "summary": "Stabilizes borrowed power"
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.676Z"
+}

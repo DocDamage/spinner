@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "senju_fan",
+    "name": "Gunbai War Fan",
+    "universe": "Naruto",
+    "summary": "20% chance to reflect an energy hazard."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:53.298Z"
+}

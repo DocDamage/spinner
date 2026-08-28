@@ -1,0 +1,27 @@
+{
+  "asset": {
+    "kind": "character",
+    "id": "mega_marvel_comics__knull_s_grendel",
+    "name": "Knull's Grendel",
+    "universe": "Marvel Comics",
+    "version": "Mega Roster gameplay profile"
+  },
+  "index": 2,
+  "file": "candidate-2.jpg",
+  "query": "\"Knull's Grendel\" \"Marvel Comics\" Grendel symbiote dragon Knull character official render",
+  "score": 66,
+  "coverage": 1.0,
+  "reasons": [
+    "name coverage 2/2",
+    "universe context"
+  ],
+  "title": "Marvel: 10 Things Fans Need To Know About Grendel The Symbiote",
+  "source": "CBR",
+  "sourcePage": "https://www.cbr.com/marvel-things-fans-need-to-know-about-grendel-the-symbiote/",
+  "imageUrl": "https://static1.cbrimages.com/wordpress/wp-content/uploads/2019/04/Knull-dragon-3.jpg",
+  "width": 1400,
+  "height": 700,
+  "mime": "image/jpeg",
+  "sha256": "28dc508d91aa018fe13f560e246d3694ca41593c9baff3595bdcf3754b680a72",
+  "acceptedAt": "2026-08-28T17:47:00Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "keyblade",
+    "name": "Keyblade",
+    "universe": "Kingdom Hearts",
+    "summary": "Prevents one soul or corruption status."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:52.976Z"
+}

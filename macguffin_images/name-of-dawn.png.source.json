@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "macguffin",
+    "id": "name-of-dawn",
+    "name": "Name of Dawn",
+    "universe": "Chronicle Saga",
+    "summary": "Prevents historical erasure"
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.776Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "helmet_fate",
+    "name": "Helmet of Fate",
+    "universe": "DC",
+    "summary": "Mystic strategy gains +10."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:51.793Z"
+}

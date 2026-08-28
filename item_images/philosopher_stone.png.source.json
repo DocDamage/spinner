@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "philosopher_stone",
+    "name": "Philosopher's Stone",
+    "universe": "Fullmetal Alchemist",
+    "summary": "Reduces stat-loss penalties by 1."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:53.794Z"
+}

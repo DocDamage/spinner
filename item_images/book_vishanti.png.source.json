@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "book_vishanti",
+    "name": "Book of the Vishanti",
+    "universe": "Marvel",
+    "summary": "Mystic / Hax gains +8."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:53.892Z"
+}

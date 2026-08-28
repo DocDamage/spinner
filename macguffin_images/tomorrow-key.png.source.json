@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "macguffin",
+    "id": "tomorrow-key",
+    "name": "Tomorrow Key",
+    "universe": "Chronicle Saga",
+    "summary": "Releases future allies"
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.976Z"
+}

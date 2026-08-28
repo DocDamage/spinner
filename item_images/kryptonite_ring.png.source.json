@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "kryptonite_ring",
+    "name": "Kryptonite Ring",
+    "universe": "DC",
+    "summary": "Battle odds +15% against kryptonian-tagged opponents."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.276Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "potara",
+    "name": "Potara Earrings",
+    "universe": "Dragon Ball",
+    "summary": "The strongest party member contributes double support."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:52.375Z"
+}

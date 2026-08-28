@@ -1,0 +1,29 @@
+{
+  "asset": {
+    "kind": "character",
+    "id": "mega_godzilla_kaiju__mothra",
+    "name": "Mothra",
+    "universe": "Godzilla / Kaiju",
+    "version": "Mega Roster gameplay profile"
+  },
+  "index": 1,
+  "file": "candidate-1.webp",
+  "query": "\"Mothra\" \"Godzilla / Kaiju\" character official render",
+  "score": 102,
+  "coverage": 1.0,
+  "reasons": [
+    "name coverage 1/1",
+    "exact name phrase",
+    "universe context",
+    "preferred source"
+  ],
+  "title": "Godzilla Battle Line Leader Review: Mothra | Fandom",
+  "source": "",
+  "sourcePage": "https://godzilla.fandom.com/f/p/4400000000000084082",
+  "imageUrl": "https://static.wikia.nocookie.net/b786df74-6c0c-45cf-baeb-1da6ccc4a3f3/scale-to-width/755",
+  "width": 755,
+  "height": 719,
+  "mime": "image/webp",
+  "sha256": "b8f14952f4bcdc5dfb93c27523938f9665b33afa9a54f611ecb28cece40fd6ec",
+  "acceptedAt": "2026-08-28T17:46:45Z"
+}

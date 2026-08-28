@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "fenton_thermos",
+    "name": "Fenton Thermos",
+    "universe": "Danny Phantom",
+    "summary": "Hazard resistance chance +8%."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.376Z"
+}

@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "item",
+    "id": "eye_agamotto",
+    "name": "Eye of Agamotto",
+    "universe": "Marvel",
+    "summary": "Shows the best battle strategy automatically."
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:51.897Z"
+}

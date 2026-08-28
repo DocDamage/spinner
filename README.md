@@ -1,8 +1,8 @@
-# Multiverse Wheel V13 — Director's Cut
+# Multiverse Wheel V14 — Chronicle Saga
 
-A local-first browser game about building a custom hero, bending a seeded event
-wheel with Fate, and carrying choices through a connected multiverse campaign.
-The runtime roster contains 1,326 character profiles.
+A local-first browser game about forging a custom hero, bending a seeded event
+wheel with Fate, and writing a connected multiverse saga alone or with up to ten
+local players. The runtime roster contains 1,326 character profiles.
 
 Play the current release at
 [docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
@@ -20,7 +20,32 @@ Open
 Serving over HTTP also enables installation and offline caching; opening the
 HTML directly still supports the local game but not its service worker.
 
-## V13 game loop
+## V14 Chronicle Saga
+
+- Local hot-seat multiplayer supports 1–10 named players, rotating captains,
+  and optional private council voting for story decisions.
+- The Chronicle War is one ten-chapter time-fracture saga, from The Hour That
+  Broke through The Unwritten Horizon. Every chapter identifies the location,
+  opposition, objective, revelation, consequence, and story key at stake.
+- Every story scene offers four authored approaches plus a freeform plan. A
+  custom plan uses a seeded d20 check, a selected skill, and a visible risk.
+- Player intent—Protect, Discover, Connect, or Defy—stays visible and changes
+  real battle and hazard odds.
+- The Hero Forge uses a 27-point, d20-inspired system with six abilities, six
+  lineages, six callings, six backgrounds, twelve skills, saves, traits, ideals,
+  bonds, flaws, and an editable origin.
+- The character dossier includes derived Armor, Initiative, Resolve, passive
+  perception, ability/save details, trained skill bonuses, stat bars, and a
+  seven-axis canvas constellation.
+- All 32 gameplay artifacts and all 10 Chronicle MacGuffins now have local,
+  project-generated art. Verified character replacements can override legacy
+  portraits without overwriting the original library.
+
+The [Chronicle Saga guide](docs/CHRONICLE_SAGA.md) documents story, multiplayer,
+character creation, choices, and stat mapping. The [asset pipeline guide](docs/ASSET_PIPELINE.md)
+documents safe downloads, review, provenance, and repairs.
+
+## Foundation retained from V13
 
 - The title command deck offers Continue, a three-step New Timeline setup,
   Daily Challenge, three isolated save slots, challenge codes, Archive, and
@@ -49,8 +74,8 @@ story-pack, callback, and offline-shell data.
 
 ## Structure
 
-- `styles/app.css`, `styles/v9.css`, `styles/v13.css` — legacy, structured, and
-  V13 title/play/combat/narrative/replay presentation
+- `styles/app.css`, `styles/v9.css`, `styles/v13.css`, `styles/v14.css` — legacy,
+  structured, title/play/combat, and Chronicle Saga presentation
 - `js/data/` — base data, expansions, and mega roster
 - `js/domain/` — independently testable balance, combat, campaign, save,
   simulation, roster, V13 state, Fate, identity, narrative, legacy, daily, and
@@ -69,6 +94,12 @@ story-pack, callback, and offline-shell data.
   endings, recap text, and share-card generation
 - `js/v13-replay.js` — Daily records, selectable New Game+, install/update UX,
   and campaign-length hardening
+- `js/domain/v14-engine.js` — independently testable character creation,
+  multiplayer, Chronicle Saga, freeform-choice, migration, and asset rules
+- `js/v14-experience.js` — V14 browser integration and presentation
+- `download_game_assets.py` — staged search, scoring, format validation,
+  duplicate audit, provenance, review sheet, acceptance, and active manifest
+- `tools/generate-relic-art.js` — deterministic local artifact/MacGuffin cards
 - `manifest.webmanifest`, `sw.js` — installable offline shell
 
 Scripts are classic deferred scripts and must remain in their documented HTML
@@ -103,5 +134,5 @@ For the detailed alias, generated-identity, and missing-media report:
 npm run validate:content -- --json
 ```
 
-State migration is idempotent and marked with schema version 13. Autosaves are
+State migration is idempotent and marked with schema version 14. Autosaves are
 local to the browser; portable JSON backup import/export remains available.

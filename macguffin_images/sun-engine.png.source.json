@@ -1,0 +1,12 @@
+{
+  "asset": {
+    "kind": "macguffin",
+    "id": "sun-engine",
+    "name": "Borrowed Sun Engine",
+    "universe": "Chronicle Saga",
+    "summary": "Powers a world-scale defense"
+  },
+  "sourcePage": "generated-project-art",
+  "generator": "tools/generate-relic-art.js",
+  "generatedAt": "2026-08-28T17:26:54.877Z"
+}
