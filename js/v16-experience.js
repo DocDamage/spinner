@@ -94,13 +94,13 @@
 
   const completeEventV16=P.completeEvent;
   P.completeEvent=function(){
-    const pending=copy(this.state.pending),beforeId=pending?.id,result=completeEventV16.call(this),finished=pending&&pending.stage==='result'&&(!this.state.pending||this.state.pending.id!==beforeId);
-    if(finished){
+    const pending=copy(this.state.pending);
+    if(pending?.stage==='result'&&!this.state.ended){
       this.ensureV16();const sourceUniverse=universeOfPending(pending),universe=this.state.v16.currentUniverse,characterId=['battle','boss','recruit','power'].includes(pending.type)?String(pending.profileId||pending.ref||''):'';
       const step=living.advance(this.state,{roster:roster(),universe,intent:this.state.v14?.intent?.stance,type:pending.type,label:pending.label||'Encounter resolved',detail:sourceUniverse&&canonicalUniverse(sourceUniverse)!==canonicalUniverse(universe)?`Encounter source: ${sourceUniverse}.`:undefined,characterId,playerPresent:false});
-      if(step.event)this.log(`WORLD STATE: ${step.event.title}.`,'info');this.save();this.renderAll();
+      if(step.event)this.log(`WORLD STATE: ${step.event.title}.`,'info');
     }
-    return result;
+    return completeEventV16.call(this);
   };
 
   P.travelWorldV16=function(name){
