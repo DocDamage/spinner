@@ -4,6 +4,9 @@ A local-first browser game about building a custom hero, bending a seeded event
 wheel with Fate, and carrying choices through a connected multiverse campaign.
 The runtime roster contains 1,326 character profiles.
 
+Play the current release at
+[docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
+
 ## Run locally
 
 The app has no build step. Serve the repository with a static HTTP server:
