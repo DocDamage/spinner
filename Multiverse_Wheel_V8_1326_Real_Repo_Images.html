@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050711">
+<title>Multiverse Wheel V9.3 — Structured Campaign + 1,326 Roster</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles/app.css">
+<link rel="stylesheet" href="styles/v9.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar" aria-label="Run status">
+    <section class="top-card">
+      <div class="brand-icon" aria-hidden="true">MW</div>
+      <div>
+        <div class="eyebrow">Current Tier</div>
+        <div class="top-value" id="tier-name">T1 — Street</div>
+      </div>
+    </section>
+    <section class="top-card center">
+      <div>
+        <div class="act-value" id="act-title">ACT I — ORIGIN</div>
+        <div><span class="eyebrow">Spin</span> <strong class="spin-value" id="spin-counter">1 / 30</strong></div>
+      </div>
+    </section>
+    <section class="top-card right">
+      <div>
+        <div class="eyebrow">Condition</div>
+        <div class="top-value" id="status-name" style="color:var(--green)">PRISTINE</div>
+        <div class="header-actions" aria-label="Game controls">
+          <button class="icon-btn" id="sound-btn" type="button" title="Toggle sound"><span aria-hidden="true">🔊</span> Sound</button>
+          <button class="icon-btn" id="help-btn" type="button" title="Help"><span aria-hidden="true">?</span> Help</button>
+          <button class="icon-btn" id="new-btn" type="button" title="New run"><span aria-hidden="true">↻</span> New</button>
+        </div>
+      </div>
+      <div class="status-orb" id="status-orb" aria-hidden="true">◆</div>
+    </section>
+  </header>
+
+  <main>
+    <section class="playfield">
+      <aside class="panel hero-panel" aria-labelledby="hero-title">
+        <h2 class="panel-title" id="hero-title"><span>Character Dossier</span><span class="count" id="ability-count">0 abilities</span></h2>
+        <div id="hero-dossier"></div>
+      </aside>
+
+      <section class="wheel-column" aria-label="Multiverse wheel">
+        <div class="wheel-shell" id="wheel-shell">
+          <div class="pointer" id="pointer" aria-hidden="true"></div>
+          <canvas id="wheel" role="img" aria-label="Random multiverse event wheel"></canvas>
+          <div class="hub">
+            <div class="hub-kicker" id="hub-kicker">REAL HERO OR VILLAIN</div>
+            <div class="hub-name" id="hub-name">AWAITING ORIGIN</div>
+            <div class="hub-meta" id="hub-meta">305 named character profiles</div>
+            <div class="hub-overall" id="hub-overall">OVR —</div>
+            <button class="primary-btn" id="spin-btn" type="button">SPIN ORIGIN WHEEL</button>
+          </div>
+        </div>
+        <section class="panel event-panel" id="event-panel" aria-live="polite"></section>
+      </section>
+
+      <aside class="side-stack">
+        <section class="panel" aria-labelledby="party-title">
+          <h2 class="panel-title" id="party-title"><span>Party</span><span class="count" id="party-count">0 / 3</span></h2>
+          <div id="party-list"></div>
+        </section>
+        <section class="panel" aria-labelledby="loadout-title">
+          <h2 class="panel-title" id="loadout-title"><span>Forms & Artifacts</span><span class="count" id="loadout-count">0</span></h2>
+          <div id="loadout-list"></div>
+        </section>
+        <section class="panel" aria-labelledby="conditions-title">
+          <h2 class="panel-title" id="conditions-title"><span>Active Conditions</span><span class="count" id="hazard-rate">Hazard max 1 / wheel</span></h2>
+          <div id="conditions-list"></div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="panel library-panel" aria-labelledby="powers-title">
+      <h2 class="panel-title" id="powers-title"><span>Power Source Library</span><span class="count" id="power-set-count">0 sets</span></h2>
+      <div class="library-grid" id="power-library"></div>
+    </section>
+
+    <section class="panel log-panel" aria-labelledby="log-title">
+      <h2 class="panel-title" id="log-title"><span>Multiverse Chronicle</span><span class="count" id="seed-label">Seed</span></h2>
+      <div class="log-list" id="log-list" role="log" aria-live="polite"></div>
+      <div class="resolve-row" style="margin-top:10px">
+        <button class="secondary-btn" id="copy-btn" type="button">Copy Run Summary</button>
+        <button class="secondary-btn" id="scroll-top-btn" type="button">Back to Wheel</button>
+      </div>
+    </section>
+
+    <p class="disclaimer">Unofficial fan-made prototype. Character and item names belong to their respective rights holders. Every listed power in a selected version's gameplay profile is active in calculations; temporary one-issue feats and unrelated alternate continuities are not silently merged.</p>
+  </main>
+</div>
+
+<div class="modal" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-heading">
+  <div class="modal-card">
+    <button class="icon-btn modal-close" id="help-close" type="button">Close</button>
+    <h2 id="help-heading">How This Version Works</h2>
+    <h3>Real roster and full kits</h3>
+    <p>The origin, opponents, recruits, mentors, transformations, and many artifacts use named heroes and villains. Open any dossier to see every power included in that exact gameplay profile. All listed stats, powers, tags, forms, party support, and artifacts feed the battle calculation.</p>
+    <h3>Wheel balance</h3>
+    <p>Normal wheels now use six dynamic world archetypes: Battle, Treasure, Crisis, Tournament, Training, and Multiverse Collision. Each creates a different 14-slice mix of battles, missions, power sets, transformations, recruits, artifacts, recovery, rare events, and at most one hazard where that world calls for it. Hazard cooldown still prevents repeated hazard spam.</p>
+    <h3>Battle choices</h3>
+    <ul>
+      <li><strong>Power Clash</strong> favors Might, Defense, and Energy.</li>
+      <li><strong>Speed Blitz</strong> favors Speed, Skill, and prediction.</li>
+      <li><strong>Tactical Counter</strong> favors Mind, Skill, preparation, and technology.</li>
+      <li><strong>Mystic / Hax</strong> favors magic, reality, soul, time, and space powers.</li>
+      <li><strong>Outlast</strong> favors Defense, healing, regeneration, and adaptation.</li>
+    </ul>
+    <h3>Power growth</h3>
+    <p>Landing on a character power set adds that character's entire listed kit. Winning a battle also lets you copy the opponent's complete kit, recruit them, or convert the victory into raw stat growth.</p>
+    <h3>Saving</h3>
+    <p>The run autosaves locally after every decision. The New button erases the current run only after confirmation.</p>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/config.js"></script>
+<script src="character_image_manifest.js"></script>
+<script>
+if(!Array.isArray(window.CHARACTER_IMAGE_MANIFEST)){document.write('<script src="https://cdn.jsdelivr.net/gh/DocDamage/spinner@e899830a2a887596462df9150ad88ca6ef4b6381/character_image_manifest.js"><\/script>');}
+</script>
+<script defer src="js/data/base.js"></script>
+<script defer src="js/data/expansion.js"></script>
+<script defer src="js/data/mega-roster.js"></script>
+<script defer src="js/core.js"></script>
+<script defer src="js/v5-systems.js"></script>
+<script defer src="js/v6-custom-hero.js"></script>
+<script defer src="js/v8-everything.js"></script>
+<script defer src="js/v8-integration.js"></script>
+<script defer src="js/media-resolver.js"></script>
+<script defer src="js/performance.js"></script>
+<script defer src="js/domain/balance-engine.js"></script>
+<script defer src="js/domain/combat-engine.js"></script>
+<script defer src="js/domain/combat-advisor.js"></script>
+<script defer src="js/domain/campaign-engine.js"></script>
+<script defer src="js/domain/trait-engine.js"></script>
+<script defer src="js/domain/save-repository.js"></script>
+<script defer src="js/domain/roster-validator.js"></script>
+<script defer src="js/domain/wheel-service.js"></script>
+<script defer src="js/domain/derived-state-cache.js"></script>
+<script defer src="js/domain/collection-window.js"></script>
+<script defer src="js/ui/view-templates.js"></script>
+<script defer src="js/ui/dialog-controller.js"></script>
+<script defer src="js/ui/tab-controller.js"></script>
+<script defer src="js/v9-gameplay.js"></script>
+<script defer src="js/v10-performance.js"></script>
+<script defer src="js/v10-late-run.js"></script>
+<script defer src="js/v10-tactical-advisor.js"></script>
+<script defer src="js/bootstrap.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "multiverse-wheel",
+  "private": true,
+  "version": "9.3.0",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "validate": "npm test && node tools/validate-project.js",
+    "analyze:balance": "node tools/simulate-balance.js"
+  }
+}
