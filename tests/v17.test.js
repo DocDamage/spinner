@@ -47,3 +47,8 @@ test('faction Favor can stabilize the current reality',()=>{
   const engine=new RealityRulesEngine(),value=state(),faction=Object.values(value.v16.factions)[0],world=value.v16.universes['earth-prime'];value.v17.factionFavor[faction.id]=3;const before=world.stability;
   const result=engine.spendFavor(value,faction.id,'stabilize');assert.equal(result.ok,true);assert.equal(result.cost,2);assert.equal(world.stability>=before,true);assert.equal(engine.factionFavor(value,faction.id),1);
 });
+
+test('unavailable ceasefires do not consume faction Favor',()=>{
+  const engine=new RealityRulesEngine(),value=state(),faction=Object.values(value.v16.factions)[0];value.v17.factionFavor[faction.id]=3;faction.relations={};
+  const result=engine.spendFavor(value,faction.id,'ceasefire');assert.equal(result.ok,false);assert.match(result.error,/no active hostile relation/i);assert.equal(engine.factionFavor(value,faction.id),3);assert.equal(value.v17.stats.favorSpent,0);
+});
