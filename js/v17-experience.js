@@ -44,12 +44,15 @@
     this.save();this.drawWheel();
   };
   const generateWheelV17=P.generateWheel;
-  P.generateWheel=function(){if(this.state?.v17){this.ensureV17();if(this.state.v13?.runContext?.kind!=='daily')reality.rollChain(this.state);}const result=generateWheelV17.call(this);if(this.state?.v17)this.applyWheelDirectiveV17();return result;};
+  P.generateWheel=function(){
+    if(this.state?.v17){this.ensureV17();const next=Number(this.state.spin||0)+1,protectedBeat=next===1||[10,20,30].includes(next)||this.state.v13?.runContext?.kind==='daily';if(!protectedBeat)reality.rollChain(this.state);}
+    const result=generateWheelV17.call(this);if(this.state?.v17)this.applyWheelDirectiveV17();return result;
+  };
 
   const landV17=P.land;
   P.land=function(slice){
-    const secret=Boolean(slice?.v17Secret),revealed=secret?{...slice,label:slice.v17RevealLabel||'Unknown Signal',sub:slice.v17RevealSub||'',v17WasSecret:true}:slice,chain=this.state?.v17?.wheel?.activeChain?copy(this.state.v17.wheel.activeChain):null;
-    const result=landV17.call(this,revealed);if(this.state?.v17&&chain){const consumed=reality.consumeChain(this.state);if(consumed?.remaining===0)this.log(`WHEEL CURRENT ENDED: ${consumed.label}.`,'info');}
+    const secret=Boolean(slice?.v17Secret),revealed=secret?{...slice,label:slice.v17RevealLabel||'Unknown Signal',sub:slice.v17RevealSub||'',v17WasSecret:true}:slice,chain=this.state?.v17?.wheel?.activeChain?copy(this.state.v17.wheel.activeChain):null,protectedLanding=protectedWheelTypes.has(revealed?.type)||this.state.v13?.runContext?.kind==='daily';
+    const result=landV17.call(this,revealed);if(this.state?.v17&&chain&&!protectedLanding){const consumed=reality.consumeChain(this.state);if(consumed?.remaining===0)this.log(`WHEEL CURRENT ENDED: ${consumed.label}.`,'info');}
     if(secret){this.log(`SECRET SLICE REVEALED: ${revealed.label}.`,'rare');this.audio.rare();}this.save();return result;
   };
 
