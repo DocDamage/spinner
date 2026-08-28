@@ -67,7 +67,7 @@
   };
 
   P.shouldCreateNemesisV16=function(enemy,pending,playerWon){
-    if(playerWon||!enemy)return false;if(pending?.type==='boss'||this.state.challenge==='nemesis')return true;
+    if(playerWon||!enemy)return false;if(pending?.type==='boss'||this.state.challenge==='nemesis'||this.state.v13?.challenge==='nemesis'||this.state.challengeMode==='nemesis')return true;
     const seed=MultiverseDomain.hash32?.(`${this.state.seed}|${this.state.spin}|${enemy.id}|nemesis`)||0;return seed%100<28;
   };
   P.trackNemesisBattleV16=function(pending,beforeWins,beforeLosses){
@@ -86,6 +86,13 @@
     P.finishCombatVictory=function(p,enemy){
       const result=finishCombatVictoryV16.call(this,p,enemy);this.ensureV16();const id=String(enemy?.id||p?.profileId||p?.ref||'');
       if(id&&this.state.v16.nemeses[id])living.noteNemesisResult(this.state,id,true);this.save();return result;
+    };
+  }
+  if(typeof P.fighterKO==='function'){
+    const fighterKOV16=P.fighterKO;
+    P.fighterKO=function(p,enemy,state){
+      const result=fighterKOV16.call(this,p,enemy,state);this.ensureV16();const id=String(enemy?.id||p?.profileId||p?.ref||''),character=CHAR.get(id)||enemy;
+      if(id&&this.state.v16.nemeses[id])living.noteNemesisResult(this.state,id,false);else if(character&&this.shouldCreateNemesisV16(character,p,false))living.registerNemesis(this.state,character,`${character.name} defeated the party in tactical combat on Spin ${this.state.spin}.`);this.save();return result;
     };
   }
 
