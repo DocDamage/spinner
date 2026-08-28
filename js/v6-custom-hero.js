@@ -266,10 +266,9 @@
   // Same-franchise chemistry recognizes alias-normalized franchise names.
   const _relationshipBonusV7=P.relationshipBonus;
   P.relationshipBonus=function(){
-    const ids=[this.state.baseId,...this.state.party].filter(Boolean),notes=[];let b=0;
+    const base=_relationshipBonusV7.call(this),ids=[this.state.baseId,...this.state.party].filter(Boolean),notes=[...(base.notes||[])];let b=Number(base.bonus||0);
     for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++){
-      const key=[ids[i],ids[j]].sort().join('|'),r=RELATIONSHIPS[key];
-      if(r){b+=r.v*.004;notes.push(r.n);}else{const a=CHAR.get(ids[i]),c=CHAR.get(ids[j]);if(a&&c&&this.sameUniverse(a.universe,c.universe))b+=.006;}
+      const a=CHAR.get(ids[i]),c=CHAR.get(ids[j]);if(a&&c&&a.universe!==c.universe&&this.sameUniverse(a.universe,c.universe)){b+=.006;notes.push(`${a.universe} and ${c.universe} are recognized as one canonical franchise.`);}
     }
     return{bonus:clamp(b,-.05,.08),notes};
   };

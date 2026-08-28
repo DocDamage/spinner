@@ -1,13 +1,16 @@
 {
   "name": "multiverse-wheel",
   "private": true,
-  "version": "10.1.0",
+  "version": "13.0.0",
   "scripts": {
     "test": "node --test tests/*.test.js",
     "test:e2e": "playwright test",
-    "validate": "npm test && node tools/validate-project.js",
+    "validate": "npm test && node tools/validate-project.js && node tools/validate-v13-content.js",
     "validate:release": "npm run validate && npm run test:e2e",
-    "analyze:balance": "node tools/simulate-balance.js"
+    "analyze:balance": "node tools/simulate-balance.js",
+    "analyze:v13": "node tools/simulate-v13.js",
+    "validate:content": "node tools/validate-v13-content.js",
+    "generate:icons": "node tools/generate-v13-icons.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1"

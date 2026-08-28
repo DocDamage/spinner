@@ -90,7 +90,7 @@
   P.renderCollectionGoalV11=function() {
     const root=document.getElementById('power-library');
     if (!root || root.querySelector('.v11-collection-goal')) return;
-    const progress=experience.collectionProgress(DATA.characters,this.state.discoveredCharacters || []);
+    const progress=experience.collectionProgress(DATA.characters,this.state.discoveredCharacters || [],MultiverseDomain.canonicalUniverse || (value=>value));
     const active=this.state.v11Experience?.collectionFocus;
     const nextReward=experience.nextCollectionReward(progress.count);
     const universes=progress.universes.map(entry=>`<option value="${esc(entry.universe)}" ${active?.universe===entry.universe?'selected':''}>${esc(entry.universe)} • ${entry.discovered}/${entry.total}</option>`).join('');
@@ -98,7 +98,7 @@
   };
 
   P.claimCollectionRewardsV11=function() {
-    const progress=experience.collectionProgress(DATA.characters,this.state.discoveredCharacters || []);
+    const progress=experience.collectionProgress(DATA.characters,this.state.discoveredCharacters || [],MultiverseDomain.canonicalUniverse || (value=>value));
     const rewards=experience.collectionRewards(progress.count,this.state.v11Experience.collectionRewards);
     if (!rewards.length) return false;
     for (const reward of rewards) {
@@ -161,7 +161,8 @@
     const next=(this.state?.spin || 0)+1;
     if (!focus?.remaining || next===1 || next%10===0 || !this.state.slices?.length) return result;
     const owned=new Set((this.state.kits || []).map(kit=>kit.id));
-    const pool=DATA.characters.filter(character=>character.universe===focus.universe && !owned.has(character.id));
+    const canonical=MultiverseDomain.canonicalUniverse || (value=>value);
+    const pool=DATA.characters.filter(character=>canonical(character.universe)===canonical(focus.universe) && !owned.has(character.id));
     const index=this.state.slices.findIndex(slice=>['power','battle','recruit','training'].includes(slice.type));
     if (pool.length && index>=0) {
       const character=this.pick(pool);

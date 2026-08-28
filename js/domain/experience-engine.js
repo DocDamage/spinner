@@ -47,15 +47,16 @@
       ];
     }
 
-    collectionProgress(characters = [], discoveredIds = []) {
+    collectionProgress(characters = [], discoveredIds = [], universeNormalizer = value => value) {
       const discovered=new Set(discoveredIds);
       const rosterIds=new Set(characters.map(character=>character.id));
       const universes=new Map();
       for (const character of characters) {
-        const entry=universes.get(character.universe) || {universe:character.universe,total:0,discovered:0};
+        const universe=universeNormalizer(character.universe);
+        const entry=universes.get(universe) || {universe,total:0,discovered:0};
         entry.total++;
         if (discovered.has(character.id)) entry.discovered++;
-        universes.set(character.universe,entry);
+        universes.set(universe,entry);
       }
       const count=[...discovered].filter(id => rosterIds.has(id)).length;
       const milestones=[1,5,10,25,50,100,250,500,1000,characters.length];
