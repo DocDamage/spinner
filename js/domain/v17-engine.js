@@ -124,10 +124,11 @@
     factionFavor(state,factionId){return Math.max(0,Math.round(Number(state.v17.factionFavor[String(factionId||'')]||0)));}
 
     spendFavor(state,factionId,kind){
-      this.ensure(state);const id=String(factionId||''),faction=state.v16?.factions?.[id];if(!faction)return{ok:false,error:'Unknown faction.'};const costs={stabilize:2,reveal:2,ceasefire:3},cost=costs[kind];if(!cost)return{ok:false,error:'Unknown favor action.'};if(this.factionFavor(state,id)<cost)return{ok:false,error:`${cost} Favor required.`};state.v17.factionFavor[id]-=cost;state.v17.stats.favorSpent+=cost;const world=currentWorld(state);
+      this.ensure(state);const id=String(factionId||''),faction=state.v16?.factions?.[id];if(!faction)return{ok:false,error:'Unknown faction.'};const costs={stabilize:2,reveal:2,ceasefire:3},cost=costs[kind];if(!cost)return{ok:false,error:'Unknown favor action.'};if(this.factionFavor(state,id)<cost)return{ok:false,error:`${cost} Favor required.`};const world=currentWorld(state),hidden=kind==='reveal'?this.routesFor(state,world.name).find(route=>!route.unlocked):null,relationId=kind==='ceasefire'?Object.keys(faction.relations||{}).find(otherId=>Number(faction.relations[otherId])<-25):'';
+      if(kind==='reveal'&&!hidden)return{ok:false,error:'No hidden route remains in this reality.'};if(kind==='ceasefire'&&!relationId)return{ok:false,error:'This faction has no active hostile relation to soften.'};state.v17.factionFavor[id]-=cost;state.v17.stats.favorSpent+=cost;
       if(kind==='stabilize'){world.stability=clamp(Number(world.stability||0)+8,0,100);world.threat=clamp(Number(world.threat||0)-5,0,100);}
-      if(kind==='reveal'){const hidden=this.routesFor(state,world.name).find(route=>!route.unlocked);if(hidden){hidden.unlocked=true;hidden.discovered=true;state.v17.stats.secretsFound++;}else{state.v17.factionFavor[id]+=cost;state.v17.stats.favorSpent-=cost;return{ok:false,error:'No hidden route remains in this reality.'};}}
-      if(kind==='ceasefire'){for(const relationId of Object.keys(faction.relations||{}))if(Number(faction.relations[relationId])<-25){faction.relations[relationId]=Math.min(-10,Number(faction.relations[relationId])+20);const other=state.v16.factions[relationId];if(other?.relations)other.relations[id]=faction.relations[relationId];break;}}
+      if(kind==='reveal'){hidden.unlocked=true;hidden.discovered=true;state.v17.stats.secretsFound++;if(!state.v17.wheel.secretDiscoveries.includes(hidden.routeId))state.v17.wheel.secretDiscoveries.push(hidden.routeId);}
+      if(kind==='ceasefire'){faction.relations[relationId]=Math.min(-10,Number(faction.relations[relationId])+20);const other=state.v16.factions[relationId];if(other?.relations)other.relations[id]=faction.relations[relationId];}
       return{ok:true,cost,kind,favor:this.factionFavor(state,id)};
     }
 
