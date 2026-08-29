@@ -47,6 +47,12 @@ window.addEventListener('DOMContentLoaded',async()=>{
                     if(!window.MultiverseDomain?.ActivityCircuitEngine)await loadScript('js/domain/v24-engine.js');
                     await loadScript('js/v24-experience.js');release='V24 Multiverse Activities & Competition Circuits';
                     document.title='Multiverse Wheel V24 — Multiverse Activities & Competition Circuits';if(description)description.content='Race, compete, hunt, train, and celebrate through persistent Wheel-driven activities while existing economy, party, relic, faction, settlement, and operation systems remain authoritative.';
+                    try{
+                      loadStyle('styles/v25.css');
+                      if(!window.MultiverseDomain?.CrisisArcEngine)await loadScript('js/domain/v25-engine.js');
+                      await loadScript('js/v25-experience.js');release='V25 Cataclysms & Multiverse Crisis Arcs';
+                      document.title='Multiverse Wheel V25 — Cataclysms & Multiverse Crisis Arcs';if(description)description.content='Answer persistent multiverse-scale emergencies through ordinary Wheel outcomes while existing worlds, factions, civilians, strongholds, relics, operations, and activities remain authoritative.';
+                    }catch(error){console.error('V25 Cataclysms & Multiverse Crisis Arcs failed to load; continuing with V24 Multiverse Activities & Competition Circuits.',error);document.title='Multiverse Wheel V24 — Multiverse Activities & Competition Circuits';}
                   }catch(error){console.error('V24 Multiverse Activities & Competition Circuits failed to load; continuing with V23 Tactical Missions & Warfront Operations.',error);document.title='Multiverse Wheel V23 — Tactical Missions & Warfront Operations';}
                 }catch(error){console.error('V23 Tactical Missions & Warfront Operations failed to load; continuing with V22 Settlements & Civilian Worlds.',error);document.title='Multiverse Wheel V22 — Settlements & Civilian Worlds';}
               }catch(error){console.error('V22 Settlements & Civilian Worlds failed to load; continuing with V21 Faction Campaigns & Strongholds.',error);document.title='Multiverse Wheel V21 — Faction Campaigns & Strongholds';}
