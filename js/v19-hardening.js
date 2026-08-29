@@ -34,4 +34,22 @@
   if(typeof globalThis.MultiverseWheel!=='function')return;
   const P=globalThis.MultiverseWheel.prototype,useAssist=P.useAssistV13,probe=new Engine();
   if(typeof useAssist==='function')P.useAssistV13=function(id){this.ensureV19?.();const decision=probe.assistDecision(this.state,id,true);if(!decision.allowed){this.save();this.renderAll();return this.toast(decision.reason);}return useAssist.call(this,id);};
+
+  // V13 historically reloaded on every service-worker controllerchange. On a
+  // first install, sw.js calls clients.claim(), which also fires controllerchange
+  // even though no update is being applied. As the offline shell grew, that
+  // first-control reload could interrupt live input and browser-test journeys.
+  // Adopt the initial controller silently; reload only when a later worker
+  // replaces a controller that the page has already observed.
+  P.registerPwaV13=function(){
+    if(this._v19PwaSafeRegistered)return;this._v19PwaSafeRegistered=true;this.injectReplayV13?.();
+    const network=document.querySelector('[data-v13-network]'),updateNetwork=()=>{if(network)network.textContent=navigator.onLine?'ONLINE • OFFLINE CACHE ENABLED':'OFFLINE • LOCAL TIMELINE AVAILABLE';};updateNetwork();window.addEventListener('online',updateNetwork);window.addEventListener('offline',updateNetwork);
+    window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();this._v13InstallPrompt=event;const button=document.querySelector('[data-v13-install]');if(button)button.hidden=false;});
+    if(!('serviceWorker'in navigator)||!/^https?:$/.test(location.protocol))return;
+    let controllerSeen=Boolean(navigator.serviceWorker.controller),refreshing=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!controllerSeen){controllerSeen=true;return;}if(refreshing)return;refreshing=true;location.reload();});
+    navigator.serviceWorker.register('./sw.js').then(registration=>{
+      this._v13ServiceWorker=registration;const showUpdate=()=>{if(registration.waiting)document.getElementById('v13-update-banner').hidden=false;};showUpdate();registration.addEventListener('updatefound',()=>{const worker=registration.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showUpdate();});});
+    }).catch(()=>{if(network)network.textContent='ONLINE • OFFLINE CACHE UNAVAILABLE';});
+  };
 })();
