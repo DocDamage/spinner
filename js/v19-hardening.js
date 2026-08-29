@@ -35,6 +35,15 @@
   const P=globalThis.MultiverseWheel.prototype,useAssist=P.useAssistV13,probe=new Engine();
   if(typeof useAssist==='function')P.useAssistV13=function(id){this.ensureV19?.();const decision=probe.assistDecision(this.state,id,true);if(!decision.allowed){this.save();this.renderAll();return this.toast(decision.reason);}return useAssist.call(this,id);};
 
+  // V13 schedules a delayed command-deck opener during initial binding. Never
+  // let that startup callback replace a subview the player has already entered.
+  const openTitleV13=P.openTitleV13;
+  if(typeof openTitleV13==='function')P.openTitleV13=function(view='home'){
+    const title=document.getElementById('v13-title-screen'),active=String(this._v13TitleView||'');
+    if(view==='home'&&title?.classList.contains('open')&&active&&active!=='home')return false;
+    return openTitleV13.call(this,view);
+  };
+
   // First service-worker control is part of installation, not an app update.
   // A reload is allowed only after the player explicitly chooses RELOAD UPDATE.
   // This prevents clients.claim() from interrupting live input or first-run play.
