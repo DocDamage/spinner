@@ -1,28 +1,23 @@
-# Multiverse Wheel V20 — Relic Bonds & Equipment Mastery
+# Multiverse Wheel V21 — Faction Campaigns & Strongholds
 
-A local-first browser game about forging a custom hero, bending a seeded event
-wheel with Fate, and writing a connected multiverse saga alone or with up to ten
-local or directly connected players. The runtime roster contains 1,326 character
-profiles.
+A local-first browser/PWA game about forging a custom hero, bending a seeded event wheel with Fate, and writing a persistent multiverse saga alone or with up to ten local/directly connected players. The runtime roster contains 1,326 character profiles.
 
-The release stack now works as one connected simulation:
+V21 turns the persistent factions introduced in V16 into a playable strategic layer without replacing the Wheel or duplicating the systems built since V16.
 
-- **V16 — Living Multiverse:** persistent worlds, factions, nemeses, relic owners,
-  long memory, and off-screen evolution.
-- **V17 — Reality Rules:** Universe DNA, internal destinations, secret routes,
-  faction quests, Favor, and multi-spin Wheel currents.
-- **V18 — Multiversal Economy:** location markets, equipment, crafting, auctions,
-  contracts, scarcity, and artifact evolution.
-- **V19 — Party Consequences:** trust, friendship, rivalry, fear, resentment,
-  morale, wounds, scars, reserves, personal quests, betrayal, and relationship
-  endings that feed back into combat and the economy.
-- **V20 — Relic Bonds & Equipment Mastery:** equipment mastery, 2/4-piece sets,
-  faction Regalia, signature/awakened gear, relic personalities and quests,
-  attunement, purity/corruption, nemesis theft/recovery, vendor loyalty, and the
-  combined Legacy Convergence transformation.
+Play the current release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
 
-Play the current release at
-[docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
+## Release stack
+
+The modern runtime is deliberately layered and fallback-safe:
+
+- **V16 — Living Multiverse:** persistent universes, six seeded factions, faction power/resources/cohesion/relations, wars, alliances, nemeses, artifact ownership, world memory, collapse/recovery, and bounded offline world simulation.
+- **V17 — Reality Rules:** Universe DNA, destinations, secret routes, short faction quests, Favor, travel routes, faction warfronts, and multi-spin Wheel currents.
+- **V18 — Multiversal Economy:** the authoritative Credits wallet plus Cosmic Fragments, Salvage, Void Marks, Bounty Seals, markets, equipment, crafting, enchantment, transmutation, contracts, auctions, and artifact evolution.
+- **V19 — Party Consequences:** Loyalty, Trust, Respect, Friendship, Rivalry, Fear, Resentment, morale, wounds, scars, reserves, personal quests, betrayal, defection, mentor bonds, faction reactions, and relationship endings.
+- **V20 — Relic Bonds & Equipment Mastery:** equipment mastery, signature/awakened gear, equipment sets, faction Regalia, vendor loyalty, relic Bond/Purity/Corruption/personality/attunement/quests, relic disputes, nemesis theft/recovery, and Legacy Convergence.
+- **V21 — Faction Campaigns & Strongholds:** membership, rank, Authority, long campaigns, strategic territory/fronts, player strongholds, facilities, specialists, diplomacy, infiltration, sieges, faction-exclusive unlocks, and faction legacy endings.
+
+`js/bootstrap.js` loads these layers in order. If V21 fails to load, the browser logs the failure and continues as V20 instead of taking the game down.
 
 ## Run locally
 
@@ -32,381 +27,241 @@ The app has no build step. Serve the repository with a static HTTP server:
 python -m http.server 8765
 ```
 
-Open
-`http://localhost:8765/Multiverse_Wheel_V8_1326_Real_Repo_Images.html`.
-Serving over HTTP also enables installation and offline caching; opening the
-HTML directly still supports the local game but not its service worker.
+Then open:
 
-## V20 Relic Bonds & Equipment Mastery
+`http://localhost:8765/Multiverse_Wheel_V8_1326_Real_Repo_Images.html`
 
-V20 upgrades the existing V18 inventory rather than creating a second gear
-system. `state.lootInventory`, `state.equipment`, `state.artifacts`, V18
-currencies, and V18 artifact evolution remain authoritative; V20 adds persistent
-identity, mastery, bond, ownership-consequence, and narrative state around them.
+Serving over HTTP enables installation and offline caching. Opening the HTML directly still runs the local game, but not its service worker.
 
-### Equipment mastery
+## V21 Faction Campaigns & Strongholds
 
-Every V18 equipment item receives a persistent mastery record. Equipped items
-gain mastery XP from play, weighted toward combat and bosses. Mastery progresses
-from Level 1 through Level 10 and adds incremental bonuses to stats the item
-already supports.
+### Ownership rules
 
-Readable mastery ranks are Initiate, Familiar, Veteran, Masterwork, Signature,
-and Ascendant.
+V21 extends older systems instead of shadowing them:
 
-- Mastery Level 6 unlocks persistent signature naming.
-- Mastery Level 10 awakens the equipment.
-- Mastery survives equip/unequip, enchantment, reforging, save/load, and normal
-  inventory use.
+- V16 remains authoritative for faction identity, reputation, power, resources, cohesion, relations, nemeses, artifact ownership, world history, and world ticks.
+- V17 remains authoritative for destinations, route unlocks, Favor, and short faction quests.
+- V18 remains authoritative for Credits and all material currencies, equipment inventory, crafting, markets, and artifact evolution.
+- V19 remains authoritative for party relationships, wounds, reserves, defections, personal quests, and relationship consequences.
+- V20 remains authoritative for equipment mastery, faction Regalia items, signature/awakened gear, relic Bond/Purity/Corruption, relic bearer state, and relic quests.
+- V21 stores only the new campaign/strategy layer in `state.v21`.
 
-### Equipment sets and Legacy Forge
+### Faction membership
 
-V20 ships five core equipment set families:
+Each V16 faction can have a persistent V21 membership record. Status can be neutral, allied, member, infiltrating, expelled, defected, or enemy.
 
-- **Rift Vanguard** — assault and mobility.
-- **Paradox Savant** — mind, energy, and hax.
-- **World Warden** — defense and stability.
-- **Starbound Hunter** — speed and precision.
-- **Void Covenant** — forbidden power.
+The player may have one primary faction at a time. They can leave active service without erasing history, defect directly to a rival, or maintain a separate infiltration target.
 
-Matching equipped pieces activate real 2-piece and 4-piece bonuses without
-re-adding the underlying V18 item stats.
+Joining and defection write through to V16 reputation/relations and can trigger V19 party reactions.
 
-The Economy tab now includes a Legacy Forge that creates normal V18 Weapon,
-Armor, Focus, and Charm records using existing Salvage, Cosmic Fragments, and
-Void Marks. Existing items can also be reforged into an unlocked set while
-keeping their underlying bonuses and enchantment state.
+### Rank and Authority
 
-### Faction Regalia
+V21 has eight faction ranks:
 
-A V16 faction with Reputation 35+ can unlock a generated Regalia equipment set.
-Its bonuses derive from faction ethos:
+1. Outsider
+2. Associate
+3. Operative
+4. Veteran
+5. Captain
+6. Commander
+7. Champion
+8. Regent
 
-- Mercy → Defense / Mind
-- Knowledge → Mind / Hax
-- Freedom → Speed / Skill
-- Order → Defense / Might
-- Balance → Energy / Mind
-- Ambition → Might / Hax
+Promotion uses campaign contribution XP plus V16 reputation and V21 Authority gates. Repeating trivial events alone cannot skip those gates.
 
-Faction loyalty therefore feeds equipment progression instead of ending at a
-reputation number.
+**Authority** is separate from reputation. Reputation answers what the faction thinks of the player; Authority controls what strategic decisions the player can make inside the faction.
 
-### Relic personalities and quests
+Authority is bounded from 0–100 and gates higher-level diplomacy, campaign decisions, stronghold construction, and faction access.
 
-Every owned artifact receives one deterministic persistent personality:
+### Long-form campaigns
 
-- Guardian
-- Seeker
-- Sovereign
-- Trickster
-- Sage
-- Avenger
+V21 campaigns are durable strategic arcs that progress through normal Wheel-compatible events rather than a detached minigame.
 
-Each relic tracks Bond, Purity, Corruption, bearer, awakening, a personality-
-specific quest, ownership status, nemesis thief/world, party claims, and history.
+Current campaign families:
 
-Relic quest families include protection, discovery, worthy victories, rule-
-breaking survival, teaching/learning, and vengeance. Quest completion increases
-Bond and Purity and can satisfy part of the awakening requirement.
+- Border War
+- Liberation Campaign
+- Relic Crusade
+- Succession Crisis
+- Reality Stabilization
+- Faction Schism
 
-### Attunement and relationship resonance
+Each campaign has persistent operations, progress, enemy factions, territory context, momentum, a final strategic decision, rewards, consequences, and aftermath.
 
-A relic can attune to the hero or a party member. Ally attunement requires V19
-Trust 40+, and strong Trust/Friendship with the bearer amplifies the relic's
-favored stat resonance.
+Rendering the campaign screen does not advance it. Progress comes from deduplicated gameplay events and recognized V17 faction-service completions.
 
-This uses V19's existing relationship axes; V20 does not introduce a duplicate
-ally-approval score.
+### Territory and frontlines
 
-### Relic awakening
+Territories are built from the existing V17 destination network. A territory stores controller, faction influence, stability, fortification, supply, contest state, campaign linkage, and history.
 
-A relic can awaken when it reaches:
+Hostile V16 relations can produce persistent fronts. Front pressure, supply, and morale move through bounded world ticks. Campaign aftermath and sieges can change control.
 
-- Bond 80+;
-- Purity 55+;
-- and either its relic quest is complete or V18 artifact evolution is Level 4+.
+Offline simulation may damage strategic position, but it cannot arbitrarily delete a player stronghold or force an unrecoverable campaign finale.
 
-Awakened relics provide stronger favored-stat resonance and become part of V20
-ending consequences.
+### Strongholds
 
-### Purity, corruption, and temptation
+Player-aligned strongholds are expensive persistent bases built in eligible territory with the real V18 wallet.
 
-Corruption is an intentional power-versus-consequence system.
+Base construction currently requires Operative rank, 10 Authority, friendly/unclaimed eligible territory, and:
 
-The player can embrace a relic's temptation to gain Bond faster and eventually
-more Hax pressure at the cost of Purity and defensive stability. Purification
-spends existing V18 Cosmic Fragments and Salvage to lower Corruption, restore
-Purity, and reinforce the bond.
+- 450 Credits
+- 42 Salvage
+- 6 Cosmic Fragments
 
-### Nemesis theft and recovery
+Strongholds track level, integrity, defense, supply, morale, facilities, specialists, siege state, and history.
 
-V20 finally makes V16's persistent relic ownership system directly playable.
-A recurring nemesis can steal a bonded relic after eligible battle/boss losses.
+Occupied bases remain in state and can be recovered through later play; V21 does not permanently erase them during background simulation.
 
-A theft:
+### Facilities
 
-- removes the relic from `state.artifacts`;
-- snapshots its V18 evolution state;
-- records the thief and last known world;
-- adds the relic to the nemesis `stolenArtifacts` list;
-- changes `state.v16.artifactOwners` to nemesis ownership;
-- enters Chronicle and long memory.
+Strongholds support ten upgradeable facilities:
 
-Defeating that nemesis recovers the relic, restores its V18 evolution state, and
-returns V16 ownership to the player.
+- Command Center — campaign/strategic support
+- Forge — V20 equipment/set support
+- Relic Vault — relic protection/purification support
+- Medical Bay — V19 recovery support
+- Training Hall — training/mastery support
+- Intelligence Wing — infiltration support
+- Portal Nexus — V17 route/travel support
+- Quartermaster — supply/economy support
+- Embassy — diplomacy support
+- Defense Grid — siege/offline defense
 
-### Party relic claims
+Facility construction and upgrades use V18 Credits/materials. Benefits are intentionally bounded so they support the hero rather than replace the Wheel build.
 
-Relics can create disputes between sufficiently respected party members. The
-player chooses which ally carries the relic. The winner gains Trust/Respect;
-the losing claimant can gain Resentment. The outcome feeds directly into V19
-relationships and therefore can later affect assists, morale, betrayal, and
-endings.
+### Specialists and party assignments
 
-### Vendor loyalty
+Living V19 allies can be temporarily assigned to stronghold roles such as Field Medic, Smith, Diplomat, Intelligence Officer, Portal Engineer, Archivist, or Defense Commander.
 
-V20 adds persistent loyalty per V18 market location. Purchases, sales, crafting,
-enchantment, and transmutation build Vendor Rank 0–5.
+Assignments persist, can affect relationships, and do not permanently remove the character from the save. Dead, departed, or defected allies cannot be assigned.
 
-Vendor loyalty changes the real V18 offer price returned to the existing shop
-and is capped, with faction influence, at a 14% discount. There is still one
-shop, one wallet, and one transaction ledger.
+V19 defectors remain the same relationship records and can reappear as faction operatives instead of being cloned into unrelated enemies.
 
-### Legacy Convergence
+### Diplomacy
 
-V20 adds a combined transformation that requires progress across both V19 and
-V20.
+Diplomatic actions use the real V16 faction relation matrix:
 
-**Legacy Convergence** requires:
+- propose alliance
+- propose ceasefire
+- trade resources
+- threaten
+- betray an agreement
 
-- at least one owned, awakened, attuned relic;
-- Party Morale 75+;
-- strongest V19 Duo Bond 82+.
+Availability is driven by current relation, Authority, and relevant stronghold support. Invalid proposals spend nothing.
 
-During Battle/Boss combat, Legacy Convergence adds +2 to all seven core stats.
-It stacks with V19 Resonant Ascension (+4 all stats), producing a verified +6
-all-stat live transformation delta when both states are active.
+### Infiltration
 
-### Relic/equipment endings
+A hostile faction can be infiltrated through a persistent cover/suspicion/intel record.
 
-The main campaign ending and V19 party epilogue remain intact. V20 adds another
-recap layer based on the inventory legacy:
+Covert operations include reconnaissance, sabotage, plan theft, prisoner rescue, leadership manipulation, and opening stronghold gates.
 
-- **The Relics Still Call** — bonded relics remain in enemy hands.
-- **Crowned by Ruin** — corruption defines the legacy.
-- **The Living Armory** — awakened relics plus signature equipment survive as a
-  major legacy.
-- **The Relic Remembers** — an awakened relic carries the timeline forward.
-- **Tools of the Road** — gear mattered without becoming destiny.
+Outcomes use seeded checks influenced by cover, intel, player skill, suspicion, and Intelligence Wing support. Infiltration is not a pure random button. Exposure can create a persistent V16 counterintelligence nemesis.
 
-### V20 UI
+### Sieges
 
-The V18 Economy tab remains the single inventory surface and now includes:
+Sieges are multi-step strategic events:
 
-- Relic Mastery beacon;
-- Vendor Rank and live discount;
-- active 2/4-piece set summary;
-- Legacy Forge;
-- gear mastery XP/rank;
-- signature naming;
-- set reforging;
-- Bond / Purity / Corruption bars;
-- relic personality and quest;
-- hero/ally attunement;
-- purification and temptation controls;
-- stolen relic tracking;
-- party relic claim decisions;
-- Legacy Convergence readiness;
-- Relic & Equipment Chronicle.
+1. Preparation
+2. Approach
+3. Breach / Defense
+4. Champion encounter
+5. Final decision
 
-The [V20 Relic Bonds & Equipment Mastery guide](docs/V20_RELIC_BONDS.md)
-documents state ownership, thresholds, economy/relationship integration, theft,
-awakening, offline behavior, and release validation.
+Available approaches include direct assault, stealth, sabotage, diplomacy, relic breach, evacuation, surrender, and retreat options. Siege outcomes change stronghold integrity/status and territory control without deleting the base record.
 
-## V19 Party Consequences
+### V19 and V20 integration
 
-V13 already had Loyalty, assist refusal, and possible departures. V19 keeps that
-system compatible but turns it into a broader persistent relationship model.
+Major faction choices can change V19 Trust, Respect, Loyalty, Fear, and Resentment based on faction ethos and ally personality.
 
-### Seven relationship axes
+Faction progression unlocks the existing V20/V18 equipment path rather than a second inventory. V21 exposes the normal `faction:<id>` Regalia set identity and higher-rank signature/technique access.
 
-Every known ally tracks Loyalty, Trust, Respect, Friendship, Rivalry, Fear, and
-Resentment. Legacy V13 Loyalty remains synchronized with V19 instead of being
-applied twice.
+Faction relic objectives operate on existing V20 relic records and V16 artifact ownership. Returning, keeping, attuning, purifying, corrupting, destroying, or redirecting a relic can change Bond/Purity/Corruption, ownership, reputation, and faction relations.
 
-### Deterministic personality and chemistry
+### Combat limits
 
-Every roster character receives a deterministic personality profile derived from
-identity, role, and tags. Every active/reserve pair receives persistent
-compatibility, Trust, Friendship, Rivalry, and Resentment.
+V21 strategic support is deliberately capped:
 
-### Morale and combat effects
+- campaign/stronghold odds contribution: approximately ±6%
+- damage contribution: approximately ±8%
 
-Party Morale persists from 0–100. Relationships affect real combat with bounded
-battle-odds (-9% to +8%) and damage (-12% to +12%) contributions.
+These effects stack with older release systems without becoming the dominant source of combat power.
 
-### Duo Bond and Resonant Ascension
+### UI
 
-The strongest active pair becomes the Duo Bond. Bond 70+ improves team-combo
-pressure. Bond 82+ plus Morale 70+ unlocks **Resonant Ascension**, which adds +4
-to all seven core stats during combat and up to +8% relationship-driven damage.
+Open **World → Factions** for the V21 command surface:
 
-### Assists, wounds, and reserves
+- Overview
+- Membership
+- Campaign
+- Territory
+- Strongholds
+- Diplomacy
 
-Low Trust/Loyalty, high Resentment, and accumulated injuries can cause assist
-refusal. High Friendship can reduce assist cost. Wounds can become scars;
-treatment changes relationships. `state.party` remains the active combat team
-and V19 adds persistent reserves around it.
-
-### Optional permadeath, conflict, and defection
-
-Permadeath is off by default. Low Morale and weak chemistry can trigger arguments
-that support reconciliation or taking sides. Deeply fractured allies can defect
-toward hostile V16 factions.
-
-### Personal quests and endings
-
-Allies receive deterministic personal quests and persistent mentor bonds. V19
-adds party endings including Found Across Worlds, The Names They Carry, The
-Fractured Alliance, Rivals to the Horizon, and The Surviving Company.
-
-The [V19 Party Consequences guide](docs/V19_PARTY_CONSEQUENCES.md) documents the
-complete relationship state model, thresholds, integration rules, and validation.
-
-## V18 Multiversal Economy
-
-- Credits remain the authoritative legacy currency; Cosmic Fragments, Salvage,
-  Void Marks, and Bounty Seals add specialist resources with real sources/sinks.
-- Current V17 destination selects Crossroads Exchange, Fracture Forge, Faction
-  Quartermaster, Relic Broker, Arena Broker, or Interdimensional Black Market.
-- Deterministic market stock rotates every three V16 world ticks. Prices react to
-  rarity, vendor, world pressure, demand, faction reputation, V19 party reactions,
-  and now V20 vendor loyalty.
-- Eight rarity tiers: Common, Uncommon, Rare, Epic, Legendary, Mythic, Divine,
-  and Forbidden.
-- Weapon, Armor, Focus, and Charm equipment changes real combat stats and tags.
-- Buy, sell, equip, salvage, enchant, transmute, Field/Masterwork/Forbidden
-  crafting, artifact evolution/fusion, sealed auctions, and economy contracts.
-- The World State modal includes the Economy tab and a compact Economy beacon.
-
-The [V18 Multiversal Economy guide](docs/V18_MULTIVERSAL_ECONOMY.md) documents
-pricing, vendors, equipment, crafting, artifacts, contracts, and auctions.
-
-## V17 Reality Rules
-
-- Every discovered universe receives deterministic Universe DNA with gravity,
-  technology, mystic, time, mortality, and psionic laws.
-- Each reality receives amplified/suppressed power tags and seven deterministic
-  destinations: five public plus two hidden routes.
-- Destinations change wheel weighting, hazard/strategy rules, faction work, and
-  V18 vendor availability.
-- Up to three faction quests can run at once and award Reputation, Favor, and
-  stability.
-- Wheel currents include Reality Storm, Bounty Hunt, Golden Route, Forbidden
-  Current, Echo Chain, and ??? Signal.
-- Protected first-discovery, boss, scripted story/camp/ending, and Daily wheels
-  remain protected.
-
-The [V17 Reality Rules guide](docs/V17_REALITY_RULES.md) covers this layer.
-
-## V16 Living Multiverse
-
-- Completed encounters advance a deterministic persistent world simulation.
-- Realities retain stability, corruption, threat, visits, collapse state, and
-  off-screen history.
-- Six seeded factions persist goals, power, resources, reputation, and relations.
-- Enemies can become recurring nemeses that grow and hunt routes.
-- Relic ownership and long memory persist separately from inventory.
-- Offline catch-up advances one tick per 90 minutes, capped at 12.
-- The World panel exposes map, world meters, factions, nemeses, and memory.
-
-The [V16 Living Multiverse guide](docs/V16_LIVING_MULTIVERSE.md) covers the
-persistent simulation foundation.
-
-## V15 Hero Ascension and Chronicle Saga
-
-- Every hero starts at Level 1 and gains XP, core attribute points, power-source
-  capacity, techniques, and transformations gradually.
-- Hero Forge includes 12 lineages, 10 callings, 12 backgrounds, 18 skills, and
-  six point-buy abilities.
-- Portable hero files are checksum-validated and deliberately reset progression.
-- Cross-device WebRTC table play supports 2–10 browsers with a host-authoritative
-  save/timeline.
-- Chronicle War is a ten-chapter saga with authored choices and freeform d20
-  plans; Protect/Discover/Connect/Defy intentions feed later systems.
-
-The [Chronicle Saga guide](docs/CHRONICLE_SAGA.md) covers story and multiplayer.
-
-## Foundation retained from V13
-
-The current game still retains title/setup flow, three save slots, Daily
-Challenge, challenge codes, Archive, Settings, Fate controls, Build Lab,
-structured character identities/weaknesses, tactical combat, assists/team combos,
-after-action reports, callbacks/rivals/endings, share cards, New Game+, and the
-offline-first install/update shell.
-
-## Structure
-
-- `styles/app.css`, `styles/v9.css`, `styles/v13.css` through `styles/v20.css` —
-  layered shell, Chronicle, progression, Living Multiverse, Reality Rules,
-  Economy, Party, and Relic Mastery presentation.
-- `js/data/` — base data, expansions, and mega roster.
-- `js/domain/v16-engine.js` — persistent worlds, factions, nemeses, relic owners,
-  memory, and world pressure.
-- `js/domain/v17-engine.js` — Universe DNA, routes, faction operations/Favor,
-  secret gates, and Wheel currents.
-- `js/domain/v18-engine.js` — currencies, markets, rarity, equipment, crafting,
-  artifact evolution/fusion, contracts, and auctions.
-- `js/domain/v19-engine.js` — relationship axes, personality, pair bonds, morale,
-  wounds/scars, reserves, guests, personal quests, incidents, defection,
-  permadeath, nemesis/faction/economy reactions, and party endings.
-- `js/domain/v20-engine.js` — equipment mastery/sets, signature gear, relic
-  personalities/bonds/quests/corruption, vendor loyalty, nemesis theft/recovery,
-  party claims, Legacy Convergence, Chronicle, and V20 epilogues.
-- `js/v19-experience.js` / `js/v19-hardening.js` — V19 gameplay integration and
-  compatibility hardening.
-- `js/v20-experience.js` — V20 combat/economy/ending integration and UI.
-- `manifest.webmanifest`, `sw.js` — installable offline shell.
-
-Classic scripts remain layered through V15. `js/bootstrap.js` then loads V16 →
-V17 → V18 → V19 → V20 before constructing the game instance. Every new layer
-has an independent fallback, so a V20 load failure still leaves V19 playable.
+A compact **Faction Command** beacon sits with the Reality/Economy/Party/Legacy status surfaces and shows primary allegiance, rank, Authority, current campaign, front pressure, and urgent stronghold status.
+
+The interface keeps keyboard-friendly controls, text labels in addition to color, mobile layouts, and reduced-motion compatibility.
+
+## Persistence and PWA
+
+V21 migration is idempotent and upgrades V20 saves to schema 21 without rerolling persistent factions or losing V16–V20 relationships.
+
+The service worker cache is `multiverse-wheel-v21-factions-1` and precaches the V21 CSS/domain/browser layers.
+
+The first-install safety rule remains intact: a brand-new service worker installation does **not** immediately claim and reload a live page. Client claiming occurs only when an older Multiverse Wheel cache proves this is a real release update; `SKIP_WAITING` remains explicit.
 
 ## Validation
 
-Run all unit, content, migration, syntax/reference, and offline checks:
+Run the full unit/content/migration gate:
 
 ```powershell
 npm run validate
 ```
 
-Run individual modern release validators:
+Run only V21 content validation:
 
 ```powershell
-npm run validate:v16
-npm run validate:v17
-npm run validate:v18
-npm run validate:v19
-npm run validate:v20
+npm run validate:v21
 ```
 
-Run the full release gate, including automated Chromium journeys, keyboard
-controls, persistence, and offline reload:
+Run all Chromium browser journeys:
+
+```powershell
+npm run test:e2e
+```
+
+Run the complete release gate:
 
 ```powershell
 npm run validate:release
 ```
 
-GitHub Actions runs the validation suite and Chromium journeys on pull requests
-and pushes to `main`.
+The GitHub Actions workflow requires two jobs:
 
-Generate deterministic balance reports:
+1. **Unit and content validation** — all historical unit tests and V13–V21 validators.
+2. **Chromium release journeys** — all historical Playwright journeys plus V21 journeys.
 
-```powershell
-npm run analyze:balance
-npm run analyze:v13
-```
+A V21 release should not be merged until both jobs are green on the exact final PR head.
 
-State migration is idempotent and marked with schema version 20. Autosaves are
-local to the browser; portable JSON backup import/export remains available.
+## V21 files
+
+Primary release files:
+
+- `js/domain/v21-engine.js`
+- `js/v21-experience.js`
+- `styles/v21.css`
+- `tests/v21.test.js`
+- `tests/e2e/v21.spec.js`
+- `tools/validate-v21-content.js`
+
+Release wiring also updates:
+
+- `js/bootstrap.js`
+- `sw.js`
+- `package.json`
+- `package-lock.json`
+- `manifest.webmanifest`
+- `index.html`
+
+## Previous release documentation
+
+V20 remains fully supported under V21. Its detailed relic/equipment behavior is documented in [docs/V20_RELIC_BONDS.md](docs/V20_RELIC_BONDS.md). Older version documentation and validators remain in the repository and are still part of the release gate.
