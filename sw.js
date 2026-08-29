@@ -2,7 +2,7 @@
 
 importScripts('./game_asset_manifest.js');
 
-const CACHE_NAME='multiverse-wheel-v21-factions-2';
+const CACHE_NAME='multiverse-wheel-v21-factions-1';
 const APP_SHELL=[
   './',
   './Multiverse_Wheel_V8_1326_Real_Repo_Images.html',
