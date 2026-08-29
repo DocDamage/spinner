@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
         try{
           loadStyle('styles/v19.css');
           if(!window.MultiverseDomain?.PartyConsequencesEngine)await loadScript('js/domain/v19-engine.js');
-          await loadScript('js/v19-experience.js');release='V19 Party Consequences';
+          await loadScript('js/v19-experience.js');await loadScript('js/v19-hardening.js');release='V19 Party Consequences';
           document.title='Multiverse Wheel V19 — Party Consequences';
           const description=document.querySelector('meta[name="description"]');if(description)description.content='Forge a Level 1 hero through a Living Multiverse where trust, rivalry, wounds, reserves, betrayals, personal quests, and party bonds change combat and endings.';
         }catch(error){console.error('V19 Party Consequences failed to load; continuing with V18 Multiversal Economy.',error);document.title='Multiverse Wheel V18 — Multiversal Economy';}
