@@ -51,6 +51,6 @@ test('contracts accept and pay currencies after matching events',()=>{
   assert.equal(completed.length,1);assert.equal(contract.status,'completed');assert.equal(value.credits,before+100);assert.equal(value.v18.wallet.bountySeals,2);
 });
 
-test('artifact evolution bonuses scale but stay tied to owned evolution records',()=>{
-  const engine=new EconomyCraftingEngine(),value=state();value.artifacts=['relic-a'];engine.syncArtifactEvolution(value,artifacts);value.v18.artifactEvolution['relic-a'].level=4;const bonus=engine.artifactEvolutionBonuses(value);assert.equal(Object.values(bonus).reduce((sum,v)=>sum+v,0)>0,true);assert.equal(RARITY_TIERS.length,8);
+test('artifact evolution bonuses scale but stay tied to currently owned artifacts',()=>{
+  const engine=new EconomyCraftingEngine(),value=state();value.artifacts=['relic-a'];engine.syncArtifactEvolution(value,artifacts);value.v18.artifactEvolution['relic-a'].level=4;const bonus=engine.artifactEvolutionBonuses(value);assert.equal(Object.values(bonus).reduce((sum,v)=>sum+v,0)>0,true);value.artifacts=[];engine.syncArtifactEvolution(value,artifacts);assert.equal(value.v18.artifactEvolution['relic-a'],undefined);assert.equal(Object.values(engine.artifactEvolutionBonuses(value)).reduce((sum,v)=>sum+v,0),0);assert.equal(RARITY_TIERS.length,8);
 });
