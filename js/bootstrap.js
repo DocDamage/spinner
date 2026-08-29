@@ -21,6 +21,13 @@ window.addEventListener('DOMContentLoaded',async()=>{
           await loadScript('js/v19-experience.js');await loadScript('js/v19-hardening.js');release='V19 Party Consequences';
           document.title='Multiverse Wheel V19 — Party Consequences';
           const description=document.querySelector('meta[name="description"]');if(description)description.content='Forge a Level 1 hero through a Living Multiverse where trust, rivalry, wounds, reserves, betrayals, personal quests, and party bonds change combat and endings.';
+          try{
+            loadStyle('styles/v20.css');
+            if(!window.MultiverseDomain?.RelicMasteryEngine)await loadScript('js/domain/v20-engine.js');
+            await loadScript('js/v20-experience.js');release='V20 Relic Bonds & Equipment Mastery';
+            document.title='Multiverse Wheel V20 — Relic Bonds & Equipment Mastery';
+            if(description)description.content='Forge a hero whose equipment gains mastery and whose relics bond, awaken, corrupt, choose allies, get stolen by nemeses, and reshape combat and endings.';
+          }catch(error){console.error('V20 Relic Bonds & Equipment Mastery failed to load; continuing with V19 Party Consequences.',error);document.title='Multiverse Wheel V19 — Party Consequences';}
         }catch(error){console.error('V19 Party Consequences failed to load; continuing with V18 Multiversal Economy.',error);document.title='Multiverse Wheel V18 — Multiversal Economy';}
       }catch(error){console.error('V18 Multiversal Economy failed to load; continuing with V17 Reality Rules.',error);document.title='Multiverse Wheel V17 — Reality Rules';}
     }catch(error){console.error('V17 Reality Rules failed to load; continuing with V16 Living Multiverse.',error);document.title='Multiverse Wheel V16 — Living Multiverse';}

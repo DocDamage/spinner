@@ -1,4 +1,4 @@
-# Multiverse Wheel V19 — Party Consequences
+# Multiverse Wheel V20 — Relic Bonds & Equipment Mastery
 
 A local-first browser game about forging a custom hero, bending a seeded event
 wheel with Fate, and writing a connected multiverse saga alone or with up to ten
@@ -16,6 +16,10 @@ The release stack now works as one connected simulation:
 - **V19 — Party Consequences:** trust, friendship, rivalry, fear, resentment,
   morale, wounds, scars, reserves, personal quests, betrayal, and relationship
   endings that feed back into combat and the economy.
+- **V20 — Relic Bonds & Equipment Mastery:** equipment mastery, 2/4-piece sets,
+  faction Regalia, signature/awakened gear, relic personalities and quests,
+  attunement, purity/corruption, nemesis theft/recovery, vendor loyalty, and the
+  combined Legacy Convergence transformation.
 
 Play the current release at
 [docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
@@ -33,6 +37,193 @@ Open
 Serving over HTTP also enables installation and offline caching; opening the
 HTML directly still supports the local game but not its service worker.
 
+## V20 Relic Bonds & Equipment Mastery
+
+V20 upgrades the existing V18 inventory rather than creating a second gear
+system. `state.lootInventory`, `state.equipment`, `state.artifacts`, V18
+currencies, and V18 artifact evolution remain authoritative; V20 adds persistent
+identity, mastery, bond, ownership-consequence, and narrative state around them.
+
+### Equipment mastery
+
+Every V18 equipment item receives a persistent mastery record. Equipped items
+gain mastery XP from play, weighted toward combat and bosses. Mastery progresses
+from Level 1 through Level 10 and adds incremental bonuses to stats the item
+already supports.
+
+Readable mastery ranks are Initiate, Familiar, Veteran, Masterwork, Signature,
+and Ascendant.
+
+- Mastery Level 6 unlocks persistent signature naming.
+- Mastery Level 10 awakens the equipment.
+- Mastery survives equip/unequip, enchantment, reforging, save/load, and normal
+  inventory use.
+
+### Equipment sets and Legacy Forge
+
+V20 ships five core equipment set families:
+
+- **Rift Vanguard** — assault and mobility.
+- **Paradox Savant** — mind, energy, and hax.
+- **World Warden** — defense and stability.
+- **Starbound Hunter** — speed and precision.
+- **Void Covenant** — forbidden power.
+
+Matching equipped pieces activate real 2-piece and 4-piece bonuses without
+re-adding the underlying V18 item stats.
+
+The Economy tab now includes a Legacy Forge that creates normal V18 Weapon,
+Armor, Focus, and Charm records using existing Salvage, Cosmic Fragments, and
+Void Marks. Existing items can also be reforged into an unlocked set while
+keeping their underlying bonuses and enchantment state.
+
+### Faction Regalia
+
+A V16 faction with Reputation 35+ can unlock a generated Regalia equipment set.
+Its bonuses derive from faction ethos:
+
+- Mercy → Defense / Mind
+- Knowledge → Mind / Hax
+- Freedom → Speed / Skill
+- Order → Defense / Might
+- Balance → Energy / Mind
+- Ambition → Might / Hax
+
+Faction loyalty therefore feeds equipment progression instead of ending at a
+reputation number.
+
+### Relic personalities and quests
+
+Every owned artifact receives one deterministic persistent personality:
+
+- Guardian
+- Seeker
+- Sovereign
+- Trickster
+- Sage
+- Avenger
+
+Each relic tracks Bond, Purity, Corruption, bearer, awakening, a personality-
+specific quest, ownership status, nemesis thief/world, party claims, and history.
+
+Relic quest families include protection, discovery, worthy victories, rule-
+breaking survival, teaching/learning, and vengeance. Quest completion increases
+Bond and Purity and can satisfy part of the awakening requirement.
+
+### Attunement and relationship resonance
+
+A relic can attune to the hero or a party member. Ally attunement requires V19
+Trust 40+, and strong Trust/Friendship with the bearer amplifies the relic's
+favored stat resonance.
+
+This uses V19's existing relationship axes; V20 does not introduce a duplicate
+ally-approval score.
+
+### Relic awakening
+
+A relic can awaken when it reaches:
+
+- Bond 80+;
+- Purity 55+;
+- and either its relic quest is complete or V18 artifact evolution is Level 4+.
+
+Awakened relics provide stronger favored-stat resonance and become part of V20
+ending consequences.
+
+### Purity, corruption, and temptation
+
+Corruption is an intentional power-versus-consequence system.
+
+The player can embrace a relic's temptation to gain Bond faster and eventually
+more Hax pressure at the cost of Purity and defensive stability. Purification
+spends existing V18 Cosmic Fragments and Salvage to lower Corruption, restore
+Purity, and reinforce the bond.
+
+### Nemesis theft and recovery
+
+V20 finally makes V16's persistent relic ownership system directly playable.
+A recurring nemesis can steal a bonded relic after eligible battle/boss losses.
+
+A theft:
+
+- removes the relic from `state.artifacts`;
+- snapshots its V18 evolution state;
+- records the thief and last known world;
+- adds the relic to the nemesis `stolenArtifacts` list;
+- changes `state.v16.artifactOwners` to nemesis ownership;
+- enters Chronicle and long memory.
+
+Defeating that nemesis recovers the relic, restores its V18 evolution state, and
+returns V16 ownership to the player.
+
+### Party relic claims
+
+Relics can create disputes between sufficiently respected party members. The
+player chooses which ally carries the relic. The winner gains Trust/Respect;
+the losing claimant can gain Resentment. The outcome feeds directly into V19
+relationships and therefore can later affect assists, morale, betrayal, and
+endings.
+
+### Vendor loyalty
+
+V20 adds persistent loyalty per V18 market location. Purchases, sales, crafting,
+enchantment, and transmutation build Vendor Rank 0–5.
+
+Vendor loyalty changes the real V18 offer price returned to the existing shop
+and is capped, with faction influence, at a 14% discount. There is still one
+shop, one wallet, and one transaction ledger.
+
+### Legacy Convergence
+
+V20 adds a combined transformation that requires progress across both V19 and
+V20.
+
+**Legacy Convergence** requires:
+
+- at least one owned, awakened, attuned relic;
+- Party Morale 75+;
+- strongest V19 Duo Bond 82+.
+
+During Battle/Boss combat, Legacy Convergence adds +2 to all seven core stats.
+It stacks with V19 Resonant Ascension (+4 all stats), producing a verified +6
+all-stat live transformation delta when both states are active.
+
+### Relic/equipment endings
+
+The main campaign ending and V19 party epilogue remain intact. V20 adds another
+recap layer based on the inventory legacy:
+
+- **The Relics Still Call** — bonded relics remain in enemy hands.
+- **Crowned by Ruin** — corruption defines the legacy.
+- **The Living Armory** — awakened relics plus signature equipment survive as a
+  major legacy.
+- **The Relic Remembers** — an awakened relic carries the timeline forward.
+- **Tools of the Road** — gear mattered without becoming destiny.
+
+### V20 UI
+
+The V18 Economy tab remains the single inventory surface and now includes:
+
+- Relic Mastery beacon;
+- Vendor Rank and live discount;
+- active 2/4-piece set summary;
+- Legacy Forge;
+- gear mastery XP/rank;
+- signature naming;
+- set reforging;
+- Bond / Purity / Corruption bars;
+- relic personality and quest;
+- hero/ally attunement;
+- purification and temptation controls;
+- stolen relic tracking;
+- party relic claim decisions;
+- Legacy Convergence readiness;
+- Relic & Equipment Chronicle.
+
+The [V20 Relic Bonds & Equipment Mastery guide](docs/V20_RELIC_BONDS.md)
+documents state ownership, thresholds, economy/relationship integration, theft,
+awakening, offline behavior, and release validation.
+
 ## V19 Party Consequences
 
 V13 already had Loyalty, assist refusal, and possible departures. V19 keeps that
@@ -40,174 +231,45 @@ system compatible but turns it into a broader persistent relationship model.
 
 ### Seven relationship axes
 
-Every known ally now tracks:
-
-- Loyalty
-- Trust
-- Respect
-- Friendship
-- Rivalry
-- Fear
-- Resentment
-
-Legacy V13 Loyalty remains synchronized with the V19 Loyalty axis. V19 does not
-apply the same Loyalty reward twice when an older V13 story/combat hook already
-owns that change.
+Every known ally tracks Loyalty, Trust, Respect, Friendship, Rivalry, Fear, and
+Resentment. Legacy V13 Loyalty remains synchronized with V19 instead of being
+applied twice.
 
 ### Deterministic personality and chemistry
 
 Every roster character receives a deterministic personality profile derived from
-identity, role, and tags. Personality dimensions include compassion, discipline,
-ambition, rebellion, caution, honor, pragmatism, and vengeance.
+identity, role, and tags. Every active/reserve pair receives persistent
+compatibility, Trust, Friendship, Rivalry, and Resentment.
 
-Every active/reserve pair receives persistent chemistry with compatibility,
-Trust, Friendship, Rivalry, and Resentment. Compatibility considers role
-diversity, shared universe, tag overlap, and personality distance.
+### Morale and combat effects
 
-### Morale and real combat effects
-
-Party Morale persists from 0–100. Relationship state now modifies real combat:
-
-- high Morale, Trust, Respect, Friendship, and Duo Bond can improve performance;
-- wounds, low morale, and fractured relationships can reduce performance;
-- the relationship battle-odds contribution is capped between -9% and +8%;
-- relationship damage pressure is capped between -12% and +12%.
+Party Morale persists from 0–100. Relationships affect real combat with bounded
+battle-odds (-9% to +8%) and damage (-12% to +12%) contributions.
 
 ### Duo Bond and Resonant Ascension
 
-The strongest active pair becomes the current Duo Bond.
+The strongest active pair becomes the Duo Bond. Bond 70+ improves team-combo
+pressure. Bond 82+ plus Morale 70+ unlocks **Resonant Ascension**, which adds +4
+to all seven core stats during combat and up to +8% relationship-driven damage.
 
-- Bond 70+ improves team-combo pressure.
-- Bond 82+ plus Morale 70+ unlocks **Resonant Ascension**.
+### Assists, wounds, and reserves
 
-While Resonant Ascension is active during combat, the hero receives +4 to all
-seven core stats and can gain up to +8% relationship-driven damage. This is a
-real combat state based on party relationships, not a cosmetic placeholder.
+Low Trust/Loyalty, high Resentment, and accumulated injuries can cause assist
+refusal. High Friendship can reduce assist cost. Wounds can become scars;
+treatment changes relationships. `state.party` remains the active combat team
+and V19 adds persistent reserves around it.
 
-### Assists and refusal
+### Optional permadeath, conflict, and defection
 
-Older V13 Loyalty requirements still apply. V19 adds refusal pressure from:
+Permadeath is off by default. Low Morale and weak chemistry can trigger arguments
+that support reconciliation or taking sides. Deeply fractured allies can defect
+toward hostile V16 factions.
 
-- critically low Trust or Loyalty;
-- high Resentment;
-- multiple wounds combined with weak Trust.
+### Personal quests and endings
 
-High Friendship can reduce assist cost further. Eligibility checks are
-side-effect free: merely rendering an assist option cannot increment refusal
-history. A refusal is recorded only when the player actually requests the assist.
-
-### Wounds and scars
-
-Losses can create deterministic minor or severe wounds. Boss losses carry a
-higher severe-injury risk.
-
-- treatment removes one active wound;
-- treatment improves Trust/Friendship and lowers Fear;
-- accumulated wounds can convert into persistent scars;
-- wounds affect relationship combat performance;
-- scars stay in the character's long-term party record.
-
-### Optional permadeath
-
-Permadeath support is included but **off by default**.
-
-With permadeath disabled, catastrophic consequences create severe wounds. With
-permadeath enabled, a severe consequence can permanently mark an ally dead,
-remove them from active/reserve rosters, lower morale, enter long memory, and
-change the relationship ending.
-
-### Active party and reserves
-
-`state.party` remains the active combat party for backward compatibility. V19
-adds a persistent reserve roster around it.
-
-Players can bench and reactivate allies without losing:
-
-- relationship axes;
-- wounds/scars;
-- personal quest progress;
-- pair bonds;
-- refusal history;
-- nemesis targeting state.
-
-The domain also supports temporary guest characters with spin-based expiry.
-
-### Personal quests and mentors
-
-Each ally receives a deterministic personal quest based on role and personality.
-Quest families include protection, combat proof, training/research, travel,
-relic recovery, and relationship choices. Completion strongly improves Loyalty,
-Trust, Respect, and Friendship while reducing Resentment.
-
-Training also records persistent mentor/student lessons with lesson count, Trust,
-and Respect.
-
-### Arguments, reconciliation, and taking sides
-
-Low morale plus weak pair compatibility can create deterministic party arguments.
-Unresolved incidents appear in the Team screen. The player can:
-
-- reconcile both allies;
-- side with the first ally;
-- side with the second ally.
-
-Reconciliation restores pair Trust/Friendship, lowers Resentment, and raises
-Morale. Taking sides benefits one relationship while straining the other.
-
-### Betrayal and defection
-
-A heavily fractured ally can defect when all of these are true:
-
-- Loyalty below 28;
-- Trust below 30;
-- Resentment at least 65;
-- the seeded betrayal roll triggers.
-
-A defector leaves the active party and can align with the most hostile known V16
-faction. The betrayal enters the persistent party memory and affects the ending.
-
-### Faction, nemesis, and market consequences
-
-V19 connects earlier systems instead of building isolated relationship flavor:
-
-- completing V17 faction work can please or anger allies based on faction ethos
-  and personality;
-- a hunting V16 nemesis can target the ally with the strongest Friendship/Loyalty
-  bond;
-- V18 market prices receive a bounded party modifier from Trust, Friendship,
-  rebellion, and Resentment;
-- deterministic party banter changes tone between warm, steady, competitive,
-  uneasy, and cold based on current relationships.
-
-### Relationship endings
-
-The original campaign ending remains intact. V19 adds a party epilogue stored in
-the recap. Current relationship outcomes include:
-
-- **Found Across Worlds** — surviving allies form a deeply trusted family.
-- **The Names They Carry** — multiple permanent deaths define the final memory.
-- **The Fractured Alliance** — multiple defections define the route.
-- **Rivals to the Horizon** — strong rivalry becomes the surviving bond.
-- **The Surviving Company** — mixed/default party outcome.
-
-### Team UI
-
-The Team dashboard now exposes:
-
-- Party Morale;
-- active and reserve ally cards;
-- all seven relationship axes;
-- wounds, scars, refusal count, and nemesis-target state;
-- personal quest progress;
-- bench/reactivate actions;
-- wound treatment;
-- unresolved argument choices;
-- strongest Duo Bond;
-- Resonant Ascension readiness;
-- contextual party banter;
-- the optional permadeath toggle.
-
-A compact Party beacon sits beneath the Reality/Economy beacons.
+Allies receive deterministic personal quests and persistent mentor bonds. V19
+adds party endings including Found Across Worlds, The Names They Carry, The
+Fractured Alliance, Rivals to the Horizon, and The Surviving Company.
 
 The [V19 Party Consequences guide](docs/V19_PARTY_CONSEQUENCES.md) documents the
 complete relationship state model, thresholds, integration rules, and validation.
@@ -219,8 +281,8 @@ complete relationship state model, thresholds, integration rules, and validation
 - Current V17 destination selects Crossroads Exchange, Fracture Forge, Faction
   Quartermaster, Relic Broker, Arena Broker, or Interdimensional Black Market.
 - Deterministic market stock rotates every three V16 world ticks. Prices react to
-  rarity, vendor, world pressure, demand, faction reputation, and now bounded
-  V19 party reactions.
+  rarity, vendor, world pressure, demand, faction reputation, V19 party reactions,
+  and now V20 vendor loyalty.
 - Eight rarity tiers: Common, Uncommon, Rare, Epic, Legendary, Mythic, Divine,
   and Forbidden.
 - Weapon, Armor, Focus, and Charm equipment changes real combat stats and tags.
@@ -286,9 +348,9 @@ offline-first install/update shell.
 
 ## Structure
 
-- `styles/app.css`, `styles/v9.css`, `styles/v13.css` through `styles/v19.css` —
+- `styles/app.css`, `styles/v9.css`, `styles/v13.css` through `styles/v20.css` —
   layered shell, Chronicle, progression, Living Multiverse, Reality Rules,
-  Economy, and Party presentation.
+  Economy, Party, and Relic Mastery presentation.
 - `js/data/` — base data, expansions, and mega roster.
 - `js/domain/v16-engine.js` — persistent worlds, factions, nemeses, relic owners,
   memory, and world pressure.
@@ -299,14 +361,17 @@ offline-first install/update shell.
 - `js/domain/v19-engine.js` — relationship axes, personality, pair bonds, morale,
   wounds/scars, reserves, guests, personal quests, incidents, defection,
   permadeath, nemesis/faction/economy reactions, and party endings.
-- `js/v19-experience.js` — combat/story/team integration and Party UI.
-- `js/v19-hardening.js` — legacy Loyalty single-sourcing, side-effect-free assist
-  probes, personal-quest outcome rules, and missing V13 arc migration.
+- `js/domain/v20-engine.js` — equipment mastery/sets, signature gear, relic
+  personalities/bonds/quests/corruption, vendor loyalty, nemesis theft/recovery,
+  party claims, Legacy Convergence, Chronicle, and V20 epilogues.
+- `js/v19-experience.js` / `js/v19-hardening.js` — V19 gameplay integration and
+  compatibility hardening.
+- `js/v20-experience.js` — V20 combat/economy/ending integration and UI.
 - `manifest.webmanifest`, `sw.js` — installable offline shell.
 
 Classic scripts remain layered through V15. `js/bootstrap.js` then loads V16 →
-V17 → V18 → V19 before constructing the game instance. Every new layer has an
-independent fallback, so a V19 load failure still leaves V18 playable.
+V17 → V18 → V19 → V20 before constructing the game instance. Every new layer
+has an independent fallback, so a V20 load failure still leaves V19 playable.
 
 ## Validation
 
@@ -323,6 +388,7 @@ npm run validate:v16
 npm run validate:v17
 npm run validate:v18
 npm run validate:v19
+npm run validate:v20
 ```
 
 Run the full release gate, including automated Chromium journeys, keyboard
@@ -342,5 +408,5 @@ npm run analyze:balance
 npm run analyze:v13
 ```
 
-State migration is idempotent and marked with schema version 19. Autosaves are
+State migration is idempotent and marked with schema version 20. Autosaves are
 local to the browser; portable JSON backup import/export remains available.
