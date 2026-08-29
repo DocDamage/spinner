@@ -1,0 +1,43 @@
+'use strict';
+
+const test=require('node:test');
+const assert=require('node:assert/strict');
+require('../js/domain/v13-engine.js');
+require('../js/domain/v14-engine.js');
+require('../js/domain/v15-engine.js');
+require('../js/domain/v16-engine.js');
+require('../js/domain/v17-engine.js');
+require('../js/domain/v18-engine.js');
+require('../js/domain/v19-engine.js');
+require('../js/domain/v20-engine.js');
+require('../js/domain/v21-engine.js');
+require('../js/domain/v22-engine.js');
+require('../js/domain/v23-engine.js');
+require('../js/domain/v24-engine.js');
+require('../js/domain/v25-engine.js');
+const {WORLD_CONTENT_CATALOG,WORLD_CONTENT_META}=require('../js/data/world-content.js');
+const WorldAssetArt=require('../js/world-asset-art.js');
+const {V26_SCHEMA_VERSION,WorldContentEngine,migrateV26}=require('../js/domain/v26-engine.js');
+
+const roster=[{id:'a',name:'Aegis',universe:'Earth-Prime',role:'support',tags:['healing']}];
+const artifacts=[{id:'relic-a',name:'Chronicle Heart',powers:['time'],bonuses:{mind:4}}];
+const makeState=(seed=26001)=>migrateV26({seed,spin:12,credits:8000,customCharacter:{codename:'Atlas',homeworld:'Earth-Prime',stats:{might:70,defense:72,speed:74,skill:76,mind:78,energy:75,hax:68}},party:['a'],artifacts:['relic-a'],kits:[],lootInventory:[],equipment:{}},artifacts,roster);
+
+test('1. V26 migration is idempotent',()=>{const state=makeState(),engine=new WorldContentEngine(),before=JSON.stringify(state);engine.ensure(state,artifacts,roster);assert.equal(state.v26.schemaVersion,V26_SCHEMA_VERSION);assert.equal(JSON.stringify(state),before);});
+test('2. V25 crisis state survives V26 migration',()=>{const state=makeState(),before=JSON.stringify(state.v25);migrateV26(state,artifacts,roster);assert.equal(JSON.stringify(state.v25),before);});
+test('3. world content expansion ships hundreds of original assets',()=>{assert.ok(WORLD_CONTENT_META.total>=350);assert.equal(WORLD_CONTENT_CATALOG.length,WORLD_CONTENT_META.total);});
+test('4. all required world asset families have meaningful depth',()=>{for(const kind of ['building','place','interior','item','vehicle','npc','stronghold','settlement','activity','crisis','icon'])assert.ok(WORLD_CONTENT_META.counts[kind]>=20,`${kind} count`);});
+test('5. every V26 asset carries formal provenance and usage metadata',()=>{for(const asset of WORLD_CONTENT_CATALOG){for(const key of ['id','kind','name','subtype','sourceFranchise','world','faction','rarity','tags','path','mime','width','height','sha256','sourcePage','verified','fallbackAllowed','usageTargets','notes'])assert.ok(Object.prototype.hasOwnProperty.call(asset,key),`${asset.id} missing ${key}`);assert.equal(asset.sourcePage,'generated-project-art');assert.equal(asset.verified,true);assert.equal(asset.mime,'image/svg+xml');assert.ok(asset.tags.length>=3);assert.ok(asset.usageTargets.length>=1);}});
+test('6. V26 asset IDs are unique',()=>{const ids=WORLD_CONTENT_CATALOG.map(x=>x.id);assert.equal(new Set(ids).size,ids.length);});
+test('7. kind and text search filters the catalog without mutating it',()=>{const engine=new WorldContentEngine(),before=WORLD_CONTENT_CATALOG.length,result=engine.query({kind:'vehicle',search:'race'});assert.ok(result.length>0);assert.ok(result.every(x=>x.kind==='vehicle'));assert.equal(WORLD_CONTENT_CATALOG.length,before);});
+test('8. seeded context assignment is stable across repeated ensure calls',()=>{const state=makeState(801),engine=new WorldContentEngine(),a=engine.assignmentAssets(state,'world','Earth-Prime',{slots:4}).map(x=>x.id);engine.ensure(state);const b=engine.assignmentAssets(state,'world','Earth-Prime',{slots:4}).map(x=>x.id);assert.deepEqual(a,b);});
+test('9. V21 strongholds receive visual assignments without replacing V21 ownership',()=>{const state=makeState(802),engine=new WorldContentEngine();state.v21.strongholds['hold-test']={id:'hold-test',name:'Test Bastion',type:'Forward Base',universe:'Earth-Prime',playerAligned:true,status:'safe',integrity:90};const before=JSON.stringify(state.v21.strongholds['hold-test']);engine.syncAssignments(state);assert.ok(state.v26.assignments['stronghold:hold-test']);assert.equal(JSON.stringify(state.v21.strongholds['hold-test']),before);});
+test('10. V22 settlements receive stable context art',()=>{const state=makeState(803),engine=new WorldContentEngine(),town=Object.values(state.v22.settlements)[0];assert.ok(town);engine.syncAssignments(state);const assets=engine.context(state,'settlement',town.id,4);assert.equal(assets.length,4);assert.ok(assets.some(x=>['settlement','building','place','npc','item'].includes(x.kind)));});
+test('11. V23 operations can resolve mission-place-vehicle-NPC art',()=>{const state=makeState(804),engine=new WorldContentEngine();state.v23.operations['op-test']={id:'op-test',label:'Convoy Shield',type:'escort',universe:'Earth-Prime',status:'planned'};engine.syncAssignments(state);const assets=engine.context(state,'operation','op-test',4);assert.equal(assets.length,4);assert.ok(assets.every(x=>['place','interior','vehicle','npc','item'].includes(x.kind)));});
+test('12. V24 activities can resolve race and venue visuals',()=>{const state=makeState(805),engine=new WorldContentEngine();state.v24.activities['act-test']={id:'act-test',label:'Portal Rally',family:'portal-rally',universe:'Earth-Prime',status:'available'};engine.syncAssignments(state);const assets=engine.context(state,'activity','act-test',4);assert.equal(assets.length,4);assert.ok(assets.every(x=>['activity','place','vehicle','npc'].includes(x.kind)));});
+test('13. V25 crises can resolve crisis-scene support art',()=>{const state=makeState(806),engine=new WorldContentEngine();state.v25.crises['crisis-test']={id:'crisis-test',label:'Fracture Test',family:'reality-fracture',primaryUniverse:'Earth-Prime',status:'watching'};engine.syncAssignments(state);const assets=engine.context(state,'crisis','crisis-test',4);assert.equal(assets.length,4);assert.ok(assets.every(x=>['crisis','place','vehicle','item','npc'].includes(x.kind)));});
+test('14. favorites use V26 state only and never create another currency',()=>{const state=makeState(),engine=new WorldContentEngine(),asset=WORLD_CONTENT_CATALOG[0],a=engine.toggleFavorite(state,asset.id),b=engine.toggleFavorite(state,asset.id);assert.equal(a.added,true);assert.equal(b.added,false);assert.equal(state.v26.wallet,undefined);assert.equal(state.v26.currency,undefined);});
+test('15. recent-view tracking is bounded',()=>{const state=makeState(),engine=new WorldContentEngine();for(const asset of WORLD_CONTENT_CATALOG.slice(0,50))engine.markSeen(state,asset.id);assert.ok(state.v26.recent.length<=30);});
+test('16. project art renderer emits accessible standalone SVG',()=>{const asset=WORLD_CONTENT_CATALOG.find(x=>x.kind==='building'),svg=WorldAssetArt.svg(asset),uri=WorldAssetArt.dataUri(asset);assert.match(svg,/^<svg/);assert.match(svg,/aria-label=/);assert.ok(svg.includes(asset.name));assert.ok(uri.startsWith('data:image/svg+xml'));});
+test('17. catalog queries support usage targets',()=>{const engine=new WorldContentEngine(),assets=engine.query({usageTarget:'stronghold'});assert.ok(assets.length>0);assert.ok(assets.every(x=>x.usageTargets.includes('stronghold')));});
+test('18. same seed and owner produce the same assignment in independent saves',()=>{const a=makeState(999),b=makeState(999),engine=new WorldContentEngine(),x=engine.assignmentAssets(a,'world','Earth-Prime',{slots:4}).map(v=>v.id),y=engine.assignmentAssets(b,'world','Earth-Prime',{slots:4}).map(v=>v.id);assert.deepEqual(x,y);});
