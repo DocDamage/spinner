@@ -41,17 +41,26 @@ test('V26 Journey 3 — favorites and recent views persist without a new wallet'
 test('V26 Journey 4 — existing worlds and V21–V25 systems receive stable context art only',async({page})=>{
   await load(page);await enter(page);
   const seeded=await page.evaluate(()=>{
+    game.state.characterReady=true;
     game.ensureV21();game.ensureV22();game.ensureV23();game.ensureV24();game.ensureV25();game.ensureV26();
-    game.state.v21.strongholds['v26-hold']={id:'v26-hold',name:'Atlas Bastion',type:'Forward Base',universe:'Earth-Prime',playerAligned:true,status:'safe',integrity:90,supply:70,morale:70,facilities:[],specialists:[]};
-    game.state.v23.operations['v26-op']={id:'v26-op',label:'Atlas Convoy',type:'escort',universe:'Earth-Prime',status:'planned'};
-    game.state.v24.activities['v26-act']={id:'v26-act',label:'Atlas Rally',family:'portal-rally',universe:'Earth-Prime',status:'available',venue:'Atlas Raceway'};
-    game.state.v25.crises['v26-crisis']={id:'v26-crisis',label:'Atlas Fracture',family:'reality-fracture',primaryUniverse:'Earth-Prime',universeIds:['Earth-Prime'],status:'watching',severity:70,pressure:0,momentum:0,failures:0,successes:0,phaseIndex:0,phases:[],response:{},history:[]};
+    Object.assign(game.state.v18.wallet,{salvage:1200,cosmicFragments:240,voidMarks:30,bountySeals:30});game.state.credits=18000;
+    for(const faction of Object.values(game.state.v16.factions))faction.reputation=85;
+    const factions=new MultiverseDomain.FactionCampaignEngine(),factionId=Object.keys(game.state.v16.factions)[0],territory=Object.values(game.state.v21.territories)[0];
+    if(game.state.v21.primaryFactionId!==factionId)factions.joinFaction(game.state,factionId,Array.from(CHAR.values()));
+    Object.assign(game.state.v21.memberships[factionId],{rank:5,rankXp:320,authority:80});territory.controllerFactionId=factionId;territory.contested=false;game.state.v16.currentUniverse=territory.universe;
+    const built=factions.buildStronghold(game.state,{territoryId:territory.id,factionId}),hold=built.stronghold;hold.name='Atlas Bastion';
+    const operations=new MultiverseDomain.TacticalOperationsEngine(),createdOperation=operations.createOperation(game.state,{sourceKey:'e2e:v26:operation',sourceType:'test',family:'rescue',settlementId:territory.id,territoryId:territory.id,universe:territory.universe,factionId,urgency:74,label:'Atlas Convoy'}).operation;
+    game.state.v23.operations={[createdOperation.id]:createdOperation};game.state.v23.activeOperationId=null;
+    const activities=new MultiverseDomain.ActivityCircuitEngine(),createdActivity=activities.createActivity(game.state,{sourceKey:'e2e:v26:activity',sourceType:'test',family:'speed-race',universe:territory.universe,venue:'Atlas Raceway',difficulty:1,heat:70}).activity;createdActivity.label='Atlas Rally';
+    game.state.v24.activities={[createdActivity.id]:createdActivity};game.state.v24.activeActivityId=null;
+    const crises=new MultiverseDomain.CrisisArcEngine(),createdCrisis=crises.createCrisis(game.state,{sourceKey:'e2e:v26:crisis',sourceType:'test',family:'reality-fracture',primaryUniverse:territory.universe,universeIds:[territory.universe],severity:72,label:'Atlas Fracture'}).crisis;
+    game.state.v25.crises={[createdCrisis.id]:createdCrisis};game.state.v25.activeCrisisId=null;
     new MultiverseDomain.WorldContentEngine().syncAssignments(game.state);game.save();
-    return {v21:JSON.stringify(game.state.v21.strongholds['v26-hold']),assignments:Object.keys(game.state.v26.assignments).filter(k=>/v26-(hold|op|act|crisis)/.test(k))};
+    return {holdId:hold.id,v21:JSON.stringify(game.state.v21.strongholds[hold.id]),assignments:Object.keys(game.state.v26.assignments).filter(k=>[hold.id,createdOperation.id,createdActivity.id,createdCrisis.id].some(id=>k.endsWith(`:${id}`)))};
   });
   expect(seeded.assignments.length).toBe(4);
   await page.evaluate(()=>game.openWorldV16('factions'));await expect(page.locator('.v26-context-strip')).toContainText('Atlas Bastion');
-  const preserved=await page.evaluate(()=>JSON.stringify(game.state.v21.strongholds['v26-hold']));expect(preserved).toBe(seeded.v21);
+  const preserved=await page.evaluate(id=>JSON.stringify(game.state.v21.strongholds[id]),seeded.holdId);expect(preserved).toBe(seeded.v21);
   await page.locator('[data-v16-world-tab="operations"]').click();await expect(page.locator('.v26-context-strip')).toContainText('Atlas Convoy');
   await page.locator('[data-v16-world-tab="activities"]').click();await expect(page.locator('.v26-context-strip')).toContainText('Atlas Rally');
   await page.locator('[data-v16-world-tab="crises"]').click();await expect(page.locator('.v26-context-strip')).toContainText('Atlas Fracture');
