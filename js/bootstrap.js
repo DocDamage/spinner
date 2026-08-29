@@ -33,6 +33,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
               await loadScript('js/domain/v21-hardening.js');
               await loadScript('js/v21-experience.js');
               await loadScript('js/v21-integration.js');
+              await loadScript('js/v21-runtime-fixes.js');
               release='V21 Faction Campaigns & Strongholds';
               document.title='Multiverse Wheel V21 — Faction Campaigns & Strongholds';
               if(description)description.content='Join persistent factions, fight long campaigns through the Wheel, shape territory and diplomacy, and build recoverable multiversal strongholds.';
