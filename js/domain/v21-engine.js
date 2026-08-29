@@ -48,7 +48,8 @@
 
   class FactionCampaignEngine{
     ensure(state={},artifacts=[],roster=[]){
-      if(root.MultiverseDomain?.migrateV20)root.MultiverseDomain.migrateV20(state,artifacts,roster);
+      const needsBaseMigration=Number(state.v21?.schemaVersion||0)<V21_SCHEMA_VERSION;
+      if(needsBaseMigration&&root.MultiverseDomain?.migrateV20)root.MultiverseDomain.migrateV20(state,artifacts,roster);
       state.v21||={};const v=state.v21;
       v.schemaVersion=V21_SCHEMA_VERSION;state.v21Version=V21_SCHEMA_VERSION;state.schemaVersion=Math.max(Number(state.schemaVersion||0),V21_SCHEMA_VERSION);
       v.memberships=v.memberships&&typeof v.memberships==='object'?v.memberships:{};
