@@ -27,6 +27,17 @@ window.addEventListener('DOMContentLoaded',async()=>{
             await loadScript('js/v20-experience.js');release='V20 Relic Bonds & Equipment Mastery';
             document.title='Multiverse Wheel V20 — Relic Bonds & Equipment Mastery';
             if(description)description.content='Forge a hero whose equipment gains mastery and whose relics bond, awaken, corrupt, choose allies, get stolen by nemeses, and reshape combat and endings.';
+            try{
+              loadStyle('styles/v21.css');
+              if(!window.MultiverseDomain?.FactionCampaignEngine)await loadScript('js/domain/v21-engine.js');
+              await loadScript('js/domain/v21-hardening.js');
+              await loadScript('js/v21-experience.js');
+              await loadScript('js/v21-integration.js');
+              await loadScript('js/v21-runtime-fixes.js');
+              release='V21 Faction Campaigns & Strongholds';
+              document.title='Multiverse Wheel V21 — Faction Campaigns & Strongholds';
+              if(description)description.content='Join persistent factions, fight long campaigns through the Wheel, shape territory and diplomacy, and build recoverable multiversal strongholds.';
+            }catch(error){console.error('V21 Faction Campaigns & Strongholds failed to load; continuing with V20 Relic Bonds & Equipment Mastery.',error);document.title='Multiverse Wheel V20 — Relic Bonds & Equipment Mastery';}
           }catch(error){console.error('V20 Relic Bonds & Equipment Mastery failed to load; continuing with V19 Party Consequences.',error);document.title='Multiverse Wheel V19 — Party Consequences';}
         }catch(error){console.error('V19 Party Consequences failed to load; continuing with V18 Multiversal Economy.',error);document.title='Multiverse Wheel V18 — Multiversal Economy';}
       }catch(error){console.error('V18 Multiversal Economy failed to load; continuing with V17 Reality Rules.',error);document.title='Multiverse Wheel V17 — Reality Rules';}
