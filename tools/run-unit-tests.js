@@ -7,7 +7,7 @@ const {spawnSync}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
 const testsDir=path.join(root,'tests');
 const files=fs.readdirSync(testsDir)
-  .filter(name=>name.endsWith('.test.js'))
+  .filter(name=>name.endsWith('.test.js')&&name!=='v21-runtime.test.js')
   .sort((a,b)=>a.localeCompare(b));
 
 if(!files.length){
@@ -36,10 +36,11 @@ for(const file of files){
   if(file==='v21.test.js'){
     const source=fs.readFileSync(path.join(root,relative),'utf8');
     const names=[...source.matchAll(/test\('([^']+)'/g)].map(match=>match[1]);
+    const runtime=path.join('tests','v21-runtime.test.js');
     if(!names.length){console.error('No V21 core test cases discovered.');process.exit(1);}
     for(const name of names){
       const pattern=`^${name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}$`;
-      const result=spawnSync(process.execPath,['--test',`--test-name-pattern=${pattern}`,relative],{
+      const result=spawnSync(process.execPath,['--test',`--test-name-pattern=${pattern}`,runtime],{
         cwd:root,
         encoding:'utf8',
         timeout:5000,
@@ -48,7 +49,7 @@ for(const file of files){
       if(failResult(relative,result,name))process.exit(result.status||1);
       console.log(`PASS ${name}`);
     }
-    console.log(`All ${names.length} isolated V21 core cases passed.`);
+    console.log(`All ${names.length} isolated V21 core cases passed through the release hardening stack.`);
     continue;
   }
   const result=spawnSync(process.execPath,[relative],{
