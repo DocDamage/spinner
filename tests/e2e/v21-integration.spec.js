@@ -6,7 +6,7 @@ const APP='/Multiverse_Wheel_V8_1326_Real_Repo_Images.html?e2e=v21-integration';
 async function load(page){
   await page.goto(APP);
   await expect(page.getByRole('heading',{name:'Choose where the story begins'})).toBeVisible();
-  await expect.poll(()=>page.evaluate(()=>document.documentElement.dataset.release||'')).toContain('v21');
+  await expect.poll(()=>page.evaluate(()=>Number((document.documentElement.dataset.release||'').match(/^v(\d+)/)?.[1]||0))).toBeGreaterThanOrEqual(21);
   await expect.poll(()=>page.evaluate(()=>game?.state?.v21?.schemaVersion)).toBe(21);
 }
 
