@@ -39,7 +39,7 @@ test('legacy forge creates real V18 inventory pieces and faction reputation unlo
 });
 
 test('mastered equipment can become a signature and awaken at level ten',()=>{
-  const value=makeState(),engine=new RelicMasteryEngine(),record=value.v20.gear['gear-a'];record.level=6;const sig=engine.nameSignature(value,'gear-a');assert.equal(sig.ok,true);assert.match(sig.name,/Doc Prime/);record.level=10;engine.gearRecord(value,value.lootInventory[0]);assert.equal(record.awakened,true);assert.equal(engine.masteryBonuses(value).skill>=1,true);
+  const value=makeState(),engine=new RelicMasteryEngine(),record=value.v20.gear['gear-a'];record.level=6;const sig=engine.nameSignature(value,'gear-a');assert.equal(sig.ok,true);assert.match(sig.name,/Doc Prime/);value.v20.gear['gear-a'].level=10;engine.gearRecord(value,value.lootInventory[0]);assert.equal(value.v20.gear['gear-a'].awakened,true);assert.equal(engine.masteryBonuses(value).skill>=1,true);
 });
 
 test('relic attunement respects ally trust and relationship bonds amplify resonance',()=>{
