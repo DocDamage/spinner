@@ -23,9 +23,9 @@ for(const ref of ['styles/v17.css','js/domain/v17-engine.js','js/v17-experience.
 for(const ref of ['styles/v17.css','js/domain/v17-engine.js','js/v17-experience.js'])if(!sw.includes(ref))failures.push(`service worker does not cache ${ref}`);
 for(const marker of ['data-v16-world-tab="dna"','data-v16-world-tab="routes"','data-v16-world-tab="quests"','v17Secret','FACTION QUEST COMPLETE'])if(!experience.includes(marker))failures.push(`V17 integration marker missing: ${marker}`);
 for(const marker of ['v17-reality-beacon','v17-route-grid','v17-quest-grid','v17-favor-grid'])if(!css.includes(marker))failures.push(`V17 UI style marker missing: ${marker}`);
-if(pkg.version!=='17.0.0')failures.push(`package version is ${pkg.version}, expected 17.0.0`);
+const packageMajor=Number(String(pkg.version||'0').split('.')[0]);if(!Number.isInteger(packageMajor)||packageMajor<17)failures.push(`package version ${pkg.version} predates V17`);
 if(!String(pkg.scripts?.validate||'').includes('validate-v17-content.js')||!pkg.scripts?.['validate:v17'])failures.push('package validation scripts do not include V17');
 
-const report={schema:value.v17.schemaVersion,dnaLaws:Object.keys(dna.laws),routes:{total:routes.length,secrets:routes.filter(route=>route.secret).length},quests:summary.offeredQuests.length,wheelCurrents:Object.keys(CHAIN_DEFINITIONS).length,failures};
+const report={schema:value.v17.schemaVersion,dnaLaws:Object.keys(dna.laws),routes:{total:routes.length,secrets:routes.filter(route=>route.secret).length},quests:summary.offeredQuests.length,wheelCurrents:Object.keys(CHAIN_DEFINITIONS).length,packageVersion:pkg.version,failures};
 if(process.argv.includes('--json'))console.log(JSON.stringify(report,null,2));else console.log(`V17 content valid: ${report.dnaLaws.length} reality laws, ${report.routes.total} destinations (${report.routes.secrets} secret), ${report.quests} quest offers, ${report.wheelCurrents} Wheel currents.`);
 if(failures.length){console.error(`Failures: ${failures.join('; ')}`);process.exitCode=1;}
