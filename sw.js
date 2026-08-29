@@ -2,7 +2,7 @@
 
 importScripts('./game_asset_manifest.js');
 
-const CACHE_NAME='multiverse-wheel-v21-factions-1';
+const CACHE_NAME='multiverse-wheel-v21-factions-2';
 const APP_SHELL=[
   './',
   './Multiverse_Wheel_V8_1326_Real_Repo_Images.html',
@@ -19,7 +19,7 @@ const APP_SHELL=[
   './js/domain/derived-state-cache.js','./js/domain/collection-window.js','./js/domain/experience-engine.js','./js/domain/session-engine.js','./js/domain/v13-engine.js','./js/domain/v14-engine.js','./js/domain/v15-engine.js','./js/domain/v16-engine.js','./js/domain/v17-engine.js','./js/domain/v18-engine.js','./js/domain/v19-engine.js','./js/domain/v20-engine.js','./js/domain/v21-engine.js','./js/domain/v21-hardening.js',
   './js/ui/view-templates.js','./js/ui/dialog-controller.js','./js/ui/tab-controller.js',
   './js/v9-gameplay.js','./js/v10-performance.js','./js/v10-late-run.js','./js/v10-tactical-advisor.js','./js/v11-experience.js','./js/v12-command-center.js',
-  './js/v13-foundation.js','./js/v13-shell.js','./js/v13-agency.js','./js/v13-combat.js','./js/v13-narrative.js','./js/v13-replay.js','./js/v14-experience.js','./js/v15-experience.js','./js/v16-experience.js','./js/v17-experience.js','./js/v18-experience.js','./js/v19-experience.js','./js/v19-hardening.js','./js/v20-experience.js','./js/v21-experience.js','./js/v21-integration.js','./js/bootstrap.js',
+  './js/v13-foundation.js','./js/v13-shell.js','./js/v13-agency.js','./js/v13-combat.js','./js/v13-narrative.js','./js/v13-replay.js','./js/v14-experience.js','./js/v15-experience.js','./js/v16-experience.js','./js/v17-experience.js','./js/v18-experience.js','./js/v19-experience.js','./js/v19-hardening.js','./js/v20-experience.js','./js/v21-experience.js','./js/v21-integration.js','./js/v21-runtime-fixes.js','./js/bootstrap.js',
   ...(self.GAME_ASSET_MANIFEST||[]).map(entry=>`./${entry.path}`)
 ];
 
