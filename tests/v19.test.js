@@ -9,6 +9,7 @@ require('../js/domain/v16-engine.js');
 require('../js/domain/v17-engine.js');
 require('../js/domain/v18-engine.js');
 const {V19_SCHEMA_VERSION,PartyConsequencesEngine,migrateV19,AXES}=require('../js/domain/v19-engine.js');
+require('../js/v19-hardening.js');
 
 const roster=[
   {id:'a',name:'Aegis',universe:'Marvel',role:'support',tags:['healing','support','magic']},
@@ -75,4 +76,9 @@ test('high friendship and pair bonds can unlock Resonant Ascension',()=>{
 test('relationship ending recognizes a found-family route',()=>{
   const engine=new PartyConsequencesEngine(),value=state();for(const id of value.party){value.v19.records[id].axes.friendship=90;value.v19.records[id].axes.trust=90;}const ending=engine.ending(value);
   assert.equal(ending.id,'found-family');assert.equal(ending.devoted.length,2);
+});
+
+test('assist probes are side-effect free while committed refusal increments once',()=>{
+  const engine=new PartyConsequencesEngine(),value=state(),r=value.v19.records.a;r.axes.trust=5;r.axes.loyalty=5;r.axes.resentment=90;
+  assert.equal(engine.assistDecision(value,'a').allowed,false);assert.equal(engine.assistDecision(value,'a').allowed,false);assert.equal(r.refusals,0);assert.equal(engine.assistDecision(value,'a',true).allowed,false);assert.equal(r.refusals,1);assert.equal(value.v13.relationshipArcs.a.refusals,1);
 });
