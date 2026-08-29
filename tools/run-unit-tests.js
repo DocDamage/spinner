@@ -18,7 +18,10 @@ if(!files.length){
 for(const file of files){
   const relative=path.join('tests',file);
   console.log(`\n=== ${relative} ===`);
-  const result=spawnSync(process.execPath,['--test','--test-timeout=15000',relative],{
+  // Each file already imports node:test. Running it directly avoids the outer
+  // node --test worker buffering the file as one opaque subtest, while keeping
+  // the exact assertions, hooks, TAP output, and exit status intact.
+  const result=spawnSync(process.execPath,[relative],{
     cwd:root,
     stdio:'inherit',
     timeout:30000,
