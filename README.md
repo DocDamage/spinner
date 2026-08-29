@@ -1,8 +1,8 @@
-# Multiverse Wheel V22 — Settlements & Civilian Worlds
+# Multiverse Wheel V23 — Tactical Missions & Warfront Operations
 
-A local-first browser/PWA game about forging a custom hero, bending a seeded event wheel with Fate, and writing a persistent multiverse saga alone or with up to ten local/directly connected players. The runtime roster contains 1,326 character profiles.
+A local-first browser/PWA game about forging a custom hero, bending a seeded event Wheel with Fate, and writing a persistent multiverse saga alone or with up to ten local/directly connected players. The runtime roster contains 1,326 character profiles.
 
-V22 adds civilian populations, refugees, rebuilding, sanctuaries, public opinion, and local recovery to the persistent worlds and faction conflicts established in V16–V21. The Wheel remains the center of play.
+V23 turns the strategic wars and civilian stakes established in V21–V22 into persistent tactical operations that are planned before deployment and completed through ordinary Wheel outcomes. It adds mission continuity without turning Multiverse Wheel into a separate tactical RPG.
 
 Play the current release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
 
@@ -10,15 +10,16 @@ Play the current release at [docdamage.github.io/spinner](https://docdamage.gith
 
 The modern runtime is deliberately layered and fallback-safe:
 
-- **V16 — Living Multiverse:** persistent universes, factions, relations, wars, alliances, nemeses, artifact ownership, world memory, collapse/recovery, and bounded offline world simulation.
+- **V16 — Living Multiverse:** persistent universes, factions, relations, wars, alliances, nemeses, artifact ownership, world memory, collapse/recovery, and bounded offline simulation.
 - **V17 — Reality Rules:** Universe DNA, destinations, secret routes, faction work, Favor, travel routes, and multi-spin Wheel currents.
 - **V18 — Multiversal Economy:** authoritative Credits/material wallets, markets, equipment, crafting, enchantment, transmutation, contracts, auctions, and artifact evolution.
 - **V19 — Party Consequences:** Loyalty, Trust, Respect, Friendship, Rivalry, Fear, Resentment, morale, wounds, scars, reserves, personal quests, betrayal, defection, mentorship, and relationship endings.
 - **V20 — Relic Bonds & Equipment Mastery:** mastery, signature/awakened gear, equipment sets, faction Regalia, vendor loyalty, relic Bond/Purity/Corruption, attunement, relic quests, disputes, nemesis theft/recovery, and Legacy Convergence.
 - **V21 — Faction Campaigns & Strongholds:** membership, rank, Authority, long campaigns, strategic territory/fronts, strongholds, facilities, specialists, diplomacy, infiltration, sieges, faction-exclusive unlocks, and faction legacy endings.
-- **V22 — Settlements & Civilian Worlds:** persistent civilian populations, displacement/refugees, civilian needs, Wheel-driven relief requests, rebuilding, sanctuaries, public opinion, bounded local market pressure, and civilian legacy endings.
+- **V22 — Settlements & Civilian Worlds:** persistent civilian populations, displacement/refugees, civilian needs, Wheel-driven relief requests, rebuilding, sanctuaries, public opinion, bounded market pressure, and civilian legacy endings.
+- **V23 — Tactical Missions & Warfront Operations:** persistent mission opportunities sourced from the living world, five-stage operations, pre-deployment planning, recoverable setbacks, and bounded aftermath across warfronts, strongholds, civilians, party bonds, relics, and faction progression.
 
-`js/bootstrap.js` loads these layers in order. If V22 fails, the browser logs the failure and continues as the complete V21 game.
+`js/bootstrap.js` loads these layers in order. If V23 fails to load, the browser logs the failure and continues as the complete V22 game.
 
 ## Run locally
 
@@ -34,145 +35,141 @@ Then open:
 
 Serving over HTTP enables installation and offline caching. Opening the HTML directly still runs the local game, but not its service worker.
 
-## V22 Settlements & Civilian Worlds
+## V23 Tactical Missions & Warfront Operations
 
-### Ownership rules
+### What creates an operation
 
-V22 extends older systems instead of duplicating them:
+V23 discovers opportunities from persistent state that already matters:
 
-- V16 remains authoritative for worlds, threat, corruption, stability, factions, nemeses, memory, and world ticks.
-- V17 remains authoritative for destinations, routes, Favor, and short faction work.
-- V18 remains authoritative for Credits/materials, markets, equipment, crafting, and artifact evolution.
-- V19 remains authoritative for party relationships and relationship consequences.
-- V20 remains authoritative for equipment mastery and relic relationships.
-- V21 remains authoritative for faction membership, campaigns, territory control, strongholds, facilities, specialists, diplomacy, infiltration, and sieges.
-- V22 stores only civilian settlement, displacement, sanctuary, relief-request, public-opinion, and recovery state in `state.v22`.
+- active V21 campaigns;
+- active V21 warfronts;
+- V22 civilian crises and heavy displacement;
+- threatened or besieged V21 strongholds;
+- V21 infiltration operations;
+- stolen V20 relics;
+- active V16 nemeses.
 
-### Civilian populations
+Discovery is deterministic and keyed to its source. Opening or rendering the Operations screen never rerolls or advances an operation.
 
-Every persistent V21 territory receives one deterministic V22 settlement. Existing settlements are never rerolled by migration or rendering.
+### Operation families
 
-Settlements track:
+The release includes thirteen mission families:
 
-- resident population;
-- displaced population;
-- food;
-- housing;
-- health;
-- security;
-- prosperity;
-- morale;
-- infrastructure;
-- player public opinion;
-- active civilian request;
-- recovery history.
+- Extraction
+- Rescue
+- Escort
+- Sabotage
+- Reconnaissance
+- Interception
+- Artifact Recovery
+- Stronghold Defense
+- Civilian Evacuation
+- Counter-Infiltration
+- Warfront Breakthrough
+- Leadership Capture
+- Route Stabilization
 
-All settlement metrics are bounded.
+### Five-stage mission loop
 
-### Strategic pressure and refugees
+Every operation persists across five ordered stages:
 
-Civilian pressure is derived from the systems already driving the world:
+1. Intel
+2. Approach
+3. Complication
+4. Objective
+5. Extraction
 
-- contested V21 territory;
-- V21 front pressure;
-- V21 stronghold sieges;
-- V16 threat;
-- V16 corruption;
-- local territory stability and supply.
+The sixth concept, Aftermath, writes the result into the existing systems that own the affected world state.
 
-High pressure can create refugees and damage civilian conditions. Safer worlds gradually recover.
+Each stage lists compatible normal Wheel signals. A matching ordinary gameplay result advances the current stage. Unrelated Wheel results do not advance it.
 
-Background simulation is capped and cannot silently delete a settlement or reduce an inhabited settlement below its protected civilian floor.
+### Mission planning
 
-### Civilian requests through the Wheel
+Before deployment, the player can choose:
 
-Settlements generate persistent requests from their strongest current need:
+- Adaptive, Direct, Stealth, or Diplomatic approach;
+- up to three active V19 allies;
+- an assigned V21 specialist where available;
+- optional V21 faction support;
+- optional owned V20 relic support;
+- a V18 supply commitment;
+- a strategic priority such as Balanced, Civilians First, Objective First, or Team Safety.
 
-- Refugee Influx;
-- Food Shortage;
-- Housing Crisis;
-- Medical Emergency;
-- Civilian Security;
-- Infrastructure Damage;
-- Local Economy Shock.
+Planning is free. Supply resources are spent only when **Deploy** succeeds. Invalid deployment spends nothing.
 
-Requests progress from normal Wheel-compatible results such as Recovery, Travel, Recruit, Training, Battle, Boss, Artifact, Rare, and recognized faction service.
+V23 planning is intentionally bounded: its own combat contribution is capped at approximately **±6% odds** and **±8% damage**.
 
-The request system provides long-term context around ordinary play rather than a detached minigame.
+### Party integration
 
-### Relief actions
+V23 reads the authoritative V19 relationship records. Dead, departed, or defected allies cannot deploy. Severe resentment, broken trust, or broken loyalty can cause an active ally to refuse a mission.
 
-Direct relief uses the authoritative V18 wallet:
+Setbacks can add Fear, Trust loss, and bounded V19 wounds. Success can improve Trust, Respect, Friendship, and Loyalty. V23 adds no approval meter.
 
-- **Emergency Aid** — improves food, health, morale, prosperity, and public opinion.
-- **Rebuild District** — improves infrastructure, housing, prosperity, and morale.
-- **Medical Relief** — improves health and morale.
-- **Open Relief Route** — improves food, security, prosperity, and access.
-- **Resettle Refugees** — returns displaced residents to a community when there is room.
+### Warfront consequences
 
-There is no civilian currency and no second shop.
+Mission outcomes can make small changes to existing V21 front pressure, supply, and morale. A single operation cannot instantly conquer a warfront. Warfront Breakthrough keeps territory strategically contested so V21 remains authoritative for conquest and campaign resolution.
 
-Successful relief can also feed V19 Trust, Respect, Friendship, and Resentment through the existing relationship engine.
+### Civilian consequences
 
-### Sanctuaries
+V22 crisis settlements can create Rescue, Escort, Civilian Evacuation, and Route Stabilization missions.
 
-A safe player-aligned V21 stronghold can open a V22 sanctuary.
+Success can reduce displacement and improve Security, Health, Infrastructure, Morale, and Public Opinion. Failure can create additional bounded displacement using V22's existing protected-population rules. There is no second civilian simulator.
 
-The stronghold stays a V21 faction base. The sanctuary adds only civilian state:
+### Stronghold defense
 
-- capacity;
-- refugee residents;
-- safety;
-- stockpile;
-- morale;
-- history.
+Threatened V21 strongholds can generate Stronghold Defense and Counter-Infiltration operations.
 
-Construction and resupply spend V18 resources. Refugees transfer gradually during world ticks and cannot exceed sanctuary capacity.
+Success can restore bounded Integrity, Defense, Supply, or Morale. Failure is recoverable and cannot delete a player stronghold; the existing V21 siege/recovery layer remains authoritative.
 
-### Public opinion
+### Existing rewards only
 
-Each settlement tracks player public opinion from -100 to 100.
+Operation rewards feed existing systems:
 
-Relief, completed requests, and sanctuary work improve public opinion. This is civilian sentiment, not a replacement for V16 faction reputation.
+- V18 Credits and Salvage;
+- V21 rank XP and Authority;
+- V21 campaign momentum;
+- V20 relic Bond/history when relic support was committed;
+- V19 relationship changes;
+- V22 civilian recovery/public opinion.
 
-### Local economy pressure
+V23 introduces no new currency, shop, inventory, relationship meter, faction reputation model, relic inventory, or city-building economy.
 
-V22 modifies the existing V18 market price path instead of creating another economy.
+### Recoverable setbacks
 
-Civilian prosperity, security, and public opinion contribute a bounded local modifier of approximately **-6% to +8%**. Existing V18 scarcity, V20 vendor loyalty, and faction modifiers remain authoritative.
+A failed matching Wheel result adds operational Stress instead of instantly deleting the mission. Repeated setbacks can eventually fail an operation. The source campaign, front, settlement, stronghold, or relic remains recoverable and can generate future opportunities.
 
-### Civilian endings
+The player can also order a withdrawal. Withdrawals are recorded in operation history and apply bounded consequences. A failed or withdrawn operation can then be reopened and replanned for another attempt.
 
-V22 adds a civilian epilogue layer without replacing earlier endings. Possible outcomes include:
+### Offline simulation
 
-- **The Doors Stayed Open** — a durable sanctuary network resettled large numbers of refugees.
-- **Worlds Worth Saving** — broad civilian recovery produced healthy, secure, prosperous worlds.
-- **Caravans Between Stars** — major displacement remains part of the post-campaign multiverse.
-- **People in the Margins** — civilian survival remains part of the Chronicle even without a perfect recovery.
+V23 hooks into the existing V16 world tick. Background simulation can discover opportunities, raise urgency, and add a small amount of pressure to an active mission.
+
+Offline catch-up is capped at six ticks by default and cannot auto-complete a mission.
 
 ## UI
 
-Open **World → Civilians** for:
+Open **World → Operations** to see:
 
-- total civilian population;
-- displaced population;
-- average health/security/prosperity/morale;
-- current settlement needs;
-- active Wheel-driven civilian request;
-- direct relief actions and costs;
-- sanctuary construction/resupply;
-- all discovered settlements;
-- local V18 market pressure.
+- the active operation;
+- five-stage progress;
+- current stress;
+- next compatible Wheel signals;
+- source stakes and strategic context;
+- available operations sorted by urgency;
+- party availability/refusal reasons;
+- approach, specialist, faction, relic, priority, and supply planning;
+- exact supply costs;
+- recent resolved-operation history.
 
-A compact **Civilians** beacon appears with Reality, Economy, Party, Legacy, and Faction Command status surfaces.
+A compact **Operations** beacon sits alongside the existing Reality, Economy, Party, Legacy, Faction Command, and Civilians surfaces.
 
 ## Persistence and PWA
 
-V22 migration is idempotent and upgrades V21 saves without rerolling V16–V21 state.
+V23 uses schema `23`. Migration from V22 is idempotent. Once `state.v23.schemaVersion` is 23, ordinary `ensure()` calls do not replay older V16–V22 migrations.
 
-The service worker cache is `multiverse-wheel-v22-civilian-1` and precaches the V22 CSS/domain/browser layers.
+The service worker cache is `multiverse-wheel-v23-operations-1` and precaches the V23 CSS/domain/browser layers.
 
-The first-install safety rule remains intact: a brand-new service worker does not immediately claim and reload a live page. Client claiming occurs only when an older Multiverse Wheel cache proves this is a release upgrade; `SKIP_WAITING` remains explicit.
+The first-install safety rule remains intact: a brand-new service worker does not immediately claim and reload a live page. Client claiming occurs only when an older Multiverse Wheel cache proves this is a real release upgrade; `SKIP_WAITING` remains explicit.
 
 ## Validation
 
@@ -182,10 +179,10 @@ Run the full unit/content/migration gate:
 npm run validate
 ```
 
-Run only V22 content validation:
+Run only V23 content validation:
 
 ```powershell
-npm run validate:v22
+npm run validate:v23
 ```
 
 Run all Chromium browser journeys:
@@ -194,7 +191,7 @@ Run all Chromium browser journeys:
 npm run test:e2e
 ```
 
-Run the complete release gate:
+Run the complete local release gate:
 
 ```powershell
 npm run validate:release
@@ -202,22 +199,20 @@ npm run validate:release
 
 GitHub Actions runs two required jobs on pushes to `main`:
 
-1. **Unit and content validation** — all historical tests and V13–V22 validators.
-2. **Chromium release journeys** — all historical Playwright journeys plus V22 journeys.
+1. **Unit and content validation** — all historical tests and V13–V23 validators.
+2. **Chromium release journeys** — all historical Playwright journeys plus V23 journeys.
 
-V22 is considered complete only when both jobs are green on the exact `main` commit.
+V23 is complete only when both jobs are green on the exact authoritative `main` commit.
 
-## V22 files
+## V23 primary files
 
-Primary release files:
-
-- `js/domain/v22-engine.js`
-- `js/v22-experience.js`
-- `styles/v22.css`
-- `tests/v22.test.js`
-- `tests/e2e/v22.spec.js`
-- `tools/validate-v22-content.js`
-- `docs/V22_SETTLEMENTS_CIVILIAN_WORLDS.md`
+- `js/domain/v23-engine.js`
+- `js/v23-experience.js`
+- `styles/v23.css`
+- `tests/v23.test.js`
+- `tests/e2e/v23.spec.js`
+- `tools/validate-v23-content.js`
+- `docs/V23_TACTICAL_MISSIONS_WARFRONT_OPERATIONS.md`
 
 Release wiring also updates:
 
@@ -227,12 +222,13 @@ Release wiring also updates:
 - `package-lock.json`
 - `manifest.webmanifest`
 - `index.html`
-- `tools/validate-v21-content.js` (forward-compatible release branding checks)
+- `README.md`
+- `tools/validate-v22-content.js` (forward-compatible service-worker release check)
 
 ## Scope boundary
 
-V22 is not a city builder, 4X game, tactical RTS, second economy, or replacement for V16/V21 strategy.
+V23 is not a tactical RPG, RTS, XCOM-like grid game, second combat system, second economy, second party model, second faction campaign system, or replacement for the Wheel.
 
-The Wheel remains the core game. Civilian systems add stakes, consequences, recovery, and long-term reasons to care about the worlds affected by normal play.
+The Wheel remains the core interaction. V23 makes the worlds around the Wheel react with clearer mission stakes, planning, persistence, and consequences.
 
-See [`docs/V22_SETTLEMENTS_CIVILIAN_WORLDS.md`](docs/V22_SETTLEMENTS_CIVILIAN_WORLDS.md) for the complete release design.
+See [`docs/V23_TACTICAL_MISSIONS_WARFRONT_OPERATIONS.md`](docs/V23_TACTICAL_MISSIONS_WARFRONT_OPERATIONS.md) for the implementation design and ownership boundaries.

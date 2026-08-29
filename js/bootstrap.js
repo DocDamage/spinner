@@ -44,6 +44,14 @@ window.addEventListener('DOMContentLoaded',async()=>{
                 release='V22 Settlements & Civilian Worlds';
                 document.title='Multiverse Wheel V22 — Settlements & Civilian Worlds';
                 if(description)description.content='Protect civilian worlds, rebuild settlements, shelter refugees, answer relief requests through the Wheel, and leave behind worlds worth saving.';
+                try{
+                  loadStyle('styles/v23.css');
+                  if(!window.MultiverseDomain?.TacticalOperationsEngine)await loadScript('js/domain/v23-engine.js');
+                  await loadScript('js/v23-experience.js');
+                  release='V23 Tactical Missions & Warfront Operations';
+                  document.title='Multiverse Wheel V23 — Tactical Missions & Warfront Operations';
+                  if(description)description.content='Plan persistent tactical operations, answer warfront and civilian crises through normal Wheel play, and carry their consequences back into factions, settlements, party bonds, relics, and strongholds.';
+                }catch(error){console.error('V23 Tactical Missions & Warfront Operations failed to load; continuing with V22 Settlements & Civilian Worlds.',error);document.title='Multiverse Wheel V22 — Settlements & Civilian Worlds';}
               }catch(error){console.error('V22 Settlements & Civilian Worlds failed to load; continuing with V21 Faction Campaigns & Strongholds.',error);document.title='Multiverse Wheel V21 — Faction Campaigns & Strongholds';}
             }catch(error){console.error('V21 Faction Campaigns & Strongholds failed to load; continuing with V20 Relic Bonds & Equipment Mastery.',error);document.title='Multiverse Wheel V20 — Relic Bonds & Equipment Mastery';}
           }catch(error){console.error('V20 Relic Bonds & Equipment Mastery failed to load; continuing with V19 Party Consequences.',error);document.title='Multiverse Wheel V19 — Party Consequences';}
