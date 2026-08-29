@@ -24,7 +24,18 @@ const APP_SHELL=[
 ];
 
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)));});
-self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('multiverse-wheel-')&&key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
+self.addEventListener('activate',event=>{
+  event.waitUntil(caches.keys().then(async keys=>{
+    const oldCaches=keys.filter(key=>key.startsWith('multiverse-wheel-')&&key!==CACHE_NAME);
+    await Promise.all(oldCaches.map(key=>caches.delete(key)));
+    // On first install there is no older Multiverse Wheel cache. Do not claim
+    // the already-open page: taking control mid-session can invalidate active
+    // input/evaluation contexts. During a real upgrade, the old cache proves a
+    // previous release existed, so claiming is safe and the page reload remains
+    // gated by the explicit RELOAD UPDATE action in v19-hardening.js.
+    if(oldCaches.length)await self.clients.claim();
+  }));
+});
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();});
 self.addEventListener('fetch',event=>{
   const request=event.request;if(request.method!=='GET')return;
