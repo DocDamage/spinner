@@ -37,6 +37,14 @@ window.addEventListener('DOMContentLoaded',async()=>{
               release='V21 Faction Campaigns & Strongholds';
               document.title='Multiverse Wheel V21 — Faction Campaigns & Strongholds';
               if(description)description.content='Join persistent factions, fight long campaigns through the Wheel, shape territory and diplomacy, and build recoverable multiversal strongholds.';
+              try{
+                loadStyle('styles/v22.css');
+                if(!window.MultiverseDomain?.SettlementEngine)await loadScript('js/domain/v22-engine.js');
+                await loadScript('js/v22-experience.js');
+                release='V22 Settlements & Civilian Worlds';
+                document.title='Multiverse Wheel V22 — Settlements & Civilian Worlds';
+                if(description)description.content='Protect civilian worlds, rebuild settlements, shelter refugees, answer relief requests through the Wheel, and leave behind worlds worth saving.';
+              }catch(error){console.error('V22 Settlements & Civilian Worlds failed to load; continuing with V21 Faction Campaigns & Strongholds.',error);document.title='Multiverse Wheel V21 — Faction Campaigns & Strongholds';}
             }catch(error){console.error('V21 Faction Campaigns & Strongholds failed to load; continuing with V20 Relic Bonds & Equipment Mastery.',error);document.title='Multiverse Wheel V20 — Relic Bonds & Equipment Mastery';}
           }catch(error){console.error('V20 Relic Bonds & Equipment Mastery failed to load; continuing with V19 Party Consequences.',error);document.title='Multiverse Wheel V19 — Party Consequences';}
         }catch(error){console.error('V19 Party Consequences failed to load; continuing with V18 Multiversal Economy.',error);document.title='Multiverse Wheel V18 — Multiversal Economy';}

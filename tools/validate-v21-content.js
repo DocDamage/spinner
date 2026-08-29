@@ -39,15 +39,15 @@ for(const ref of ['styles/v21.css','js/domain/v21-engine.js','js/v21-experience.
 for(const ref of ['styles/v21.css','js/domain/v21-engine.js','js/v21-experience.js','js/v21-integration.js'])if(!sw.includes(ref))failures.push(`service worker does not cache ${ref}`);
 if(bootstrap.indexOf('js/v21-integration.js')<bootstrap.indexOf('js/v21-experience.js'))failures.push('V21 integration must load after the V21 browser experience it extends');
 for(const marker of ['oldCaches','oldCaches.length','self.clients.claim()'])if(!sw.includes(marker))failures.push(`service-worker first-install guard missing: ${marker}`);
-if(!sw.includes("multiverse-wheel-v21-factions-1"))failures.push('service-worker cache name is not V21');
 for(const marker of ['FACTION COMMAND','FACTION CAMPAIGNS & STRONGHOLDS','data-v21-faction-tab','data-v21-campaign-start','data-v21-build-hold','data-v21-diplomacy','data-v21-infiltration-action','data-v21-siege'])if(!experience.includes(marker))failures.push(`V21 browser marker missing: ${marker}`);
 for(const marker of ['v21FacilitySupport','resupplyStronghold','catchUp','applyFactionWheelPressureV21','Faction Logistics Crate','replaceWheelSliceV17','runContext?.kind===\'daily\''])if(!integration.includes(marker))failures.push(`V21 cross-version integration marker missing: ${marker}`);
 for(const marker of ['v21-faction-beacon','v21-subnav','v21-campaign-card','v21-territory-grid','v21-stronghold-grid','v21-facilities','v21-diplomacy-grid','v21-siege'])if(!css.includes(marker))failures.push(`V21 UI style marker missing: ${marker}`);
 const major=Number(String(pkg.version||'0').split('.')[0]);if(!Number.isFinite(major)||major<21)failures.push(`package version is ${pkg.version}, expected major >= 21`);
 if(pkg.version!==lock.version||pkg.version!==lock.packages?.['']?.version)failures.push('package and lockfile versions do not match');
 if(!String(pkg.scripts?.validate||'').includes('validate-v21-content.js')||!String(pkg.scripts?.['validate:content']||'').includes('validate-v21-content.js')||!pkg.scripts?.['validate:v21'])failures.push('package validation scripts do not include V21');
-if(!String(manifest.name||'').includes('V21')||!String(manifest.short_name||'').includes('V21'))failures.push('PWA manifest is not branded for V21');
-if(!index.includes('Multiverse Wheel V21'))failures.push('index launcher is not branded for V21');
+const expectedBrand=`V${major}`;if(!String(manifest.name||'').includes(expectedBrand)||!String(manifest.short_name||'').includes(expectedBrand))failures.push(`PWA manifest branding must match current package major ${expectedBrand}`);
+if(!index.includes(`Multiverse Wheel ${expectedBrand}`))failures.push(`index launcher branding must match current package major ${expectedBrand}`);
+if(!sw.includes(`multiverse-wheel-v${major}-`))failures.push(`service-worker cache name must match current package major V${major}`);
 const lockText=read('package-lock.json');for(const expected of ['https://registry.npmjs.org/@playwright/test/-/test-1.62.1.tgz','sha512-DTcUc8qii+cpHvtOwggMtBRMjKZHXYWdw8syRYu2vtzuq4Wxphqq4NfCs5Zt44L6mA8rfDfj+PHnxFc/FeK6mQ=='])if(!lockText.includes(expected))failures.push('package-lock dependency URL/hash changed unexpectedly');
 
 const report={schema:state.v21.schemaVersion,ranks:RANKS_V21.length,campaignTypes:Object.keys(CAMPAIGN_DEFS_V21).length,facilities:Object.keys(FACILITY_DEFS_V21).length,specialists:SPECIALIST_ROLES_V21.length,territories:Object.keys(state.v21.territories).length,strongholdBuilt:built.ok,integrationAttached:typeof engine.catchUp==='function',packageVersion:pkg.version,firstInstallClaimGuard:sw.includes('oldCaches.length'),failures};

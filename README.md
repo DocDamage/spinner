@@ -1,8 +1,8 @@
-# Multiverse Wheel V21 — Faction Campaigns & Strongholds
+# Multiverse Wheel V22 — Settlements & Civilian Worlds
 
 A local-first browser/PWA game about forging a custom hero, bending a seeded event wheel with Fate, and writing a persistent multiverse saga alone or with up to ten local/directly connected players. The runtime roster contains 1,326 character profiles.
 
-V21 turns the persistent factions introduced in V16 into a playable strategic layer without replacing the Wheel or duplicating the systems built since V16.
+V22 adds civilian populations, refugees, rebuilding, sanctuaries, public opinion, and local recovery to the persistent worlds and faction conflicts established in V16–V21. The Wheel remains the center of play.
 
 Play the current release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
 
@@ -10,14 +10,15 @@ Play the current release at [docdamage.github.io/spinner](https://docdamage.gith
 
 The modern runtime is deliberately layered and fallback-safe:
 
-- **V16 — Living Multiverse:** persistent universes, six seeded factions, faction power/resources/cohesion/relations, wars, alliances, nemeses, artifact ownership, world memory, collapse/recovery, and bounded offline world simulation.
-- **V17 — Reality Rules:** Universe DNA, destinations, secret routes, short faction quests, Favor, travel routes, faction warfronts, and multi-spin Wheel currents.
-- **V18 — Multiversal Economy:** the authoritative Credits wallet plus Cosmic Fragments, Salvage, Void Marks, Bounty Seals, markets, equipment, crafting, enchantment, transmutation, contracts, auctions, and artifact evolution.
-- **V19 — Party Consequences:** Loyalty, Trust, Respect, Friendship, Rivalry, Fear, Resentment, morale, wounds, scars, reserves, personal quests, betrayal, defection, mentor bonds, faction reactions, and relationship endings.
-- **V20 — Relic Bonds & Equipment Mastery:** equipment mastery, signature/awakened gear, equipment sets, faction Regalia, vendor loyalty, relic Bond/Purity/Corruption/personality/attunement/quests, relic disputes, nemesis theft/recovery, and Legacy Convergence.
-- **V21 — Faction Campaigns & Strongholds:** membership, rank, Authority, long campaigns, strategic territory/fronts, player strongholds, facilities, specialists, diplomacy, infiltration, sieges, faction-exclusive unlocks, and faction legacy endings.
+- **V16 — Living Multiverse:** persistent universes, factions, relations, wars, alliances, nemeses, artifact ownership, world memory, collapse/recovery, and bounded offline world simulation.
+- **V17 — Reality Rules:** Universe DNA, destinations, secret routes, faction work, Favor, travel routes, and multi-spin Wheel currents.
+- **V18 — Multiversal Economy:** authoritative Credits/material wallets, markets, equipment, crafting, enchantment, transmutation, contracts, auctions, and artifact evolution.
+- **V19 — Party Consequences:** Loyalty, Trust, Respect, Friendship, Rivalry, Fear, Resentment, morale, wounds, scars, reserves, personal quests, betrayal, defection, mentorship, and relationship endings.
+- **V20 — Relic Bonds & Equipment Mastery:** mastery, signature/awakened gear, equipment sets, faction Regalia, vendor loyalty, relic Bond/Purity/Corruption, attunement, relic quests, disputes, nemesis theft/recovery, and Legacy Convergence.
+- **V21 — Faction Campaigns & Strongholds:** membership, rank, Authority, long campaigns, strategic territory/fronts, strongholds, facilities, specialists, diplomacy, infiltration, sieges, faction-exclusive unlocks, and faction legacy endings.
+- **V22 — Settlements & Civilian Worlds:** persistent civilian populations, displacement/refugees, civilian needs, Wheel-driven relief requests, rebuilding, sanctuaries, public opinion, bounded local market pressure, and civilian legacy endings.
 
-`js/bootstrap.js` loads these layers in order. If V21 fails to load, the browser logs the failure and continues as V20 instead of taking the game down.
+`js/bootstrap.js` loads these layers in order. If V22 fails, the browser logs the failure and continues as the complete V21 game.
 
 ## Run locally
 
@@ -33,181 +34,145 @@ Then open:
 
 Serving over HTTP enables installation and offline caching. Opening the HTML directly still runs the local game, but not its service worker.
 
-## V21 Faction Campaigns & Strongholds
+## V22 Settlements & Civilian Worlds
 
 ### Ownership rules
 
-V21 extends older systems instead of shadowing them:
+V22 extends older systems instead of duplicating them:
 
-- V16 remains authoritative for faction identity, reputation, power, resources, cohesion, relations, nemeses, artifact ownership, world history, and world ticks.
-- V17 remains authoritative for destinations, route unlocks, Favor, and short faction quests.
-- V18 remains authoritative for Credits and all material currencies, equipment inventory, crafting, markets, and artifact evolution.
-- V19 remains authoritative for party relationships, wounds, reserves, defections, personal quests, and relationship consequences.
-- V20 remains authoritative for equipment mastery, faction Regalia items, signature/awakened gear, relic Bond/Purity/Corruption, relic bearer state, and relic quests.
-- V21 stores only the new campaign/strategy layer in `state.v21`.
+- V16 remains authoritative for worlds, threat, corruption, stability, factions, nemeses, memory, and world ticks.
+- V17 remains authoritative for destinations, routes, Favor, and short faction work.
+- V18 remains authoritative for Credits/materials, markets, equipment, crafting, and artifact evolution.
+- V19 remains authoritative for party relationships and relationship consequences.
+- V20 remains authoritative for equipment mastery and relic relationships.
+- V21 remains authoritative for faction membership, campaigns, territory control, strongholds, facilities, specialists, diplomacy, infiltration, and sieges.
+- V22 stores only civilian settlement, displacement, sanctuary, relief-request, public-opinion, and recovery state in `state.v22`.
 
-### Faction membership
+### Civilian populations
 
-Each V16 faction can have a persistent V21 membership record. Status can be neutral, allied, member, infiltrating, expelled, defected, or enemy.
+Every persistent V21 territory receives one deterministic V22 settlement. Existing settlements are never rerolled by migration or rendering.
 
-The player may have one primary faction at a time. They can leave active service without erasing history, defect directly to a rival, or maintain a separate infiltration target.
+Settlements track:
 
-Joining and defection write through to V16 reputation/relations and can trigger V19 party reactions.
+- resident population;
+- displaced population;
+- food;
+- housing;
+- health;
+- security;
+- prosperity;
+- morale;
+- infrastructure;
+- player public opinion;
+- active civilian request;
+- recovery history.
 
-### Rank and Authority
+All settlement metrics are bounded.
 
-V21 has eight faction ranks:
+### Strategic pressure and refugees
 
-1. Outsider
-2. Associate
-3. Operative
-4. Veteran
-5. Captain
-6. Commander
-7. Champion
-8. Regent
+Civilian pressure is derived from the systems already driving the world:
 
-Promotion uses campaign contribution XP plus V16 reputation and V21 Authority gates. Repeating trivial events alone cannot skip those gates.
+- contested V21 territory;
+- V21 front pressure;
+- V21 stronghold sieges;
+- V16 threat;
+- V16 corruption;
+- local territory stability and supply.
 
-**Authority** is separate from reputation. Reputation answers what the faction thinks of the player; Authority controls what strategic decisions the player can make inside the faction.
+High pressure can create refugees and damage civilian conditions. Safer worlds gradually recover.
 
-Authority is bounded from 0–100 and gates higher-level diplomacy, campaign decisions, stronghold construction, and faction access.
+Background simulation is capped and cannot silently delete a settlement or reduce an inhabited settlement below its protected civilian floor.
 
-### Long-form campaigns
+### Civilian requests through the Wheel
 
-V21 campaigns are durable strategic arcs that progress through normal Wheel-compatible events rather than a detached minigame.
+Settlements generate persistent requests from their strongest current need:
 
-Current campaign families:
+- Refugee Influx;
+- Food Shortage;
+- Housing Crisis;
+- Medical Emergency;
+- Civilian Security;
+- Infrastructure Damage;
+- Local Economy Shock.
 
-- Border War
-- Liberation Campaign
-- Relic Crusade
-- Succession Crisis
-- Reality Stabilization
-- Faction Schism
+Requests progress from normal Wheel-compatible results such as Recovery, Travel, Recruit, Training, Battle, Boss, Artifact, Rare, and recognized faction service.
 
-Each campaign has persistent operations, progress, enemy factions, territory context, momentum, a final strategic decision, rewards, consequences, and aftermath.
+The request system provides long-term context around ordinary play rather than a detached minigame.
 
-Rendering the campaign screen does not advance it. Progress comes from deduplicated gameplay events and recognized V17 faction-service completions.
+### Relief actions
 
-### Territory and frontlines
+Direct relief uses the authoritative V18 wallet:
 
-Territories are built from the existing V17 destination network. A territory stores controller, faction influence, stability, fortification, supply, contest state, campaign linkage, and history.
+- **Emergency Aid** — improves food, health, morale, prosperity, and public opinion.
+- **Rebuild District** — improves infrastructure, housing, prosperity, and morale.
+- **Medical Relief** — improves health and morale.
+- **Open Relief Route** — improves food, security, prosperity, and access.
+- **Resettle Refugees** — returns displaced residents to a community when there is room.
 
-Hostile V16 relations can produce persistent fronts. Front pressure, supply, and morale move through bounded world ticks. Campaign aftermath and sieges can change control.
+There is no civilian currency and no second shop.
 
-Offline simulation may damage strategic position, but it cannot arbitrarily delete a player stronghold or force an unrecoverable campaign finale.
+Successful relief can also feed V19 Trust, Respect, Friendship, and Resentment through the existing relationship engine.
 
-### Strongholds
+### Sanctuaries
 
-Player-aligned strongholds are expensive persistent bases built in eligible territory with the real V18 wallet.
+A safe player-aligned V21 stronghold can open a V22 sanctuary.
 
-Base construction currently requires Operative rank, 10 Authority, friendly/unclaimed eligible territory, and:
+The stronghold stays a V21 faction base. The sanctuary adds only civilian state:
 
-- 450 Credits
-- 42 Salvage
-- 6 Cosmic Fragments
+- capacity;
+- refugee residents;
+- safety;
+- stockpile;
+- morale;
+- history.
 
-Strongholds track level, integrity, defense, supply, morale, facilities, specialists, siege state, and history.
+Construction and resupply spend V18 resources. Refugees transfer gradually during world ticks and cannot exceed sanctuary capacity.
 
-Occupied bases remain in state and can be recovered through later play; V21 does not permanently erase them during background simulation.
+### Public opinion
 
-### Facilities
+Each settlement tracks player public opinion from -100 to 100.
 
-Strongholds support ten upgradeable facilities:
+Relief, completed requests, and sanctuary work improve public opinion. This is civilian sentiment, not a replacement for V16 faction reputation.
 
-- Command Center — campaign/strategic support
-- Forge — V20 equipment/set support
-- Relic Vault — relic protection/purification support
-- Medical Bay — V19 recovery support
-- Training Hall — training/mastery support
-- Intelligence Wing — infiltration support
-- Portal Nexus — V17 route/travel support
-- Quartermaster — supply/economy support
-- Embassy — diplomacy support
-- Defense Grid — siege/offline defense
+### Local economy pressure
 
-Facility construction and upgrades use V18 Credits/materials. Benefits are intentionally bounded so they support the hero rather than replace the Wheel build.
+V22 modifies the existing V18 market price path instead of creating another economy.
 
-### Specialists and party assignments
+Civilian prosperity, security, and public opinion contribute a bounded local modifier of approximately **-6% to +8%**. Existing V18 scarcity, V20 vendor loyalty, and faction modifiers remain authoritative.
 
-Living V19 allies can be temporarily assigned to stronghold roles such as Field Medic, Smith, Diplomat, Intelligence Officer, Portal Engineer, Archivist, or Defense Commander.
+### Civilian endings
 
-Assignments persist, can affect relationships, and do not permanently remove the character from the save. Dead, departed, or defected allies cannot be assigned.
+V22 adds a civilian epilogue layer without replacing earlier endings. Possible outcomes include:
 
-V19 defectors remain the same relationship records and can reappear as faction operatives instead of being cloned into unrelated enemies.
+- **The Doors Stayed Open** — a durable sanctuary network resettled large numbers of refugees.
+- **Worlds Worth Saving** — broad civilian recovery produced healthy, secure, prosperous worlds.
+- **Caravans Between Stars** — major displacement remains part of the post-campaign multiverse.
+- **People in the Margins** — civilian survival remains part of the Chronicle even without a perfect recovery.
 
-### Diplomacy
+## UI
 
-Diplomatic actions use the real V16 faction relation matrix:
+Open **World → Civilians** for:
 
-- propose alliance
-- propose ceasefire
-- trade resources
-- threaten
-- betray an agreement
+- total civilian population;
+- displaced population;
+- average health/security/prosperity/morale;
+- current settlement needs;
+- active Wheel-driven civilian request;
+- direct relief actions and costs;
+- sanctuary construction/resupply;
+- all discovered settlements;
+- local V18 market pressure.
 
-Availability is driven by current relation, Authority, and relevant stronghold support. Invalid proposals spend nothing.
-
-### Infiltration
-
-A hostile faction can be infiltrated through a persistent cover/suspicion/intel record.
-
-Covert operations include reconnaissance, sabotage, plan theft, prisoner rescue, leadership manipulation, and opening stronghold gates.
-
-Outcomes use seeded checks influenced by cover, intel, player skill, suspicion, and Intelligence Wing support. Infiltration is not a pure random button. Exposure can create a persistent V16 counterintelligence nemesis.
-
-### Sieges
-
-Sieges are multi-step strategic events:
-
-1. Preparation
-2. Approach
-3. Breach / Defense
-4. Champion encounter
-5. Final decision
-
-Available approaches include direct assault, stealth, sabotage, diplomacy, relic breach, evacuation, surrender, and retreat options. Siege outcomes change stronghold integrity/status and territory control without deleting the base record.
-
-### V19 and V20 integration
-
-Major faction choices can change V19 Trust, Respect, Loyalty, Fear, and Resentment based on faction ethos and ally personality.
-
-Faction progression unlocks the existing V20/V18 equipment path rather than a second inventory. V21 exposes the normal `faction:<id>` Regalia set identity and higher-rank signature/technique access.
-
-Faction relic objectives operate on existing V20 relic records and V16 artifact ownership. Returning, keeping, attuning, purifying, corrupting, destroying, or redirecting a relic can change Bond/Purity/Corruption, ownership, reputation, and faction relations.
-
-### Combat limits
-
-V21 strategic support is deliberately capped:
-
-- campaign/stronghold odds contribution: approximately ±6%
-- damage contribution: approximately ±8%
-
-These effects stack with older release systems without becoming the dominant source of combat power.
-
-### UI
-
-Open **World → Factions** for the V21 command surface:
-
-- Overview
-- Membership
-- Campaign
-- Territory
-- Strongholds
-- Diplomacy
-
-A compact **Faction Command** beacon sits with the Reality/Economy/Party/Legacy status surfaces and shows primary allegiance, rank, Authority, current campaign, front pressure, and urgent stronghold status.
-
-The interface keeps keyboard-friendly controls, text labels in addition to color, mobile layouts, and reduced-motion compatibility.
+A compact **Civilians** beacon appears with Reality, Economy, Party, Legacy, and Faction Command status surfaces.
 
 ## Persistence and PWA
 
-V21 migration is idempotent and upgrades V20 saves to schema 21 without rerolling persistent factions or losing V16–V20 relationships.
+V22 migration is idempotent and upgrades V21 saves without rerolling V16–V21 state.
 
-The service worker cache is `multiverse-wheel-v21-factions-1` and precaches the V21 CSS/domain/browser layers.
+The service worker cache is `multiverse-wheel-v22-civilian-1` and precaches the V22 CSS/domain/browser layers.
 
-The first-install safety rule remains intact: a brand-new service worker installation does **not** immediately claim and reload a live page. Client claiming occurs only when an older Multiverse Wheel cache proves this is a real release update; `SKIP_WAITING` remains explicit.
+The first-install safety rule remains intact: a brand-new service worker does not immediately claim and reload a live page. Client claiming occurs only when an older Multiverse Wheel cache proves this is a release upgrade; `SKIP_WAITING` remains explicit.
 
 ## Validation
 
@@ -217,10 +182,10 @@ Run the full unit/content/migration gate:
 npm run validate
 ```
 
-Run only V21 content validation:
+Run only V22 content validation:
 
 ```powershell
-npm run validate:v21
+npm run validate:v22
 ```
 
 Run all Chromium browser journeys:
@@ -235,23 +200,24 @@ Run the complete release gate:
 npm run validate:release
 ```
 
-The GitHub Actions workflow requires two jobs:
+GitHub Actions runs two required jobs on pushes to `main`:
 
-1. **Unit and content validation** — all historical unit tests and V13–V21 validators.
-2. **Chromium release journeys** — all historical Playwright journeys plus V21 journeys.
+1. **Unit and content validation** — all historical tests and V13–V22 validators.
+2. **Chromium release journeys** — all historical Playwright journeys plus V22 journeys.
 
-A V21 release should not be merged until both jobs are green on the exact final PR head.
+V22 is considered complete only when both jobs are green on the exact `main` commit.
 
-## V21 files
+## V22 files
 
 Primary release files:
 
-- `js/domain/v21-engine.js`
-- `js/v21-experience.js`
-- `styles/v21.css`
-- `tests/v21.test.js`
-- `tests/e2e/v21.spec.js`
-- `tools/validate-v21-content.js`
+- `js/domain/v22-engine.js`
+- `js/v22-experience.js`
+- `styles/v22.css`
+- `tests/v22.test.js`
+- `tests/e2e/v22.spec.js`
+- `tools/validate-v22-content.js`
+- `docs/V22_SETTLEMENTS_CIVILIAN_WORLDS.md`
 
 Release wiring also updates:
 
@@ -261,7 +227,12 @@ Release wiring also updates:
 - `package-lock.json`
 - `manifest.webmanifest`
 - `index.html`
+- `tools/validate-v21-content.js` (forward-compatible release branding checks)
 
-## Previous release documentation
+## Scope boundary
 
-V20 remains fully supported under V21. Its detailed relic/equipment behavior is documented in [docs/V20_RELIC_BONDS.md](docs/V20_RELIC_BONDS.md). Older version documentation and validators remain in the repository and are still part of the release gate.
+V22 is not a city builder, 4X game, tactical RTS, second economy, or replacement for V16/V21 strategy.
+
+The Wheel remains the core game. Civilian systems add stakes, consequences, recovery, and long-term reasons to care about the worlds affected by normal play.
+
+See [`docs/V22_SETTLEMENTS_CIVILIAN_WORLDS.md`](docs/V22_SETTLEMENTS_CIVILIAN_WORLDS.md) for the complete release design.
