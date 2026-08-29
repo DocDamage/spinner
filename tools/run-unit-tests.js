@@ -15,12 +15,42 @@ if(!files.length){
   process.exit(1);
 }
 
+function failResult(relative,result,label=''){
+  if(result.error){
+    if(result.error.code==='ETIMEDOUT')console.error(`Test timed out after 5s: ${relative}${label?` :: ${label}`:''}`);
+    else console.error(`Unable to run ${relative}: ${result.error.message}`);
+    return true;
+  }
+  if(result.status!==0){
+    if(result.stdout)process.stdout.write(result.stdout);
+    if(result.stderr)process.stderr.write(result.stderr);
+    console.error(`Test failed: ${relative}${label?` :: ${label}`:''}`);
+    return true;
+  }
+  return false;
+}
+
 for(const file of files){
   const relative=path.join('tests',file);
   console.log(`\n=== ${relative} ===`);
-  // Each file already imports node:test. Running it directly avoids the outer
-  // node --test worker buffering the file as one opaque subtest, while keeping
-  // the exact assertions, hooks, TAP output, and exit status intact.
+  if(file==='v21.test.js'){
+    const source=fs.readFileSync(path.join(root,relative),'utf8');
+    const names=[...source.matchAll(/test\('([^']+)'/g)].map(match=>match[1]);
+    if(!names.length){console.error('No V21 core test cases discovered.');process.exit(1);}
+    for(const name of names){
+      const pattern=`^${name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}$`;
+      const result=spawnSync(process.execPath,['--test',`--test-name-pattern=${pattern}`,relative],{
+        cwd:root,
+        encoding:'utf8',
+        timeout:5000,
+        env:process.env
+      });
+      if(failResult(relative,result,name))process.exit(result.status||1);
+      console.log(`PASS ${name}`);
+    }
+    console.log(`All ${names.length} isolated V21 core cases passed.`);
+    continue;
+  }
   const result=spawnSync(process.execPath,[relative],{
     cwd:root,
     stdio:'inherit',
