@@ -30,6 +30,7 @@ window.addEventListener('DOMContentLoaded',async()=>{
             try{
               loadStyle('styles/v21.css');
               if(!window.MultiverseDomain?.FactionCampaignEngine)await loadScript('js/domain/v21-engine.js');
+              await loadScript('js/domain/v21-hardening.js');
               await loadScript('js/v21-experience.js');
               await loadScript('js/v21-integration.js');
               release='V21 Faction Campaigns & Strongholds';
