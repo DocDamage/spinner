@@ -24,6 +24,7 @@ for(const id of state.party){const rec=state.v19.records[id];if(rec){rec.status=
 const engine=new TacticalOperationsEngine(),created=engine.createOperation(state,{sourceKey:'validator:v23',sourceType:'validator',family:'rescue',settlementId:territory.id,territoryId:territory.id,factionId,urgency:72,label:'Validator Rescue'}),beforeWallet={credits:state.credits,salvage:state.v18.wallet.salvage};
 const plan=created.ok?engine.planOperation(state,created.operation.id,{approach:'stealth',allyIds:['ally-a'],factionSupport:true,relicId:'relic-a',supplyCommitment:1,priority:'civilians'}):{ok:false};
 const deployed=created.ok?engine.beginOperation(state,created.operation.id):{ok:false};
+const afterDeployWallet={credits:state.credits,salvage:state.v18.wallet.salvage};
 let guard=0;while(state.v23.activeOperationId&&guard++<20){const op=state.v23.operations[state.v23.activeOperationId],stage=op.stages[op.stageIndex];engine.processEvent(state,{id:`validator-${guard}`,type:stage.events[0],outcome:stage.requiredOutcome||'win'},roster);}
 const resolved=state.v23.operations[created.operation?.id||''];
 
@@ -32,7 +33,7 @@ if(state.v22?.schemaVersion!==22)failures.push('V22 state was not preserved thro
 if(Object.keys(OPERATION_FAMILIES_V23).length<13)failures.push('V23 mission family catalog is incomplete');
 if(Object.keys(APPROACHES_V23).length<4||Object.keys(SUPPLY_TIERS_V23).length!==4)failures.push('V23 planning catalogs are incomplete');
 if(!created.ok||!plan.ok||!deployed.ok)failures.push('V23 create/plan/deploy flow is not functional');
-if(deployed.ok&&state.credits>=beforeWallet.credits)failures.push('V23 deployment did not spend authoritative V18 supply resources');
+if(deployed.ok&&(afterDeployWallet.credits!==beforeWallet.credits-SUPPLY_TIERS_V23[1].cost.credits||afterDeployWallet.salvage!==beforeWallet.salvage-SUPPLY_TIERS_V23[1].cost.salvage))failures.push('V23 deployment did not spend authoritative V18 supply resources exactly once');
 if(resolved?.status!=='completed')failures.push('V23 Wheel-driven multi-stage operation did not reach aftermath');
 const mod=plan.modifiers||{};if(Number(mod.odds)<-.06||Number(mod.odds)>.06||Number(mod.damage)<-.08||Number(mod.damage)>.08)failures.push('V23 planning modifier escaped combat bounds');
 const before=JSON.stringify(state.v23);engine.summary(state);engine.summary(state);if(JSON.stringify(state.v23)!==before)failures.push('V23 summary/render access mutates operation state');
