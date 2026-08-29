@@ -2,7 +2,8 @@
 
 (function attachV21RuntimeFixes(root){
   const D=root.MultiverseDomain;
-  const Wheel=root.MultiverseWheel?.prototype;
+  const WheelClass=(typeof MultiverseWheel!=='undefined'?MultiverseWheel:root.MultiverseWheel);
+  const Wheel=WheelClass?.prototype;
   if(!D?.FactionCampaignEngine||!Wheel)return;
   const clamp=(v,min,max)=>Math.max(min,Math.min(max,Number(v)||0));
   const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
@@ -28,7 +29,8 @@
       const result=baseEnsure.call(this,state);
       if(state?.v19&&D.PartyConsequencesEngine){
         const party=new D.PartyConsequencesEngine();
-        const roster=new Map(Array.from(root.CHAR?.values?.()||[]).map(c=>[String(c.id),c]));
+        const source=(typeof CHAR!=='undefined'?CHAR:root.CHAR);
+        const roster=new Map(Array.from(source?.values?.()||[]).map(c=>[String(c.id),c]));
         for(const id of state.party||[])if(id&&!state.v19.records?.[id])party.record(state,id,roster.get(String(id))||{});
       }
       return result;
@@ -54,6 +56,14 @@
     };
     const baseGenerate=Wheel.generateWheel;
     if(typeof baseGenerate==='function')Wheel.generateWheel=function(){const result=baseGenerate.call(this);this.applyFactionWheelPressureV21();return result;};
+  }
+
+  // The original V21 integration cannot see global lexical class declarations on
+  // every browser. Preserve its bounded offline catch-up contract here as well.
+  if(typeof Wheel.loadState==='function'&&!Wheel.__v21CatchUpLoad){
+    const baseLoad=Wheel.loadState;
+    Wheel.loadState=function(){const state=baseLoad.call(this);if(state?.v21)new D.FactionCampaignEngine().catchUp(state,6);return state;};
+    Wheel.__v21CatchUpLoad=true;
   }
 
   if(typeof Wheel.resupplyStrongholdV21!=='function')Wheel.resupplyStrongholdV21=function(id){const result=new D.FactionCampaignEngine().resupplyStronghold(this.state,id);if(!result.ok)return this.toast(result.error);this.log(`LOGISTICS: ${result.stronghold.name} gained ${Math.round(result.grant)} supply for ${result.cost.credits} Credits.`,'win');this.save();this.renderAll();if(root.document?.getElementById('v16-world-modal')?.classList.contains('open')){this._v21FactionTab='strongholds';this.renderWorldV16?.('factions');}};
