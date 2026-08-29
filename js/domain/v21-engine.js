@@ -99,7 +99,18 @@
     adjustAuthority(state,factionId,delta,reason='Authority changed'){const rec=this.membership(state,factionId);if(!rec)return 0;const before=rec.authority;rec.authority=clamp(before+Number(delta||0),0,100);if(rec.authority!==before)this.history(state,rec,'authority',`${reason}: ${before} → ${rec.authority}.`);return rec.authority;}
 
     ensureTerritories(state){
-      const factions=factionList(state),fallback=factions[0]?.id||'',worlds=Object.values(state.v16?.universes||{});for(const world of worlds){let routes=[];try{routes=new root.MultiverseDomain.RealityRulesEngine().routesFor(state,world.name)||[];}catch{}if(!routes.length)routes=[{id:'crossroads',label:'Crossroads',routeId:`${world.id}:crossroads`,universe:world.name}];for(const route of routes){const id=String(route.routeId||`${world.id}:${route.id}`),old=state.v21.territories[id];if(old)continue;const rng=rngFrom(`${state.seed}|v21|territory|${id}`),controller=factions.length&&rng()>.34?factions[Math.floor(rng()*factions.length)%factions.length].id:null;state.v21.territories[id]={id,universe:String(route.universe||world.name),locationId:String(route.id||'crossroads'),type:TERRITORY_TYPES.includes(route.id)?route.id:'fracture-zone',controllerFactionId:controller||fallback||null,influence:Object.fromEntries(factions.map(f=>[f.id,clamp(Math.round((f.id===controller?58:12)+rng()*18),0,100)])),stability:clamp(Number(world.stability||75)+Math.round(rng()*10-5),0,100),fortification:Math.round(12+rng()*35),supply:Math.round(45+rng()*40),contested:Boolean(rng()>.72),campaignId:'',history:[]};}}
+      const factions=factionList(state),fallback=factions[0]?.id||'',worlds=Object.values(state.v16?.universes||{}),routeTable=state.v17?.routes||{};
+      for(const world of worlds){
+        const routeKey=String(world.id||normalize(world.name));
+        let routes=Array.isArray(routeTable[routeKey])?routeTable[routeKey]:[];
+        if(!routes.length){
+          const match=Object.values(routeTable).find(list=>Array.isArray(list)&&list.some(route=>String(route.universe||'')===String(world.name||'')));
+          if(match)routes=match;
+        }
+        routes=routes.filter(route=>!route.secret||route.discovered||route.unlocked);
+        if(!routes.length)routes=[{id:'crossroads',label:'Crossroads',routeId:`${world.id}:crossroads`,universe:world.name}];
+        for(const route of routes){const id=String(route.routeId||`${world.id}:${route.id}`),old=state.v21.territories[id];if(old)continue;const rng=rngFrom(`${state.seed}|v21|territory|${id}`),controller=factions.length&&rng()>.34?factions[Math.floor(rng()*factions.length)%factions.length].id:null;state.v21.territories[id]={id,universe:String(route.universe||world.name),locationId:String(route.id||'crossroads'),type:TERRITORY_TYPES.includes(route.id)?route.id:'fracture-zone',controllerFactionId:controller||fallback||null,influence:Object.fromEntries(factions.map(f=>[f.id,clamp(Math.round((f.id===controller?58:12)+rng()*18),0,100)])),stability:clamp(Number(world.stability||75)+Math.round(rng()*10-5),0,100),fortification:Math.round(12+rng()*35),supply:Math.round(45+rng()*40),contested:Boolean(rng()>.72),campaignId:'',history:[]};}
+      }
       return state.v21.territories;
     }
     territory(state,id){return state.v21.territories[String(id||'')]||null;}
