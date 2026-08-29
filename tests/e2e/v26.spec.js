@@ -48,7 +48,8 @@ test('V26 Journey 4 — existing worlds and V21–V25 systems receive stable con
     const factions=new MultiverseDomain.FactionCampaignEngine(),factionId=Object.keys(game.state.v16.factions)[0],territory=Object.values(game.state.v21.territories)[0];
     if(game.state.v21.primaryFactionId!==factionId)factions.joinFaction(game.state,factionId,Array.from(CHAR.values()));
     Object.assign(game.state.v21.memberships[factionId],{rank:5,rankXp:320,authority:80});territory.controllerFactionId=factionId;territory.contested=false;game.state.v16.currentUniverse=territory.universe;
-    const built=factions.buildStronghold(game.state,{territoryId:territory.id,factionId}),hold=built.stronghold;hold.name='Atlas Bastion';
+    const built=factions.buildStronghold(game.state,{territoryId:territory.id,factionId}),hold=game.state.v21.strongholds[built.stronghold.id];hold.name='Atlas Bastion';
+    game.state.v21.strongholds={[hold.id]:hold};
     const operations=new MultiverseDomain.TacticalOperationsEngine(),createdOperation=operations.createOperation(game.state,{sourceKey:'e2e:v26:operation',sourceType:'test',family:'rescue',settlementId:territory.id,territoryId:territory.id,universe:territory.universe,factionId,urgency:74,label:'Atlas Convoy'}).operation;
     game.state.v23.operations={[createdOperation.id]:createdOperation};game.state.v23.activeOperationId=null;
     const activities=new MultiverseDomain.ActivityCircuitEngine(),createdActivity=activities.createActivity(game.state,{sourceKey:'e2e:v26:activity',sourceType:'test',family:'speed-race',universe:territory.universe,venue:'Atlas Raceway',difficulty:1,heat:70}).activity;createdActivity.label='Atlas Rally';
