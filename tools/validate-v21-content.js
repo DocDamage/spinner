@@ -11,6 +11,7 @@ require('../js/domain/v18-engine.js');
 require('../js/domain/v19-engine.js');
 require('../js/domain/v20-engine.js');
 const {V21_SCHEMA_VERSION,FactionCampaignEngine,migrateV21,RANKS_V21,CAMPAIGN_DEFS_V21,FACILITY_DEFS_V21,SPECIALIST_ROLES_V21}=require('../js/domain/v21-engine.js');
+const {v21FacilitySupport}=require('../js/v21-integration.js');
 
 const root=path.resolve(__dirname,'..'),failures=[];
 const roster=[{id:'ally-a',name:'Aegis',universe:'Earth-Prime',role:'support',tags:['healing','support']},{id:'ally-b',name:'Blitz',universe:'Earth-Prime',role:'weaponmaster',tags:['speed','martial']}];
@@ -28,16 +29,19 @@ if(Object.keys(CAMPAIGN_DEFS_V21).length<6||!campaign.ok)failures.push('campaign
 if(Object.keys(FACILITY_DEFS_V21).length<10||SPECIALIST_ROLES_V21.length<10)failures.push('stronghold facility/specialist catalogs are incomplete');
 if(Object.keys(state.v21.territories).length<5)failures.push('territory generation did not use V17 routes');
 if(!built.ok||!state.v21.strongholds[built.stronghold.id])failures.push('stronghold construction is not functional');
+if(typeof v21FacilitySupport!=='function'||typeof engine.catchUp!=='function'||typeof engine.resupplyStronghold!=='function')failures.push('V21 cross-version facility/offline/logistics integration is not attached');
 if(engine.campaignCombatModifier(state).odds>.06||engine.campaignCombatModifier(state).damage>.08)failures.push('V21 combat modifiers exceed release cap');
 const before=JSON.stringify(state.v21.campaigns[campaign.campaign.id]);engine.summary(state);engine.summary(state);if(JSON.stringify(state.v21.campaigns[campaign.campaign.id])!==before)failures.push('summary/render access progresses campaign state');
 
 const read=file=>fs.readFileSync(path.join(root,file),'utf8');
-const bootstrap=read('js/bootstrap.js'),sw=read('sw.js'),css=read('styles/v21.css'),experience=read('js/v21-experience.js'),pkg=JSON.parse(read('package.json')),lock=JSON.parse(read('package-lock.json')),manifest=JSON.parse(read('manifest.webmanifest')),index=read('index.html');
-for(const ref of ['styles/v21.css','js/domain/v21-engine.js','js/v21-experience.js'])if(!bootstrap.includes(ref))failures.push(`bootstrap does not load ${ref}`);
-for(const ref of ['styles/v21.css','js/domain/v21-engine.js','js/v21-experience.js'])if(!sw.includes(ref))failures.push(`service worker does not cache ${ref}`);
+const bootstrap=read('js/bootstrap.js'),sw=read('sw.js'),css=read('styles/v21.css'),experience=read('js/v21-experience.js'),integration=read('js/v21-integration.js'),pkg=JSON.parse(read('package.json')),lock=JSON.parse(read('package-lock.json')),manifest=JSON.parse(read('manifest.webmanifest')),index=read('index.html');
+for(const ref of ['styles/v21.css','js/domain/v21-engine.js','js/v21-experience.js','js/v21-integration.js'])if(!bootstrap.includes(ref))failures.push(`bootstrap does not load ${ref}`);
+for(const ref of ['styles/v21.css','js/domain/v21-engine.js','js/v21-experience.js','js/v21-integration.js'])if(!sw.includes(ref))failures.push(`service worker does not cache ${ref}`);
+if(bootstrap.indexOf('js/v21-integration.js')<bootstrap.indexOf('js/v21-experience.js'))failures.push('V21 integration must load after the V21 browser experience it extends');
 for(const marker of ['oldCaches','oldCaches.length','self.clients.claim()'])if(!sw.includes(marker))failures.push(`service-worker first-install guard missing: ${marker}`);
 if(!sw.includes("multiverse-wheel-v21-factions-1"))failures.push('service-worker cache name is not V21');
-for(const marker of ['FACTION COMMAND','FACTION CAMPAIGNS & STRONGHOLDS','data-v21-faction-tab','data-v21-campaign-start','data-v21-build-hold','data-v21-diplomacy','data-v21-infiltration-action','data-v21-siege'])if(!experience.includes(marker))failures.push(`V21 integration marker missing: ${marker}`);
+for(const marker of ['FACTION COMMAND','FACTION CAMPAIGNS & STRONGHOLDS','data-v21-faction-tab','data-v21-campaign-start','data-v21-build-hold','data-v21-diplomacy','data-v21-infiltration-action','data-v21-siege'])if(!experience.includes(marker))failures.push(`V21 browser marker missing: ${marker}`);
+for(const marker of ['v21FacilitySupport','resupplyStronghold','catchUp','applyFactionWheelPressureV21','Faction Logistics Crate','replaceWheelSliceV17','runContext?.kind===\'daily\''])if(!integration.includes(marker))failures.push(`V21 cross-version integration marker missing: ${marker}`);
 for(const marker of ['v21-faction-beacon','v21-subnav','v21-campaign-card','v21-territory-grid','v21-stronghold-grid','v21-facilities','v21-diplomacy-grid','v21-siege'])if(!css.includes(marker))failures.push(`V21 UI style marker missing: ${marker}`);
 const major=Number(String(pkg.version||'0').split('.')[0]);if(!Number.isFinite(major)||major<21)failures.push(`package version is ${pkg.version}, expected major >= 21`);
 if(pkg.version!==lock.version||pkg.version!==lock.packages?.['']?.version)failures.push('package and lockfile versions do not match');
@@ -46,6 +50,6 @@ if(!String(manifest.name||'').includes('V21')||!String(manifest.short_name||'').
 if(!index.includes('Multiverse Wheel V21'))failures.push('index launcher is not branded for V21');
 const lockText=read('package-lock.json');for(const expected of ['https://registry.npmjs.org/@playwright/test/-/test-1.62.1.tgz','sha512-DTcUc8qii+cpHvtOwggMtBRMjKZHXYWdw8syRYu2vtzuq4Wxphqq4NfCs5Zt44L6mA8rfDfj+PHnxFc/FeK6mQ=='])if(!lockText.includes(expected))failures.push('package-lock dependency URL/hash changed unexpectedly');
 
-const report={schema:state.v21.schemaVersion,ranks:RANKS_V21.length,campaignTypes:Object.keys(CAMPAIGN_DEFS_V21).length,facilities:Object.keys(FACILITY_DEFS_V21).length,specialists:SPECIALIST_ROLES_V21.length,territories:Object.keys(state.v21.territories).length,strongholdBuilt:built.ok,packageVersion:pkg.version,firstInstallClaimGuard:sw.includes('oldCaches.length'),failures};
-if(process.argv.includes('--json'))console.log(JSON.stringify(report,null,2));else console.log(`V21 content valid: ${report.ranks} ranks, ${report.campaignTypes} campaign types, ${report.territories} territories, ${report.facilities} facilities, stronghold build ${report.strongholdBuilt?'on':'off'}, first-install claim guard ${report.firstInstallClaimGuard?'on':'off'}.`);
+const report={schema:state.v21.schemaVersion,ranks:RANKS_V21.length,campaignTypes:Object.keys(CAMPAIGN_DEFS_V21).length,facilities:Object.keys(FACILITY_DEFS_V21).length,specialists:SPECIALIST_ROLES_V21.length,territories:Object.keys(state.v21.territories).length,strongholdBuilt:built.ok,integrationAttached:typeof engine.catchUp==='function',packageVersion:pkg.version,firstInstallClaimGuard:sw.includes('oldCaches.length'),failures};
+if(process.argv.includes('--json'))console.log(JSON.stringify(report,null,2));else console.log(`V21 content valid: ${report.ranks} ranks, ${report.campaignTypes} campaign types, ${report.territories} territories, ${report.facilities} facilities, stronghold build ${report.strongholdBuilt?'on':'off'}, integration ${report.integrationAttached?'on':'off'}, first-install claim guard ${report.firstInstallClaimGuard?'on':'off'}.`);
 if(failures.length){console.error(`Failures: ${failures.join('; ')}`);process.exitCode=1;}
