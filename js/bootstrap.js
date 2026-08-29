@@ -1,6 +1,12 @@
 'use strict';
 window.addEventListener('DOMContentLoaded',async()=>{
-  const loadScript=src=>new Promise((resolve,reject)=>{const existing=document.querySelector(`script[data-mw-src="${src}"]`);if(existing)return existing.dataset.loaded==='true'?resolve():existing.addEventListener('load',resolve,{once:true});const script=document.createElement('script');script.src=src;script.defer=false;script.dataset.mwSrc=src;script.addEventListener('load',()=>{script.dataset.loaded='true';resolve();},{once:true});script.addEventListener('error',()=>reject(new Error(`Unable to load ${src}`)),{once:true});document.head.appendChild(script);});
+  const loadScript=src=>new Promise((resolve,reject)=>{
+    const existing=document.querySelector(`script[data-mw-src="${src}"]`);
+    if(existing)return existing.dataset.loaded==='true'?resolve():existing.addEventListener('load',resolve,{once:true});
+    const script=document.createElement('script');script.src=src;script.defer=false;script.dataset.mwSrc=src;
+    script.addEventListener('load',()=>{script.dataset.loaded='true';resolve();},{once:true});
+    script.addEventListener('error',()=>reject(new Error(`Unable to load ${src}`)),{once:true});document.head.appendChild(script);
+  });
   const loadStyle=href=>{if(document.querySelector(`link[href="${href}"]`))return;const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.dataset.mwStyle='true';document.head.appendChild(link);};
   let release='V15-compatible shell';
   try{
@@ -52,6 +58,14 @@ window.addEventListener('DOMContentLoaded',async()=>{
                       if(!window.MultiverseDomain?.CrisisArcEngine)await loadScript('js/domain/v25-engine.js');
                       await loadScript('js/v25-experience.js');release='V25 Cataclysms & Multiverse Crisis Arcs';
                       document.title='Multiverse Wheel V25 — Cataclysms & Multiverse Crisis Arcs';if(description)description.content='Answer persistent multiverse-scale emergencies through ordinary Wheel outcomes while existing worlds, factions, civilians, strongholds, relics, operations, and activities remain authoritative.';
+                      try{
+                        if(!window.WORLD_CONTENT_CATALOG)await loadScript('js/data/world-content.js');
+                        if(!window.WorldAssetArt)await loadScript('js/world-asset-art.js');
+                        loadStyle('styles/v26.css');
+                        if(!window.MultiverseDomain?.WorldContentEngine)await loadScript('js/domain/v26-engine.js');
+                        await loadScript('js/v26-experience.js');release='V26 World Content Expansion';
+                        document.title='Multiverse Wheel V26 — World Content Expansion';if(description)description.content='Explore a denser multiverse with hundreds of rights-safe buildings, places, items, vehicles, NPCs, stronghold scenes, settlement states, activity venues, crisis visuals, and utility art linked to existing gameplay.';
+                      }catch(error){console.error('V26 World Content Expansion failed to load; continuing with V25 Cataclysms & Multiverse Crisis Arcs.',error);document.title='Multiverse Wheel V25 — Cataclysms & Multiverse Crisis Arcs';}
                     }catch(error){console.error('V25 Cataclysms & Multiverse Crisis Arcs failed to load; continuing with V24 Multiverse Activities & Competition Circuits.',error);document.title='Multiverse Wheel V24 — Multiverse Activities & Competition Circuits';}
                   }catch(error){console.error('V24 Multiverse Activities & Competition Circuits failed to load; continuing with V23 Tactical Missions & Warfront Operations.',error);document.title='Multiverse Wheel V23 — Tactical Missions & Warfront Operations';}
                 }catch(error){console.error('V23 Tactical Missions & Warfront Operations failed to load; continuing with V22 Settlements & Civilian Worlds.',error);document.title='Multiverse Wheel V22 — Settlements & Civilian Worlds';}
