@@ -75,8 +75,10 @@
     }
 
     membership(state,factionId){
-      const faction=state.v16?.factions?.[String(factionId||'')];if(!faction)return null;const old=state.v21.memberships[faction.id]||{};
-      const rec=state.v21.memberships[faction.id]={factionId:faction.id,status:String(old.status||'neutral'),rank:clamp(old.rank||1,1,8),rankXp:Math.max(0,Number(old.rankXp||0)),authority:clamp(old.authority||0,0,100),joinedTick:Number(old.joinedTick||0),leftTick:Number(old.leftTick||0),loyalty:clamp(old.loyalty??50,0,100),cover:clamp(old.cover??0,0,100),suspicion:clamp(old.suspicion??0,0,100),declaredEnemy:Boolean(old.declaredEnemy),history:Array.isArray(old.history)?old.history.slice(-60):[]};return rec;
+      const faction=state.v16?.factions?.[String(factionId||'')];if(!faction)return null;
+      const rec=state.v21.memberships[faction.id]||{};
+      Object.assign(rec,{factionId:faction.id,status:String(rec.status||'neutral'),rank:clamp(rec.rank||1,1,8),rankXp:Math.max(0,Number(rec.rankXp||0)),authority:clamp(rec.authority||0,0,100),joinedTick:Number(rec.joinedTick||0),leftTick:Number(rec.leftTick||0),loyalty:clamp(rec.loyalty??50,0,100),cover:clamp(rec.cover??0,0,100),suspicion:clamp(rec.suspicion??0,0,100),declaredEnemy:Boolean(rec.declaredEnemy),history:Array.isArray(rec.history)?rec.history.slice(-60):[]});
+      state.v21.memberships[faction.id]=rec;return rec;
     }
     history(state,rec,type,detail){rec.history.push({tick:tick(state),spin:Number(state.spin||0),type,detail:String(detail||'').slice(0,260)});rec.history=rec.history.slice(-60);}
     primaryMembership(state){return state.v21.primaryFactionId?this.membership(state,state.v21.primaryFactionId):null;}
@@ -94,7 +96,7 @@
     }
 
     rankProgress(state,factionId){const rec=this.membership(state,factionId),faction=state.v16?.factions?.[factionId];if(!rec||!faction)return null;const next=RANKS[Math.min(7,rec.rank)]||null;return{rank:clone(RANKS[rec.rank-1]),next:clone(next),xp:rec.rankXp,reputation:Number(faction.reputation||0),authority:rec.authority,eligible:next?rec.rankXp>=next.xp&&Number(faction.reputation||0)>=next.rep&&rec.authority>=next.authority:false};}
-    addRankXp(state,factionId,amount,reason='Contribution'){const rec=this.membership(state,factionId);if(!rec)return null;rec.rankXp=Math.max(0,rec.rankXp+Math.max(0,Number(amount||0)));this.history(state,rec,'rank-xp',`${reason}: +${Math.max(0,Number(amount||0))} XP.`);let promoted=false;while(this.promote(state,factionId).ok)promoted=true;return{membership:clone(rec),promoted};}
+    addRankXp(state,factionId,amount,reason='Contribution'){const rec=this.membership(state,factionId);if(!rec)return null;rec.rankXp=Math.max(0,rec.rankXp+Math.max(0,Number(amount||0)));this.history(state,rec,'rank-xp',`${reason}: +${Math.max(0,Number(amount||0))} XP.`);let promoted=false,steps=0;while(steps<RANKS.length-1){const result=this.promote(state,factionId);if(!result.ok)break;promoted=true;steps++;}return{membership:clone(rec),promoted};}
     promote(state,factionId){const rec=this.membership(state,factionId),progress=this.rankProgress(state,factionId);if(!rec||rec.rank>=8||!progress?.eligible)return{ok:false};rec.rank++;state.v21.stats.promotions++;this.adjustAuthority(state,factionId,4+rec.rank,'Promotion');this.history(state,rec,'promotion',`Promoted to ${RANKS[rec.rank-1].label}.`);state.v21.factionUnlocks[factionId]=this.factionGearUnlocks(state,factionId);return{ok:true,rank:clone(RANKS[rec.rank-1])};}
     authority(state,factionId){return this.membership(state,factionId)?.authority||0;}
     adjustAuthority(state,factionId,delta,reason='Authority changed'){const rec=this.membership(state,factionId);if(!rec)return 0;const before=rec.authority;rec.authority=clamp(before+Number(delta||0),0,100);if(rec.authority!==before)this.history(state,rec,'authority',`${reason}: ${before} → ${rec.authority}.`);return rec.authority;}
