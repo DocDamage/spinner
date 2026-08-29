@@ -13,8 +13,17 @@ window.addEventListener('DOMContentLoaded',async()=>{
       if(!window.MultiverseDomain?.RealityRulesEngine)await loadScript('js/domain/v17-engine.js');
       await loadScript('js/v17-experience.js');
       release='V17 Reality Rules';
-      document.title='Multiverse Wheel V17 — Reality Rules';
-      const description=document.querySelector('meta[name="description"]');if(description)description.content='Forge a Level 1 hero across a Living Multiverse where every reality has unique laws, destinations, faction quests, and evolving Wheel currents.';
+      try{
+        loadStyle('styles/v18.css');
+        if(!window.MultiverseDomain?.EconomyCraftingEngine)await loadScript('js/domain/v18-engine.js');
+        await loadScript('js/v18-experience.js');
+        release='V18 Multiversal Economy';
+        document.title='Multiverse Wheel V18 — Multiversal Economy';
+        const description=document.querySelector('meta[name="description"]');if(description)description.content='Forge a Level 1 hero through a Living Multiverse with reality-specific markets, equipment, crafting, auctions, contracts, and evolving artifacts.';
+      }catch(error){
+        console.error('V18 Multiversal Economy failed to load; continuing with V17 Reality Rules.',error);
+        document.title='Multiverse Wheel V17 — Reality Rules';
+      }
     }catch(error){
       console.error('V17 Reality Rules failed to load; continuing with V16 Living Multiverse.',error);
       document.title='Multiverse Wheel V16 — Living Multiverse';
