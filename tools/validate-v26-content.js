@@ -51,7 +51,7 @@ for(const key of ['stronghold:validator-hold','operation:validator-operation','a
 if(state.v26.wallet!==undefined||state.v26.currency!==undefined)failures.push('V26 introduced a duplicate wallet/currency');
 const vehicle=engine.query({kind:'vehicle',search:'rescue'});if(!vehicle.length||vehicle.some(x=>x.kind!=='vehicle'))failures.push('V26 atlas search/filter contract is broken');
 const sample=WORLD_CONTENT_CATALOG.find(x=>x.kind==='building'),svg=WorldAssetArt.svg(sample),uri=WorldAssetArt.dataUri(sample);if(!svg.startsWith('<svg')||!svg.includes('aria-label=')||!svg.includes(sample.name)||!uri.startsWith('data:image/svg+xml'))failures.push('V26 project-art renderer is invalid');
-if(/https?:\/\//i.test(svg))failures.push('V26 generated SVG unexpectedly references remote media');
+if(/(?:href|src)=["']https?:\/\//i.test(svg))failures.push('V26 generated SVG unexpectedly references remote media');
 
 const read=file=>fs.readFileSync(path.join(root,file),'utf8');
 const bootstrap=read('js/bootstrap.js'),sw=read('sw.js'),css=read('styles/v26.css'),experience=read('js/v26-experience.js'),data=read('js/data/world-content.js'),art=read('js/world-asset-art.js'),pkg=JSON.parse(read('package.json')),lock=JSON.parse(read('package-lock.json')),manifest=JSON.parse(read('manifest.webmanifest')),index=read('index.html'),docs=read('docs/V26_WORLD_CONTENT_EXPANSION.md');
