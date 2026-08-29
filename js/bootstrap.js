@@ -6,31 +6,25 @@ window.addEventListener('DOMContentLoaded',async()=>{
   try{
     loadStyle('styles/v16.css');
     if(!window.MultiverseDomain?.LivingMultiverseEngine)await loadScript('js/domain/v16-engine.js');
-    await loadScript('js/v16-experience.js');
-    release='V16 Living Multiverse';
+    await loadScript('js/v16-experience.js');release='V16 Living Multiverse';
     try{
       loadStyle('styles/v17.css');
       if(!window.MultiverseDomain?.RealityRulesEngine)await loadScript('js/domain/v17-engine.js');
-      await loadScript('js/v17-experience.js');
-      release='V17 Reality Rules';
+      await loadScript('js/v17-experience.js');release='V17 Reality Rules';
       try{
         loadStyle('styles/v18.css');
         if(!window.MultiverseDomain?.EconomyCraftingEngine)await loadScript('js/domain/v18-engine.js');
-        await loadScript('js/v18-experience.js');
-        release='V18 Multiversal Economy';
-        document.title='Multiverse Wheel V18 — Multiversal Economy';
-        const description=document.querySelector('meta[name="description"]');if(description)description.content='Forge a Level 1 hero through a Living Multiverse with reality-specific markets, equipment, crafting, auctions, contracts, and evolving artifacts.';
-      }catch(error){
-        console.error('V18 Multiversal Economy failed to load; continuing with V17 Reality Rules.',error);
-        document.title='Multiverse Wheel V17 — Reality Rules';
-      }
-    }catch(error){
-      console.error('V17 Reality Rules failed to load; continuing with V16 Living Multiverse.',error);
-      document.title='Multiverse Wheel V16 — Living Multiverse';
-    }
-  }catch(error){
-    console.error('V16 Living Multiverse failed to load; starting the V15-compatible shell.',error);
-  }
+        await loadScript('js/v18-experience.js');release='V18 Multiversal Economy';
+        try{
+          loadStyle('styles/v19.css');
+          if(!window.MultiverseDomain?.PartyConsequencesEngine)await loadScript('js/domain/v19-engine.js');
+          await loadScript('js/v19-experience.js');release='V19 Party Consequences';
+          document.title='Multiverse Wheel V19 — Party Consequences';
+          const description=document.querySelector('meta[name="description"]');if(description)description.content='Forge a Level 1 hero through a Living Multiverse where trust, rivalry, wounds, reserves, betrayals, personal quests, and party bonds change combat and endings.';
+        }catch(error){console.error('V19 Party Consequences failed to load; continuing with V18 Multiversal Economy.',error);document.title='Multiverse Wheel V18 — Multiversal Economy';}
+      }catch(error){console.error('V18 Multiversal Economy failed to load; continuing with V17 Reality Rules.',error);document.title='Multiverse Wheel V17 — Reality Rules';}
+    }catch(error){console.error('V17 Reality Rules failed to load; continuing with V16 Living Multiverse.',error);document.title='Multiverse Wheel V16 — Living Multiverse';}
+  }catch(error){console.error('V16 Living Multiverse failed to load; starting the V15-compatible shell.',error);}
   document.documentElement.dataset.release=release.toLowerCase().replace(/[^a-z0-9]+/g,'-');
   window.game=new MultiverseWheel();
 });
