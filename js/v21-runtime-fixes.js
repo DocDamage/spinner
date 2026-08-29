@@ -74,6 +74,17 @@
     Wheel.__v21LogisticsRender=true;
   }
 
+  // World State and the older dashboard/party layer are both full-screen modals.
+  // Hand off between them instead of stacking two pointer-blocking overlays.
+  if(typeof Wheel.openWorldV16==='function'&&!Wheel.__v21WorldModalHandoff){
+    const baseOpenWorld=Wheel.openWorldV16;
+    Wheel.openWorldV16=function(...args){
+      root.document?.querySelectorAll('.v6-modal.open,.v9-modal.open,.v5-modal.open').forEach(modal=>modal.classList.remove('open'));
+      return baseOpenWorld.apply(this,args);
+    };
+    Wheel.__v21WorldModalHandoff=true;
+  }
+
   if(typeof Wheel.bind==='function'&&!Wheel.__v21RuntimeFixBind){
     const baseBind=Wheel.bind;
     Wheel.bind=function(){baseBind.call(this);if(this._v21RuntimeFixBound)return;this._v21RuntimeFixBound=true;root.document?.addEventListener('click',event=>{const button=event.target?.closest?.('[data-v21-resupply]');if(button)this.resupplyStrongholdV21(button.dataset.v21Resupply);});};
