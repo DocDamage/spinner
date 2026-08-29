@@ -5,10 +5,13 @@ const APP='/Multiverse_Wheel_V8_1326_Real_Repo_Images.html?e2e=v19';
 
 async function load(page){await page.goto(APP);await expect(page.getByRole('heading',{name:'Choose where the story begins'})).toBeVisible();await expect.poll(()=>page.evaluate(()=>game?.state?.v19?.schemaVersion)).toBe(19);}
 
-async function seedParty(page){return page.evaluate(()=>{
-  game.state.characterReady=true;game.closeTitleV13(true);const ids=DATA.characters.slice(0,2).map(c=>c.id);game.state.party=[...ids];for(const id of ids)game.v8Party(id);game.ensureV19();
-  let body=document.getElementById('v8-body');if(!body){body=document.createElement('div');body.id='v8-body';document.body.appendChild(body);}game.renderV19Team();game.injectV19UI();game.renderPartyBeaconV19();return ids;
-});}
+async function seedParty(page){
+  const ids=await page.evaluate(()=>{game.state.characterReady=true;const ids=DATA.characters.slice(0,2).map(c=>c.id);game.state.party=[...ids];for(const id of ids)game.v8Party(id);game.ensureV19();game.save();return ids;});
+  await page.evaluate(()=>game.closeTitleV13(true));
+  await page.locator('[data-v8-nav="team"]').click();
+  await expect(page.locator('#v8-shell')).toHaveClass(/open/);
+  return ids;
+}
 
 test('V19 Team view exposes relationship axes and reserve management',async({page})=>{
   await load(page);const ids=await seedParty(page);await expect(page.locator('#v19-team-layer')).toBeVisible();await expect(page.locator('.v19-team-grid .v19-ally-card')).toHaveCount(2);await expect(page.locator('.v19-axes').first()).toContainText('Trust');await expect(page.locator('#v19-party-beacon')).toContainText('Morale');
