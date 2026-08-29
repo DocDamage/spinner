@@ -27,7 +27,7 @@ test('V20 migration is idempotent and upgrades existing V18 gear/relic state',()
 });
 
 test('equipped gear gains mastery and mastery produces incremental stat bonuses',()=>{
-  const value=makeState(),engine=new RelicMasteryEngine(),record=value.v20.gear['gear-a'];for(let i=0;i<9;i++)engine.gainGearMastery(value,{type:'boss',outcome:'win'});assert.equal(record.level>1,true);const bonuses=engine.masteryBonuses(value);assert.equal(bonuses.might>0||bonuses.skill>0,true);assert.equal(value.v20.stats.masteryLevels>0,true);
+  const value=makeState(),engine=new RelicMasteryEngine();for(let i=0;i<9;i++)engine.gainGearMastery(value,{type:'boss',outcome:'win'});const record=value.v20.gear['gear-a'];assert.equal(record.level>1,true);const bonuses=engine.masteryBonuses(value);assert.equal(bonuses.might>0||bonuses.skill>0,true);assert.equal(value.v20.stats.masteryLevels>0,true);
 });
 
 test('matching equipment sets activate two-piece and four-piece bonuses',()=>{
@@ -47,7 +47,7 @@ test('relic attunement respects ally trust and relationship bonds amplify resona
 });
 
 test('relic quests can complete and awaken a bonded relic',()=>{
-  const value=makeState(),engine=new RelicMasteryEngine(),r=value.v20.relics['relic-a'];r.bearerId='hero';r.bond=79;r.purity=80;r.quest.events=['boss'];r.quest.target=1;r.quest.progress=0;r.quest.status='active';const result=engine.progressRelics(value,{type:'boss',outcome:'win'});assert.equal(result.completed.length,1);assert.equal(r.quest.status,'completed');assert.equal(r.awakened,true);assert.equal(value.v20.stats.relicAwakenings,1);
+  const value=makeState(),engine=new RelicMasteryEngine(),r=value.v20.relics['relic-a'];r.bearerId='hero';r.bond=79;r.purity=80;r.quest.events=['boss'];r.quest.target=1;r.quest.progress=0;r.quest.status='active';const result=engine.progressRelics(value,{type:'boss',outcome:'win'}),current=value.v20.relics['relic-a'];assert.equal(result.completed.length,1);assert.equal(current.quest.status,'completed');assert.equal(current.awakened,true);assert.equal(value.v20.stats.relicAwakenings,1);
 });
 
 test('corruption offers power while purification spends V18 materials to reverse it',()=>{
