@@ -1,5 +1,4 @@
 'use strict';
-
 const fs=require('node:fs');
 const path=require('node:path');
 require('../js/domain/v13-engine.js');
@@ -36,7 +35,7 @@ for(const marker of ['LEGACY CONVERGENCE','RELIC BONDS','data-v20-forge','data-v
 for(const marker of ['v20-relic-beacon','v20-grid','v20-convergence','v20-relic-bars','v20-legacy-forge'])if(!css.includes(marker))failures.push(`V20 UI style marker missing: ${marker}`);
 const major=Number(String(pkg.version||'0').split('.')[0]);if(!Number.isFinite(major)||major<20)failures.push(`package version is ${pkg.version}, expected major >= 20`);
 if(!String(pkg.scripts?.validate||'').includes('validate-v20-content.js')||!pkg.scripts?.['validate:v20'])failures.push('package validation scripts do not include V20');
-if(!String(manifest.name||'').includes('V20')||!String(manifest.short_name||'').includes('V20'))failures.push('PWA manifest is not branded for V20');
+const expectedBrand=`V${major}`;if(!Number.isFinite(major)||!String(manifest.name||'').includes(expectedBrand)||!String(manifest.short_name||'').includes(expectedBrand))failures.push(`PWA manifest branding must match current package major ${expectedBrand}`);
 
 const report={schema:state.v20.schemaVersion,gearSet:gear?.setId,relicPersonality:relic?.personality?.id,setFamilies:Object.keys(SET_DEFS).length,relicPersonalities:Object.keys(RELIC_PERSONALITIES).length,vendorDiscount:discount,legacyConvergence:engine.convergence(state).ready,firstInstallClaimGuard:sw.includes('oldCaches.length'),failures};
 if(process.argv.includes('--json'))console.log(JSON.stringify(report,null,2));else console.log(`V20 content valid: ${report.setFamilies} equipment sets, ${report.relicPersonalities} relic personalities, vendor discount ${Math.round(report.vendorDiscount*100)}%, Legacy Convergence ${report.legacyConvergence?'ready':'blocked'}, first-install claim guard ${report.firstInstallClaimGuard?'on':'off'}.`);
