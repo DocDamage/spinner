@@ -54,7 +54,8 @@ test('party incidents support reconciliation or taking sides',()=>{
 });
 
 test('fractured relationships can deterministically defect toward a hostile faction',()=>{
-  const engine=new PartyConsequencesEngine(),value=state();value.v16.factions.hostile={id:'hostile',name:'Hostile',ethos:'ambition',reputation:-80,relations:{}};const r=value.v19.records.b;r.axes.loyalty=5;r.axes.trust=5;r.axes.resentment=95;let defected=null;
+  const engine=new PartyConsequencesEngine(),value=state();value.v16.factions.hostile={id:'hostile',name:'Hostile',ethos:'ambition',reputation:-80,relations:{}};engine.adjust(value,'b',{loyalty:-45,trust:-45,resentment:90},'relationship fracture');let defected=null;
+  assert.equal(value.v13.relationshipArcs.b.loyalty,value.v19.records.b.axes.loyalty);
   for(let spin=1;spin<=100&&!defected;spin++){value.spin=spin;defected=engine.betrayalCheck(value,'b',roster);}
   assert.ok(defected);assert.equal(value.v19.records.b.status,'defected');assert.equal(value.party.includes('b'),false);assert.equal(value.v19.records.b.defectedTo,'hostile');
 });
@@ -79,6 +80,6 @@ test('relationship ending recognizes a found-family route',()=>{
 });
 
 test('assist probes are side-effect free while committed refusal increments once',()=>{
-  const engine=new PartyConsequencesEngine(),value=state(),r=value.v19.records.a;r.axes.trust=5;r.axes.loyalty=5;r.axes.resentment=90;
-  assert.equal(engine.assistDecision(value,'a').allowed,false);assert.equal(engine.assistDecision(value,'a').allowed,false);assert.equal(r.refusals,0);assert.equal(engine.assistDecision(value,'a',true).allowed,false);assert.equal(r.refusals,1);assert.equal(value.v13.relationshipArcs.a.refusals,1);
+  const engine=new PartyConsequencesEngine(),value=state();engine.adjust(value,'a',{loyalty:-45,trust:-45,resentment:90},'assist fracture');
+  assert.equal(engine.assistDecision(value,'a').allowed,false);assert.equal(engine.assistDecision(value,'a').allowed,false);assert.equal(value.v19.records.a.refusals,0);assert.equal(engine.assistDecision(value,'a',true).allowed,false);assert.equal(value.v19.records.a.refusals,1);assert.equal(value.v13.relationshipArcs.a.refusals,1);
 });
