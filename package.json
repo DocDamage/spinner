@@ -3,7 +3,7 @@
   "private": true,
   "version": "21.0.0",
   "scripts": {
-    "test": "node --test tests/*.test.js",
+    "test": "node tools/run-unit-tests.js",
     "test:e2e": "playwright test",
     "validate": "npm test && node tools/validate-project.js && node tools/validate-v13-content.js && node tools/validate-v14-content.js && node tools/validate-v15-content.js && node tools/validate-v16-content.js && node tools/validate-v17-content.js && node tools/validate-v18-content.js && node tools/validate-v19-content.js && node tools/validate-v20-content.js && node tools/validate-v21-content.js",
     "validate:release": "npm run validate && npm run test:e2e",
