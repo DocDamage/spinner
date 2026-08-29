@@ -17,13 +17,13 @@ async function seed(page,{join=true}={}){
     if(artifact&&!game.state.artifacts.includes(artifact.id))game.state.artifacts.push(artifact.id);
     const gear={id:'e2e-v21-weapon',name:'Faction Test Blade',kind:'equipment',slot:'weapon',rarity:'epic',bonuses:{might:6,skill:4},tags:['weapon','martial'],baseValue:120};
     game.state.lootInventory=(game.state.lootInventory||[]).filter(item=>item.id!==gear.id);game.state.lootInventory.push(gear);game.state.equipment={...(game.state.equipment||{}),weapon:gear.id};
-    game.ensureV21();Object.assign(game.state.v18.wallet,{salvage:800,cosmicFragments:160,voidMarks:20,bountySeals:20});game.state.credits=5000;game.state.v18.wallet.credits=5000;
+    game.ensureV21();Object.assign(game.state.v18.wallet,{salvage:800,cosmicFragments:160,voidMarks:20,bountySeals:20});game.state.credits=5000;
     for(const f of Object.values(game.state.v16.factions))f.reputation=70;
     const engine=new MultiverseDomain.FactionCampaignEngine(),factionIds=Object.keys(game.state.v16.factions),primary=factionIds[0];
     if(join){engine.joinFaction(game.state,primary,Array.from(CHAR.values()));Object.assign(game.state.v21.memberships[primary],{rank:5,rankXp:260,authority:65});}
     const territory=Object.values(game.state.v21.territories)[0];territory.controllerFactionId=primary;territory.contested=false;
     for(const id of party){game.state.v19.records[id].axes.trust=80;game.state.v19.records[id].axes.respect=75;game.state.v19.records[id].axes.friendship=72;}
-    game.ensureV21();game.save();return{party,artifactId:artifact?.id||'',gearId:gear.id,factionIds,primary,territoryId:territory.id};
+    game.ensureV21();game.save();return{party,artifactId:artifact?.id||'',gearId:gear.id,factionIds,primary,primaryName:game.state.v16.factions[primary].name,territoryId:territory.id};
   },{join});
   await page.evaluate(()=>game.closeTitleV13(true));
   await expect(page.locator('#v21-faction-beacon')).toBeVisible();
@@ -61,7 +61,7 @@ test('V21 Journey 2 — campaign operations progress from normal event signals a
   });
   await expect(page.locator('.v21-decisions')).toBeVisible();await page.locator('[data-v21-campaign-choice]').first().click();
   await expect.poll(()=>page.evaluate(()=>Object.values(game.state.v21.campaigns)[0].status)).toMatch(/won|lost/);
-  await page.reload();await expect.poll(()=>page.evaluate(()=>Object.values(game.state.v21.campaignHistory).length)).toBeGreaterThan(0);expect(seeded.primary).toBeTruthy();
+  await page.reload();await expect.poll(()=>page.evaluate(()=>game.state.v21.campaignHistory.length)).toBeGreaterThan(0);expect(seeded.primary).toBeTruthy();
 });
 
 test('V21 Journey 3 — stronghold and facility construction spend the existing V18 wallet',async({page})=>{
@@ -75,11 +75,10 @@ test('V21 Journey 3 — stronghold and facility construction spend the existing 
 test('V21 Journey 4 — campaign aftermath changes persistent territory control',async({page})=>{
   await load(page);const seeded=await seed(page);const prepared=await page.evaluate(({primary,factionIds})=>{
     const engine=new MultiverseDomain.FactionCampaignEngine(),created=engine.createCampaign(game.state,primary,'border-war').campaign,t=game.state.v21.territories[created.territoryId];t.controllerFactionId=factionIds[1];t.contested=true;
-    while(created.phase==='operations'){const o=created.objectives[created.phaseIndex];for(let i=o.progress;i<o.target;i++)engine.progressCampaign(game.state,{type:o.events[0],outcome:o.requiredOutcome||'success',factionId:primary});}game.save();return{campaignId:created.id,territoryId:t.id};
+    while(created.phase==='operations'){const o=created.objectives[created.phaseIndex];for(let i=o.progress;i<o.target;i++)engine.progressCampaign(game.state,{type:o.events[0],outcome:o.requiredOutcome||'success',factionId:primary});}game.save();return{campaignId:created.id,territoryId:t.id,factionName:game.state.v16.factions[primary].name};
   },seeded);await openFactions(page,'campaign');await page.locator('[data-v21-campaign-choice]').first().click();
   await expect.poll(()=>page.evaluate(id=>game.state.v21.territories[id].controllerFactionId,prepared.territoryId)).toBe(seeded.primary);
-  await page.locator('[data-v21-faction-tab="territory"]').click();await expect(page.locator('.v21-territory-grid')).toContainText(gameName(seeded.primary));
-  function gameName(){return '';} // control is asserted from authoritative state above; UI presence is covered by the grid assertion.
+  await page.locator('[data-v21-faction-tab="territory"]').click();await expect(page.locator('.v21-territory-grid')).toBeVisible();await expect(page.locator('.v21-territory-grid')).toContainText(prepared.factionName);
 });
 
 test('V21 Journey 5 — diplomacy writes through to symmetric V16 faction relations',async({page})=>{
@@ -99,9 +98,9 @@ test('V21 Journey 6 — faction outcome keeps V19 relationships, V20 relic/gear,
 
 test('V21 Journey 7 — V20 Legacy, V19 Party, Economy, and World remain usable without console errors',async({page})=>{
   const errors=[];page.on('console',msg=>{if(msg.type()==='error')errors.push(msg.text());});page.on('pageerror',err=>errors.push(err.message));await load(page);await seed(page);
-  await page.locator('[data-v18-economy-open]').click();await expect(page.locator('.v20-head')).toBeVisible();
+  await page.locator('[data-v18-economy-open]').click();await expect(page.locator('.v20-head')).toBeVisible();await page.locator('[data-v16-world-close]').click();
   await page.locator('[data-v19-open-team]').click();await expect(page.locator('.v19-team-head')).toBeVisible();
-  await page.locator('[data-v21-open]').click();await page.locator('[data-v16-world-tab="overview"]').click();await expect(page.locator('.v16-overview')).toBeVisible();
+  await page.evaluate(()=>game.openWorldV16('overview'));await expect(page.locator('.v16-overview')).toBeVisible();
   await page.locator('[data-v16-world-tab="factions"]').click();await expect(page.locator('.v21-subnav')).toBeVisible();
   expect(errors).toEqual([]);
 });
