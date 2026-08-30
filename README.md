@@ -1,112 +1,96 @@
-# Multiverse Wheel V26 — World Content Expansion
+# Multiverse Wheel V27 — World Content Mega-Pack
 
 A local-first browser/PWA game about forging a custom hero through a persistent multiverse built around a seeded event Wheel. The runtime roster contains 1,326 character profiles.
 
-V26 is the **world-content density release**. It adds 376 rights-safe original visual assets for buildings, places, interiors, items, vehicles, NPC roles, strongholds, settlements, activities, crisis scenes, and UI badges, then links them deterministically to the systems already built in V16–V25.
+V27 is the **world-content mega-pack release**. It preserves V26's 376 original world assets and adds 1,536 more, for **1,912 rights-safe original visuals across 25 asset families**.
 
 Play the current release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
 
 ## Release stack
 
-The modern runtime remains deliberately layered and fallback-safe:
+- **V16 — Living Multiverse:** worlds, factions, wars, nemeses, memory, and persistent simulation.
+- **V17 — Reality Rules:** destinations, routes, Favor, travel, and universe rules.
+- **V18 — Multiversal Economy:** markets, inventory, crafting, contracts, auctions, and artifact evolution.
+- **V19 — Party Consequences:** relationships, morale, wounds, betrayal, defection, mentorship, and party endings.
+- **V20 — Relic Bonds & Equipment Mastery:** mastery, signature gear, sets, relic bonds/corruption, quests, and theft/recovery.
+- **V21 — Faction Campaigns & Strongholds:** membership, campaigns, territory, bases, diplomacy, infiltration, and sieges.
+- **V22 — Settlements & Civilian Worlds:** populations, displacement, relief, rebuilding, sanctuaries, and public opinion.
+- **V23 — Tactical Missions & Warfront Operations:** persistent multi-stage operations sourced from the existing world state.
+- **V24 — Multiverse Activities & Competition Circuits:** races, tournaments, trials, hunts, and hosted events.
+- **V25 — Cataclysms & Multiverse Crisis Arcs:** persistent macro emergencies and recoverable crisis-command responses.
+- **V26 — World Content Expansion:** 376 original world assets, deterministic SVG art, Atlas browsing, and stable context assignment.
+- **V27 — World Content Mega-Pack:** +1,536 original assets, 14 new families, pagination/group filters, enriched six-slot context, and project-boundary contamination validation.
 
-- **V16 — Living Multiverse:** persistent worlds, factions, wars, nemeses, memory, and bounded world simulation.
-- **V17 — Reality Rules:** destinations, routes, Favor, travel, and reality rules.
-- **V18 — Multiversal Economy:** Credits/materials, markets, inventory, crafting, contracts, auctions, and artifact evolution.
-- **V19 — Party Consequences:** seven relationship axes, morale, wounds, reserves, betrayal, defection, mentorship, and party endings.
-- **V20 — Relic Bonds & Equipment Mastery:** mastery, signature/awakened gear, sets, relic Bond/Purity/Corruption, attunement, quests, and theft/recovery.
-- **V21 — Faction Campaigns & Strongholds:** membership, rank, Authority, campaigns, territory/fronts, strongholds, specialists, diplomacy, infiltration, and sieges.
-- **V22 — Settlements & Civilian Worlds:** civilian populations, displacement, relief, rebuilding, sanctuaries, public opinion, and civilian endings.
-- **V23 — Tactical Missions & Warfront Operations:** persistent five-stage operations sourced from campaigns, fronts, civilian crises, strongholds, relics, and nemeses.
-- **V24 — Multiverse Activities & Competition Circuits:** persistent races, tournaments, trials, hunts, and hosted events with four-segment Wheel progression and non-spendable Circuit Score.
-- **V25 — Cataclysms & Multiverse Crisis Arcs:** deterministic macro emergencies, five-phase Crisis Command responses, recoverable failure, and bounded aftermath across V16–V24.
-- **V26 — World Content Expansion:** 376 original world assets, deterministic context assignment, generated SVG project art, Atlas browsing, favorites/recent views, and visual integration across V16 and V21–V25.
+`js/bootstrap.js` loads these layers in order. If V27 fails, the game explicitly continues as V26.
 
-`js/bootstrap.js` loads these layers in order. If V26 fails, the game remains fully playable as V25.
+## V27 content scale
 
-## V26 highlights
+The combined Atlas now contains **1,912 assets**. V27 alone adds:
 
-### 376 new original assets
+- 96 buildings, 96 places, 72 interiors
+- 120 items, 96 vehicles, 72 NPC roles
+- 32 stronghold scenes, 32 settlement scenes, 32 activity scenes, 32 crisis scenes
+- 40 UI icons
+- 96 props
+- 48 landmarks and 48 shops
+- 72 resources
+- 48 flora and 48 fauna assets
+- 48 hazards and 48 transit assets
+- 72 furnishings and 72 technology assets
+- 72 weapons and 48 armor assets
+- 48 food assets and 48 utility assets
 
-V26 ships:
+The 14 new families are **prop, landmark, shop, resource, flora, fauna, hazard, transit, furnishing, technology, weapon, armor, food, and utility**.
 
-- 48 buildings
-- 48 places
-- 30 interiors
-- 60 items
-- 40 vehicles
-- 30 NPC roles
-- 20 stronghold visuals
-- 20 settlement visuals
-- 20 activity visuals
-- 20 crisis visuals
-- 40 UI icons/badges
+## Original generated project art
 
-Every record carries formal metadata for identity, subtype, source, world/faction context, rarity, tags, path, media type, dimensions, provenance, verification state, usage targets, notes, and a deterministic visual seed.
+V27 continues the rights-safe strategy introduced in V26. Metadata lives in `js/data/world-content-v27.js`; visuals are deterministic local SVG generated by `js/world-asset-art-v27.js`. No remote image hotlinks are required for these world assets, so the PWA remains offline-capable without shipping thousands of large raster files.
 
-### Rights-safe generated project art
+Exact character and transformation images remain separate and review-first. World art is never presented as exact franchise character/form art.
 
-The new world-content library uses original deterministic SVG scenes generated by `js/world-asset-art.js`. It does not hotlink remote media and it does not pretend that generic world art is exact franchise character/form art.
+## Stable additive visual identity
 
-The existing character/transformation pipeline stays review-first. Missing exact transformation imagery continues to use the project's explicit fallback behavior rather than silent wrong-image substitutions.
+V27 does not reroll existing V26 saved context. Each V27 context begins with the already-saved V26 assignment IDs and then fills extra slots with new V27 details.
 
-### Stable context integration
+This makes existing systems visually denser without duplicating their gameplay state:
 
-V26 assigns visuals to existing saved entities without taking over their gameplay state:
+- worlds can add landmarks, flora, fauna, hazards, transit, shops, and props
+- strongholds can add furnishings, tech, weapons, armor, utilities, props, and vehicles
+- settlements can add shops, food, resources, flora, transit, and street props
+- operations can add tactical gear, hazards, utilities, vehicles, interiors, and props
+- activities can add venues, transit, food, props, hosts, and landmarks
+- crises can add hazards, response gear, resources, technology, vehicles, and environmental detail
 
-- V16 current worlds → places/buildings
-- V21 strongholds → base/interior/vehicle/item/NPC visuals
-- V22 settlements → settlement/place/building/NPC/supply visuals
-- V23 operations → mission places/interiors/vehicles/NPCs/items
-- V24 activities → venues/vehicles/hosts
-- V25 crises → crisis scenes/places/response vehicles/supplies/NPCs
+V27 adds no wallet, currency, inventory, combat engine, faction engine, settlement engine, operation engine, activity engine, or crisis engine.
 
-Assignments are seeded and stored under `state.v26.assignments`, so opening a screen does not reroll its visual identity.
+## Mega-Atlas UX
 
-### World Asset Atlas
+Open **World → Atlas**. V27 provides:
 
-Open **World → Atlas** to browse the library by type, rarity, and search text. The Atlas renders a bounded 72-card window, uses lazy images, supports favorites and recent-view history, and exposes the actual generated visual for each asset.
+- 25 asset families
+- semantic group filters: Structures, World, Gear, People, Events, UI
+- individual family filters
+- rarity filters
+- search
+- 72-card pagination
+- favorites (existing V26 state)
+- V27 discovery history
+- responsive six-slot context strips
 
-Existing World tabs also receive compact context-art strips so the new assets appear where they matter instead of living in a disconnected gallery.
+## Project-boundary protection
 
-### No new duplicate system
-
-V26 adds no wallet, currency, inventory, combat engine, faction simulation, settlement simulation, operation engine, activity engine, or crisis engine. V16–V25 remain authoritative.
-
-## Persistence and PWA
-
-V26 uses schema `26`. Migration from V25 is idempotent and preserves V25 state.
-
-The service worker advances to the V26 world-content cache and precaches the V26 catalog, SVG renderer, domain/browser layers, and CSS while preserving first-install claim safety and explicit `SKIP_WAITING` behavior.
-
-Because the 376 visuals are generated locally as SVG data URIs, the release adds substantial visual breadth without forcing the PWA to cache hundreds of large raster files.
+`tools/validate-spinner-boundaries.js` is now part of normal validation. It scans Spinner text source for narrow foreign-project signatures associated with the accidentally mixed SERA backend/RLS prompt. This prevents future cross-project contamination without fuzzy-matching harmless character/image content.
 
 ## Validation
 
-Run:
-
 ```powershell
-npm run validate:v26
+npm run validate:boundaries
+npm run validate:v27
 npm run validate
 npm run test:e2e
 npm run validate:release
 ```
 
-GitHub Actions must pass both required jobs on the exact final commit:
+The release must preserve the V26 376-asset baseline, contain 1,536 V27 additions, expose 1,912 total assets/25 families, retain V26 context identity, create no duplicate economy state, pass the Spinner project-boundary guard, and pass Chromium journeys.
 
-1. **Unit and content validation**
-2. **Chromium release journeys**
-
-## V26 primary files
-
-- `js/data/world-content.js`
-- `js/world-asset-art.js`
-- `js/domain/v26-engine.js`
-- `js/v26-experience.js`
-- `styles/v26.css`
-- `tests/v26.test.js`
-- `tests/e2e/v26.spec.js`
-- `tools/validate-v26-content.js`
-- `docs/V26_WORLD_CONTENT_EXPANSION.md`
-
-Release wiring also updates `js/bootstrap.js`, `sw.js`, `package.json`, `package-lock.json`, `manifest.webmanifest`, `index.html`, and this README.
+See `docs/V27_WORLD_CONTENT_MEGAPACK.md` for the detailed release contract.

@@ -1,7 +1,7 @@
 {
-  "name": "Multiverse Wheel V26 — World Content Expansion",
-  "short_name": "MW V26",
-  "description": "Explore a denser persistent multiverse with hundreds of rights-safe buildings, places, items, vehicles, NPCs, stronghold scenes, settlement states, activities, crisis visuals, and utility art.",
+  "name": "Multiverse Wheel V27 — World Content Mega-Pack",
+  "short_name": "MW V27",
+  "description": "Explore 1,912 original world assets across 25 families: structures, places, props, shops, resources, wildlife, hazards, transit, furnishings, gear, vehicles, NPCs, activities, and crisis visuals.",
   "id": "./",
   "start_url": "./Multiverse_Wheel_V8_1326_Real_Repo_Images.html",
   "scope": "./",
@@ -9,10 +9,7 @@
   "orientation": "any",
   "background_color": "#02050d",
   "theme_color": "#050711",
-  "icons": [
-    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
-  ],
+  "icons": [{"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},{"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}],
   "categories": ["games", "entertainment"],
   "lang": "en-US"
 }
