@@ -71,10 +71,10 @@ test('daily integrity, named ending recap, share card, and selectable New Game P
 
 for(const viewport of [{name:'desktop',width:1440,height:900},{name:'mobile',width:390,height:844}])test(`a complete 30-spin ${viewport.name} journey reaches a named ending without overflow`,async({page})=>{
   // This is an intentional full-run stress journey through every accumulated
-  // release layer. Shared CI runners can exceed Playwright's 30s default even
-  // after Spinner has already reached Spin 30/30, so bound this test itself
-  // rather than weakening the timeout for the rest of the browser suite.
-  test.setTimeout(60_000);
+  // release layer. Mark only this intentional stress journey as slow so
+  // Playwright applies its standard 3x budget without weakening the rest of
+  // the browser suite or relying on a narrowly tuned runner-specific timeout.
+  test.slow();
   await page.setViewportSize({width:viewport.width,height:viewport.height});await launchPreset(page,/Aegis/i);const journey=await completeThirtySpinJourney(page);expect(journey.ended).toBe(true);expect(journey.win).toBe(true);expect(journey.spin).toBe(30);expect(journey.guard).toBeLessThan(240);expect(journey.ending).toBeTruthy();await expect(page.locator('.v13-ending')).toBeVisible();expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
 });
 
