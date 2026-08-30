@@ -47,9 +47,9 @@ Open **World → Atlas**. V28 adds:
 
 ## Asset inspector
 
-Click any Atlas card or contextual world-art card to inspect it in detail. The inspector shows family, rarity, subtype, theme/world, faction context, intended usage targets, tags, provenance notes, and related assets.
+Use **Details** on an Atlas card to inspect it without changing the established V27 card/favorite interaction. Contextual world-art cards in worlds, strongholds, settlements, operations, activities, and crises remain directly clickable for inspection.
 
-Inspection feeds the existing V27 discovery history. V28 does not create a duplicate content or progression system.
+The inspector shows family, rarity, subtype, theme/world, faction context, intended usage targets, tags, provenance notes, and related assets. Inspection feeds the existing V27 discovery history; V28 does not create a duplicate content or progression system.
 
 ## Stable gameplay authority
 
