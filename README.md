@@ -1,10 +1,10 @@
-# Multiverse Wheel V28 — Atlas UX & Asset Integration
+# Multiverse Wheel V30 — Massive World Expansion
 
-A local-first browser/PWA game about forging a custom hero through a persistent multiverse built around a seeded event Wheel. The runtime roster contains 1,326 character profiles.
+A local-first browser/PWA game about forging a custom hero through a persistent multiverse built around a seeded event Wheel. The runtime roster contains **1,326 character profiles**, while V30 expands the original world-content library to **6,616 rights-safe visuals across 40 asset families**.
 
-V28 keeps V27's **1,912 rights-safe original world visuals across 25 asset families** and makes that library substantially easier to browse, inspect, filter, reuse, and understand inside the game.
+V30 builds directly on the stable V28 release stack. It adds **4,704 new original world assets**, 15 new content families, richer deterministic world context, field-encounter composition, and travel-plan composition while preserving the existing combat, economy, party, relic, faction, settlement, operation, activity, and crisis systems as the gameplay authorities.
 
-Play the current release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/).
+Play the current published release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/). V30 remains a release candidate until its pull-request validation is green and merged.
 
 ## Release stack
 
@@ -20,57 +20,121 @@ Play the current release at [docdamage.github.io/spinner](https://docdamage.gith
 - **V25 — Cataclysms & Multiverse Crisis Arcs:** persistent macro emergencies and recoverable crisis-command responses.
 - **V26 — World Content Expansion:** 376 original world assets, deterministic SVG art, Atlas browsing, and stable context assignment.
 - **V27 — World Content Mega-Pack:** +1,536 original assets, 14 new families, pagination/group filters, enriched six-slot context, and project-boundary validation.
-- **V28 — Atlas UX & Asset Integration:** persistent Atlas preferences, favorites/discovery modes, sorting, compact browsing, asset inspection, related assets, and keyboard-friendly navigation.
+- **V28 — Atlas UX & Asset Integration:** persistent Atlas preferences, favorites/discovery modes, sorting, compact browsing, inspection, related assets, and keyboard-friendly navigation.
+- **V30 — Massive World Expansion:** +4,704 original assets, 15 new families, 6,616 total world assets, eight-slot context enrichment, deterministic field encounters, travel plans, and V30-aware Atlas tools.
 
-`js/bootstrap.js` loads these layers in order. If V28 fails, the game explicitly continues as V27.
+`js/bootstrap.js` loads the release layers in order. V30 is intentionally layered on V28; if the V30 layer fails to load, the application explicitly continues with V28 Atlas UX & Asset Integration.
 
-## 1,912 original world assets
+## 6,616 original world assets
 
-The combined V27/V28 library spans 25 families including buildings, places, interiors, items, vehicles, NPC roles, strongholds, settlements, activities, crises, icons, props, landmarks, shops, resources, flora, fauna, hazards, transit, furnishings, technology, weapons, armor, food, and utility equipment.
+The combined V30 library spans **40 families**. Existing families remain available for buildings, places, interiors, items, vehicles, NPC roles, strongholds, settlements, activities, crises, icons, props, landmarks, shops, resources, flora, fauna, hazards, transit, furnishings, technology, weapons, armor, food, and utility equipment.
 
-World content is deterministic original SVG project art rendered locally. It does not hotlink remote media and it is not presented as exact franchise character/form imagery.
+V30 adds 15 new families:
 
-Exact character and transformation images remain separate and review-first.
+- districts
+- dungeons
+- ruins
+- portals
+- routes
+- weather
+- anomalies
+- organizations
+- companions
+- mounts
+- relics / McGuffin opportunities
+- treasure
+- services
+- venues
+- encounters
 
-## V28 Atlas UX
+World content is deterministic original SVG project art rendered locally. It does not hotlink remote media and it is not presented as exact franchise character or transformation imagery.
 
-Open **World → Atlas**. V28 adds:
+Exact character and transformation images remain a separate review-first pipeline. V30 does not silently replace missing franchise imagery with generated fallback character art.
 
-- persistent search, family/group, rarity, page, and view preferences
-- sorting by name, family, rarity, or release generation
-- Favorites-only mode using existing V26 favorites
-- Seen-only mode using existing V27 discoveries
-- grid and compact layouts
-- `/` keyboard shortcut to focus Atlas search
-- responsive browsing for desktop and smaller screens
-- clear/reset filtering
+## Deterministic field encounters
 
-## Asset inspector
+`WorldExpansionEngine` can compose a six-role encounter from the world-content catalog without introducing a second combat or reward system:
 
-Use **Details** on an Atlas card to inspect it without changing the established V27 card/favorite interaction. Contextual world-art cards in worlds, strongholds, settlements, operations, activities, and crises remain directly clickable for inspection.
+1. **Scene** — the location or environmental stage.
+2. **Actor** — NPC, companion, organization, creature, or encounter presence.
+3. **Mobility** — vehicle, mount, route, portal, or transit context.
+4. **Pressure** — hazard, anomaly, weather, or crisis pressure.
+5. **Reward** — treasure, relic, resource, item, weapon, armor, or technology opportunity.
+6. **Support** — service, venue, shop, utility, food, NPC, or companion support.
 
-The inspector shows family, rarity, subtype, theme/world, faction context, intended usage targets, tags, provenance notes, and related assets. Inspection feeds the existing V27 discovery history; V28 does not create a duplicate content or progression system.
+The same save seed, owner context, difficulty, and salt produce the same encounter. Recorded scouting remains bounded and does not create a new wallet, inventory, party, or progression authority.
+
+## Travel plans
+
+V30 can also assemble deterministic travel context from:
+
+- routes, portals, or transit infrastructure
+- vehicles or mounts
+- weather, hazards, or anomalies
+- intermediate stops such as districts, places, landmarks, venues, ruins, or dungeons
+- a destination-linked field encounter
+
+These plans enrich the existing V17 travel/reality layer rather than replacing it.
+
+## Atlas and world UX
+
+Open **World → Atlas**. V30 preserves V28's persistent browsing tools and adds:
+
+- a **V30 only** filter
+- `NEW V30` asset badges
+- all 40 families in V30-aware browsing groups
+- V30-aware related-asset inspection
+- eight stable contextual visuals for world entities
+- a field-encounter preview with **Scout Next**
+- responsive/mobile layout rules
+- reduced-motion behavior
+
+Existing favorites continue to use V26 state and discovery history continues to use V27 state.
 
 ## Stable gameplay authority
 
-V28 adds no wallet, currency, inventory, crafting system, combat engine, faction engine, settlement engine, operation engine, activity engine, or crisis engine. V16–V27 remain authoritative.
+V30 does **not** introduce replacement systems for:
 
-Schema 28 owns only Atlas UI preferences, inspector selection, and UX statistics.
+- V13+ combat and hero progression
+- V17 travel/reality state
+- V18 economy, markets, crafting, or inventory
+- V19 party and relationship state
+- V20 relic ownership, bonding, corruption, or equipment mastery
+- V21 factions and strongholds
+- V22 settlements and civilian simulation
+- V23 operations
+- V24 activities and competition circuits
+- V25 crises
+
+V30 owns world-content enrichment, field-encounter/travel composition metadata, recent scouting state, and its associated presentation statistics. A relic-shaped V30 reward is an opportunity that existing V18/V20 systems may resolve; it is not a duplicate relic inventory.
 
 ## Project-boundary protection
 
-`tools/validate-spinner-boundaries.js` remains part of normal validation and guards against the SERA/backend-RLS contamination signatures identified during the project audit.
+`tools/validate-spinner-boundaries.js` remains part of normal validation and guards against foreign-project/backend contamination. Spinner database/runtime boundaries remain distinct from unrelated projects.
 
 ## Validation
 
 ```powershell
 npm run validate:boundaries
-npm run validate:v28
+npm run validate:v30
 npm run validate
 npm run test:e2e
 npm run validate:release
 ```
 
-V28 validation covers persistent UI state, favorites/discovery reuse, deterministic sorting, inspection, related-asset resolution, no duplicate economy state, responsive styling, fallback-safe bootstrap wiring, PWA caching, and Chromium browser journeys.
+V30 validation checks:
 
-See `docs/V28_ATLAS_UX_ASSET_INTEGRATION.md` for the detailed V28 release contract and `docs/V27_WORLD_CONTENT_MEGAPACK.md` for the 1,912-asset catalog release.
+- exact 1,912 + 4,704 = 6,616 asset counts
+- 40 combined families and 15 new families
+- unique IDs and generated-project-art provenance
+- dedicated SVG renderers for the new families
+- V27/V28 save compatibility and idempotent migration
+- stable legacy context prefixes plus V30 enrichment
+- deterministic six-role field encounters
+- deterministic travel plans
+- no duplicate economy, inventory, or party state
+- bootstrap fallback ordering
+- PWA/service-worker caching and release branding
+- normal unit/content validation and Chromium release journeys
+
+See [`docs/V30_MASSIVE_WORLD_EXPANSION.md`](docs/V30_MASSIVE_WORLD_EXPANSION.md) for the full V30 release contract. Earlier release contracts remain in `docs/` for historical and compatibility details.
