@@ -1,7 +1,7 @@
 {
-  "name": "Multiverse Wheel V28 — Atlas UX & Asset Integration",
-  "short_name": "MW V28",
-  "description": "Browse and inspect 1,912 original world assets with persistent filters, favorites and discovery views, sorting, compact mode, richer context integration, and keyboard-friendly Atlas navigation.",
+  "name": "Multiverse Wheel V29 — Dynamic Scene Staging",
+  "short_name": "MW V29",
+  "description": "Stage the 1,912-asset world library directly on Wheel results with context-aware scenes, repeat avoidance, persistent scene history, asset inspection, and visual-only remixes.",
   "id": "./",
   "start_url": "./Multiverse_Wheel_V8_1326_Real_Repo_Images.html",
   "scope": "./",
