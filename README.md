@@ -1,10 +1,10 @@
-# Multiverse Wheel V30 — Massive World Expansion
+# Multiverse Wheel V31 — Dynamic Scene Staging
 
-A local-first browser/PWA game about forging a custom hero through a persistent multiverse built around a seeded event Wheel. The runtime roster contains **1,326 character profiles**, while V30 expands the original world-content library to **6,616 rights-safe visuals across 40 asset families**.
+A local-first browser/PWA game about forging a custom hero through a persistent multiverse built around a seeded event Wheel. The runtime roster contains **1,326 character profiles**, and the world-content library contains **6,616 rights-safe visuals across 40 asset families**.
 
-V30 builds directly on the stable V28 release stack. It adds **4,704 new original world assets**, 15 new content families, richer deterministic world context, field-encounter composition, and travel-plan composition while preserving the existing combat, economy, party, relic, faction, settlement, operation, activity, and crisis systems as the gameplay authorities.
+V31 builds on V30 Massive World Expansion by staging context-aware world art inside ordinary Wheel results. Each live scene draws from the complete V30 catalog, avoids recent repetition, supports visual-only remix and history, and opens into the existing Atlas inspector without changing combat, rewards, choices, economy, party, relic, faction, settlement, operation, activity, or crisis authority.
 
-Play the current published release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/). V30 remains a release candidate until its pull-request validation is green and merged.
+Play the current published release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/). V31 is under development until its pull-request validation is green and merged.
 
 ## Release stack
 
@@ -22,8 +22,15 @@ Play the current published release at [docdamage.github.io/spinner](https://docd
 - **V27 — World Content Mega-Pack:** +1,536 original assets, 14 new families, pagination/group filters, enriched six-slot context, and project-boundary validation.
 - **V28 — Atlas UX & Asset Integration:** persistent Atlas preferences, favorites/discovery modes, sorting, compact browsing, inspection, related assets, and keyboard-friendly navigation.
 - **V30 — Massive World Expansion:** +4,704 original assets, 15 new families, 6,616 total world assets, eight-slot context enrichment, deterministic field encounters, travel plans, and V30-aware Atlas tools.
+- **V31 — Dynamic Scene Staging:** context-aware live Wheel scenes, recent-repeat avoidance, visual-only remix, bounded history, V30 discovery integration, and V29 prototype migration.
 
-`js/bootstrap.js` loads the release layers in order. V30 is intentionally layered on V28; if the V30 layer fails to load, the application explicitly continues with V28 Atlas UX & Asset Integration.
+`js/bootstrap.js` loads the release layers in order. V31 is intentionally layered on V30; if V31 fails to load, the application explicitly continues with V30 Massive World Expansion.
+
+## Dynamic scenes during Wheel play
+
+Eligible Wheel results stage a default four-card composition for the environment, focal detail, support, and scene detail. Selection is deterministic from the save seed, spin, event identity, universe, destination, faction, event text, and visual variation. V30 assets are preferred and staged discoveries use the existing V30 discovery history.
+
+Players can hide scenes, reopen them later, inspect every asset, browse bounded scene history, or remix the current visual composition. Remix does not reroll the pending event or modify any gameplay outcome. Compatible settings and history from the unmerged V29 prototype are imported once when an older save contains them.
 
 ## 6,616 original world assets
 

@@ -1,0 +1,26 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirname,'..'),read=file=>fs.readFileSync(path.join(root,file),'utf8'),failures=[];
+require('../js/data/world-content.js');require('../js/data/world-content-v27.js');require('../js/data/world-content-v30.js');require('../js/domain/v27-engine.js');require('../js/domain/v28-engine.js');require('../js/domain/v30-engine.js');
+const {V31_SCHEMA_VERSION,DynamicSceneEngine,migrateV31}=require('../js/domain/v31-engine.js');
+for(const file of ['js/domain/v31-engine.js','js/v31-experience.js','styles/v31.css','tests/v31.test.js','tests/e2e/v31.spec.js','docs/V31_DYNAMIC_SCENE_STAGING.md'])if(!fs.existsSync(path.join(root,file)))failures.push(`Missing ${file}`);
+const state=migrateV31({seed:31001,spin:9,customCharacter:{homeworld:'Earth-Prime'},v26:{schemaVersion:26,assignments:{},favorites:[],recent:[],settings:{},stats:{}},v27:{schemaVersion:27,contexts:{},discoveries:[],settings:{},stats:{}},v28:{schemaVersion:28,atlas:{},inspector:{},stats:{}}}),engine=new DynamicSceneEngine(),pending={type:'battle',ref:'validator-threat',label:'Validator Ambush',sub:'Earth-Prime'},scene=engine.compose(state,pending);
+if(state.v31.schemaVersion!==V31_SCHEMA_VERSION)failures.push('V31 migration schema is not 31');
+if(!scene||scene.assetIds.length<3||new Set(scene.assetIds).size!==scene.assetIds.length)failures.push('V31 scene composer did not stage at least three unique assets');
+if(scene?.usageTarget!=='operation')failures.push('V31 battle scene is not context-aware');
+for(const id of scene?.assetIds||[])if(!state.v30.discoveries.includes(id))failures.push(`V31 staged V30 asset was not recorded through V30 discovery: ${id}`);
+const pendingBefore=JSON.stringify(pending),remix=engine.remix(state,pending);
+if(remix?.variation!==1||pendingBefore!==JSON.stringify(pending))failures.push('V31 remix is not visual-only/deterministic');
+for(const key of ['wallet','currency','inventory','combat','factions','settlements','operations','activities','crises','party','relics'])if(state.v31[key]!==undefined)failures.push(`V31 illegally owns gameplay state: ${key}`);
+const engineSource=read('js/domain/v31-engine.js'),experience=read('js/v31-experience.js'),css=read('styles/v31.css'),bootstrap=read('js/bootstrap.js'),sw=read('sw.js'),docs=read('docs/V31_DYNAMIC_SCENE_STAGING.md'),pkg=JSON.parse(read('package.json')),lock=JSON.parse(read('package-lock.json')),manifest=JSON.parse(read('manifest.webmanifest')),index=read('index.html');
+for(const token of ['DynamicSceneEngine','avoidRepeat','historyLimit','sceneRemixes','V31_SCENE_PROFILES','WorldExpansionEngine'])if(!engineSource.includes(token))failures.push(`V31 engine missing ${token}`);
+for(const token of ['v31-scene-stage','data-v31-remix','data-v31-history','data-v31-toggle-scenes','data-v28-inspect'])if(!experience.includes(token))failures.push(`V31 experience missing ${token}`);
+if(!css.includes('.v31-scene-grid')||!css.includes('.v31-history-dialog')||!css.includes('@media(max-width:700px)')||!css.includes('prefers-reduced-motion'))failures.push('V31 responsive/reduced-motion scene styles missing');
+for(const token of ['scene history','remix','repeat','visual','6,616','authoritative','V30'])if(!docs.toLowerCase().includes(token.toLowerCase()))failures.push(`V31 docs missing ${token}`);
+for(const ref of ['styles/v31.css','js/domain/v31-engine.js','js/v31-experience.js']){if(!bootstrap.includes(ref))failures.push(`V31 bootstrap missing ${ref}`);if(!sw.includes(ref))failures.push(`V31 service worker missing ${ref}`);}
+if(!bootstrap.includes('continuing with V30 Massive World Expansion'))failures.push('V31 fallback does not explicitly preserve V30');
+const releaseMajor=Number(String(pkg.version||'0').split('.')[0]),lockMajor=Number(String(lock.version||'0').split('.')[0]),lockRootMajor=Number(String(lock.packages?.['']?.version||'0').split('.')[0]);
+if(releaseMajor!==31||releaseMajor!==lockMajor||releaseMajor!==lockRootMajor)failures.push('package/lock versions must align at release 31');
+if(!String(pkg.scripts.validate||'').includes('validate-v31-content.js')||!pkg.scripts['validate:v31'])failures.push('V31 validation scripts missing');
+if(!String(manifest.name||'').includes('V31')||!String(manifest.short_name||'').includes('V31')||!index.includes('Multiverse Wheel V31'))failures.push('V31 release branding is inconsistent');
+if(!sw.includes('multiverse-wheel-v31-'))failures.push('service worker cache is not versioned for V31');
+if(failures.length){console.error(`V31 validation failures: ${failures.join('; ')}`);process.exitCode=1;}else console.log(`V31 Dynamic Scene Staging validation passed: ${scene.assetIds.length} unique staged V30 assets, remix ${remix.variation}, history ${state.v31.history.length}.`);
