@@ -22,7 +22,7 @@ test('V30 Journey 1 — Massive World Atlas exposes the complete release',async(
   expect(release).toEqual({total:6616,added:4704,families:40,newFamilies:15});
 });
 
-test('V30 Journey 2 — V30-only filtering exposes exactly the new expansion pool',async({page})=>{
+test('V30 Journey 2 — V30-only filtering and normal card clicks feed Seen history',async({page})=>{
   await load(page);
   await enterAtlas(page);
   await page.locator('[data-v30-new-only]').click();
@@ -33,6 +33,11 @@ test('V30 Journey 2 — V30-only filtering exposes exactly the new expansion poo
   const nonV30=await cards.evaluateAll(nodes=>nodes.filter(node=>!node.classList.contains('v30-new-asset')).length);
   expect(nonV30).toBe(0);
   await expect(cards.first().locator('.v30-new-badge')).toContainText('NEW V30');
+  const id=await cards.first().getAttribute('data-v26-asset-card');
+  await cards.first().click();
+  await expect.poll(()=>page.evaluate(id=>game.state.v30.discoveries.includes(id),id)).toBe(true);
+  await page.locator('[data-v28-toggle="discoveredOnly"]').click();
+  await expect(page.locator(`[data-v26-asset-card="${id}"]`)).toBeVisible();
 });
 
 test('V30 Journey 3 — V30 inspection records discovery and preserves release metadata',async({page})=>{
