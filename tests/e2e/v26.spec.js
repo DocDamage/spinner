@@ -13,17 +13,17 @@ async function openAtlas(page){await page.locator('[data-v26-open]').first().cli
 
 test('V26 Journey 1 — Atlas exposes hundreds of rights-safe world assets',async({page})=>{
   await load(page);await enter(page);await openAtlas(page);
-  const total=await page.evaluate(()=>window.WORLD_CONTENT_META_V27?.total||window.WORLD_CONTENT_META?.total||0);expect(total).toBeGreaterThanOrEqual(376);
+  const total=await page.evaluate(()=>window.WORLD_CONTENT_META?.total||window.WORLD_CONTENT_META_V27?.total||0);expect(total).toBeGreaterThanOrEqual(376);
   await expect(page.locator('.v26-asset-card').first()).toBeVisible();
   const count=await page.locator('.v26-asset-card').count();expect(count).toBe(72);
   const source=await page.locator('.v26-asset-card img').first().getAttribute('src');expect(source).toMatch(/^data:image\/svg\+xml/);
 });
 
-test('V26 Journey 2 — kind, rarity, and search filters keep the Atlas browsable',async({page})=>{
+test('V26 Journey 2 — kind, rarity, and search filters keep the current Atlas browsable',async({page})=>{
   await load(page);await enter(page);await openAtlas(page);
-  const vehicleCount=await page.evaluate(()=>window.WORLD_CONTENT_META_V27?.counts?.vehicle||window.WORLD_CONTENT_META?.counts?.vehicle||0);expect(vehicleCount).toBeGreaterThanOrEqual(40);
+  const counts=await page.evaluate(()=>({legacy:window.WORLD_CONTENT_META_V27?.counts?.vehicle||0,current:window.WORLD_CONTENT_META?.counts?.vehicle||window.WORLD_CONTENT_META_V27?.counts?.vehicle||0}));expect(counts.legacy).toBeGreaterThanOrEqual(40);expect(counts.current).toBeGreaterThanOrEqual(counts.legacy);
   await page.locator('[data-v26-kind="vehicle"]').click();
-  await expect(page.locator('.v26-atlas-status')).toContainText(`${vehicleCount} matching assets`);
+  await expect(page.locator('.v26-atlas-status')).toContainText(`${counts.current} matching assets`);
   await page.locator('[data-v26-search]').fill('rescue');
   await expect(page.locator('.v26-atlas-status')).toContainText('matching assets');
   const cards=page.locator('.v26-asset-card');expect(await cards.count()).toBeGreaterThan(0);await expect(cards.first()).toContainText(/Rescue/i);
