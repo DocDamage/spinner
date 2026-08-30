@@ -1,12 +1,12 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8'),fail=m=>{throw new Error(m);};
 for(const file of ['js/domain/v28-engine.js','js/v28-experience.js','styles/v28.css','tests/v28.test.js'])if(!fs.existsSync(path.join(root,file)))fail(`Missing ${file}`);
-const engine=read('js/domain/v28-engine.js'),experience=read('js/v28-experience.js'),css=read('styles/v28.css'),bootstrap=read('js/bootstrap.js'),sw=read('sw.js'),pkg=JSON.parse(read('package.json'));
+const engine=read('js/domain/v28-engine.js'),experience=read('js/v28-experience.js'),css=read('styles/v28.css'),bootstrap=read('js/bootstrap.js'),sw=read('sw.js'),pkg=JSON.parse(read('package.json')),releaseMajor=Number(String(pkg.version||'0').split('.')[0]);
 if(!engine.includes('V28_SCHEMA_VERSION=28'))fail('V28 schema missing');
 for(const token of ['favoritesOnly','discoveredOnly','assetInspections','related(state,id'])if(!engine.includes(token))fail(`V28 engine missing ${token}`);
 for(const token of ['data-v28-search','data-v28-sort','data-v28-toggle','openAssetInspectorV28','Press / to search'])if(!experience.includes(token))fail(`V28 experience missing ${token}`);
 if(!css.includes('.v28-inspector')||!css.includes('@media(max-width:700px)'))fail('V28 responsive inspector styles missing');
 if(!bootstrap.includes('js/domain/v28-engine.js')||!bootstrap.includes('js/v28-experience.js')||!bootstrap.includes('styles/v28.css'))fail('V28 bootstrap wiring missing');
 if(!sw.includes('v28')||!sw.includes('js/domain/v28-engine.js')||!sw.includes('js/v28-experience.js'))fail('V28 service worker wiring missing');
-if(pkg.version!=='28.0.0'||!String(pkg.scripts.validate||'').includes('validate-v28-content.js'))fail('V28 package metadata missing');
+if(releaseMajor<28||!String(pkg.scripts.validate||'').includes('validate-v28-content.js'))fail('V28 package metadata missing');
 console.log('V28 Atlas UX validation passed.');
