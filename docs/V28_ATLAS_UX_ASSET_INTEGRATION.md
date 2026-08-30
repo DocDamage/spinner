@@ -38,7 +38,9 @@ Press `/` while not typing in another control to focus Atlas search.
 
 ## Asset inspector
 
-Clicking an Atlas card or contextual world-art card opens a native dialog with:
+Atlas cards retain their established V27 click/favorite behavior. Use the new **Details** control on an Atlas card to open its inspector. Contextual world-art cards remain directly clickable.
+
+The native inspector dialog includes:
 
 - asset name
 - family and rarity
@@ -68,7 +70,7 @@ npm run test:e2e
 npm run validate:release
 ```
 
-V28 validation checks schema ownership, persistent UX preferences, favorites/discovery reuse, sorting, asset inspection, related-asset lookup, responsive styling, bootstrap wiring, PWA cache wiring, and package metadata. Chromium journeys cover persistent controls, inspector behavior, state-backed favorites/discovery views, the `/` shortcut, and legacy World-tab compatibility.
+V28 validation checks schema ownership, persistent UX preferences, favorites/discovery reuse, sorting, asset inspection, related-asset lookup, responsive styling, bootstrap wiring, PWA cache wiring, and package metadata. Chromium journeys cover persistent controls, legacy Atlas-card interaction, explicit Details inspection, state-backed favorites/discovery views, the `/` shortcut, and legacy World-tab compatibility.
 
 ## Primary files
 
