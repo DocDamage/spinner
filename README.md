@@ -4,7 +4,7 @@ A local-first browser/PWA game about forging a custom hero through a persistent 
 
 V31 builds on V30 Massive World Expansion by staging context-aware world art inside ordinary Wheel results. Each live scene draws from the complete V30 catalog, avoids recent repetition, supports visual-only remix and history, and opens into the existing Atlas inspector without changing combat, rewards, choices, economy, party, relic, faction, settlement, operation, activity, or crisis authority.
 
-Play the current published release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/). V31 is under development until its pull-request validation is green and merged.
+Play the current published V31 release at [docdamage.github.io/spinner](https://docdamage.github.io/spinner/). The release passed the complete unit, content, Chromium, deployment, dependency, and secret-scanning gates before publication.
 
 ## Release stack
 
@@ -23,6 +23,10 @@ Play the current published release at [docdamage.github.io/spinner](https://docd
 - **V28 — Atlas UX & Asset Integration:** persistent Atlas preferences, favorites/discovery modes, sorting, compact browsing, inspection, related assets, and keyboard-friendly navigation.
 - **V30 — Massive World Expansion:** +4,704 original assets, 15 new families, 6,616 total world assets, eight-slot context enrichment, deterministic field encounters, travel plans, and V30-aware Atlas tools.
 - **V31 — Dynamic Scene Staging:** context-aware live Wheel scenes, recent-repeat avoidance, visual-only remix, bounded history, V30 discovery integration, and V29 prototype migration.
+
+## Next release
+
+V32 is defined as **Cinematic Encounter Director**. It will extend V31 scenes into deterministic, accessible multi-beat storyboards across Wheel results, travel, combat, operations, activities, tournaments, and crises while preserving every existing gameplay authority. The approved implementation contract and acceptance gates are in [`docs/V32_CINEMATIC_ENCOUNTER_DIRECTOR.md`](docs/V32_CINEMATIC_ENCOUNTER_DIRECTOR.md).
 
 `js/bootstrap.js` loads the release layers in order. V31 is intentionally layered on V30; if V31 fails to load, the application explicitly continues with V30 Massive World Expansion.
 
@@ -129,7 +133,7 @@ npm run test:e2e
 npm run validate:release
 ```
 
-V30 validation checks:
+Current release validation checks:
 
 - exact 1,912 + 4,704 = 6,616 asset counts
 - 40 combined families and 15 new families
@@ -142,6 +146,10 @@ V30 validation checks:
 - no duplicate economy, inventory, or party state
 - bootstrap fallback ordering
 - PWA/service-worker caching and release branding
+- deterministic V31 four-card scene composition
+- context profiles for origin, battle, boss, power, transformation, training, recruitment, artifacts, recovery, hazards, and rare events
+- V29 preference migration and V30 discovery integration
+- visual-only remix behavior and bounded scene history
 - normal unit/content validation and Chromium release journeys
 
-See [`docs/V30_MASSIVE_WORLD_EXPANSION.md`](docs/V30_MASSIVE_WORLD_EXPANSION.md) for the full V30 release contract. Earlier release contracts remain in `docs/` for historical and compatibility details.
+See [`docs/V31_DYNAMIC_SCENE_STAGING.md`](docs/V31_DYNAMIC_SCENE_STAGING.md) for the current release contract, [`docs/V30_MASSIVE_WORLD_EXPANSION.md`](docs/V30_MASSIVE_WORLD_EXPANSION.md) for the underlying world-expansion contract, and [`docs/RELEASE_PROCESS.md`](docs/RELEASE_PROCESS.md) for the repository release policy. Earlier release contracts remain in `docs/` for historical and compatibility details.
