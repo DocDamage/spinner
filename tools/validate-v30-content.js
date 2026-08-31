@@ -77,12 +77,12 @@ for(const marker of ['WorldExpansionEngine','ENCOUNTER_SLOTS','travelPlan','lega
 for(const marker of ['6,616','4,704','40','15','dungeons','portals','companions','mounts','McGuffin','field encounter','travel plan','review-first'])if(!docs.toLowerCase().includes(marker.toLowerCase()))failures.push(`V30 documentation marker missing: ${marker}`);
 
 const releaseMajor=Number(String(pkg.version||'0').split('.')[0]),lockMajor=Number(String(lock.version||'0').split('.')[0]),lockRootMajor=Number(String(lock.packages?.['']?.version||'0').split('.')[0]);
-if(releaseMajor!==30||releaseMajor!==lockMajor||releaseMajor!==lockRootMajor)failures.push('package/lock versions must stay aligned at release 30');
+if(releaseMajor<30||releaseMajor!==lockMajor||releaseMajor!==lockRootMajor)failures.push('package/lock versions must stay aligned at release 30 or newer');
 for(const script of ['validate-v30-content.js','validate-spinner-boundaries.js'])if(!String(pkg.scripts?.validate||'').includes(script))failures.push(`main validation script missing ${script}`);
 if(!pkg.scripts?.['validate:v30']||!pkg.scripts?.['validate:boundaries'])failures.push('V30 dedicated validation scripts are missing');
-const releaseTag='V30';
-if(!String(manifest.name||'').includes(releaseTag)||!String(manifest.short_name||'').includes(releaseTag)||!index.includes(`Multiverse Wheel ${releaseTag}`))failures.push('current release branding is inconsistent for V30');
-if(!sw.includes('multiverse-wheel-v30-'))failures.push('current service-worker cache is not versioned for V30');
+const releaseTag=`V${releaseMajor}`;
+if(!String(manifest.name||'').includes(releaseTag)||!String(manifest.short_name||'').includes(releaseTag)||!index.includes(`Multiverse Wheel ${releaseTag}`))failures.push(`current release branding is inconsistent for ${releaseTag}`);
+if(!sw.includes(`multiverse-wheel-v${releaseMajor}-`))failures.push(`current service-worker cache is not versioned for ${releaseTag}`);
 
 const report={schema:state.v30.schemaVersion,total:WORLD_CONTENT_META_V30.total,added:WORLD_CONTENT_META_V30.addedTotal,families:Object.keys(WORLD_CONTENT_META_V30.counts).length,newFamilies:WORLD_CONTENT_META_V30.newFamilies.length,context:context.length,encounterSlots:Object.keys(encounterA.resolvedAssets||{}).length,packageVersion:pkg.version,failures};
 if(process.argv.includes('--json'))console.log(JSON.stringify(report,null,2));else console.log(`V30 content valid: ${report.total} total assets (+${report.added}), ${report.families} families (${report.newFamilies} new), ${report.context} context visuals, ${report.encounterSlots} encounter roles.`);

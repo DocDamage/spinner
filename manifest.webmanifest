@@ -1,7 +1,7 @@
 {
-  "name": "Multiverse Wheel V30 — Massive World Expansion",
-  "short_name": "MW V30",
-  "description": "Explore 6,616 original world assets across 40 families with expanded buildings, places, items, vehicles, NPCs, dungeons, portals, mounts, relics, field encounters, and deterministic world context.",
+  "name": "Multiverse Wheel V31 — Dynamic Scene Staging",
+  "short_name": "MW V31",
+  "description": "Stage context-aware live scenes from 6,616 original world assets during ordinary Wheel play, with visual-only remix and persistent scene history.",
   "id": "./",
   "start_url": "./Multiverse_Wheel_V8_1326_Real_Repo_Images.html",
   "scope": "./",

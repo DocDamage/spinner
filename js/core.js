@@ -256,9 +256,9 @@ class MultiverseWheel {
     if(action==='recovery-overcharge'){this.applyRecovery(p.ref,'overcharge');this.state.pending.stage='result';this.renderAll();return;}
     if(action==='strategy'){this.selectedStrategy=value;this.renderEvent();return;}
     if(action==='resolve-battle'){this.resolveBattle(value||this.selectedStrategy);return;}
-    if(action==='battle-copy'){this.acquireKit(p.profileId);this.finishBattleReward(`Copied ${CHAR.get(p.profileId).name}'s complete power set.`);return;}
-    if(action==='battle-recruit'){this.recruit(p.profileId,this.state.party.length>=this.partyCapacity());this.finishBattleReward(`${CHAR.get(p.profileId).name} joined or trained the party.`);return;}
-    if(action==='battle-surge'){this.battleSurge(p.profileId);this.finishBattleReward('Converted victory into raw stat growth.');return;}
+    if(action==='battle-copy'){const id=p.profileId||p.ref;this.acquireKit(id);this.finishBattleReward(`Copied ${CHAR.get(id).name}'s complete power set.`);return;}
+    if(action==='battle-recruit'){const id=p.profileId||p.ref;this.recruit(id,this.state.party.length>=this.partyCapacity());this.finishBattleReward(`${CHAR.get(id).name} joined or trained the party.`);return;}
+    if(action==='battle-surge'){this.battleSurge(p.profileId||p.ref);this.finishBattleReward('Converted victory into raw stat growth.');return;}
     if(action==='hazard-resist'){this.resolveHazard('resist');return;}
     if(action==='hazard-contain'){this.resolveHazard('contain');return;}
     if(action==='nullify'){this.useNullifier();return;}
