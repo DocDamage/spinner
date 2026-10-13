@@ -33,5 +33,5 @@
     "assets:relics": "node tools/generate-relic-art.js",
     "generate:icons": "node tools/generate-v13-icons.js"
   },
-  "devDependencies": {"@playwright/test": "^1.62.1"}
+  "devDependencies": {"@playwright/test": "^1.64.0"}
 }
